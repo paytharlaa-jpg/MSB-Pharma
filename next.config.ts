@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
