@@ -38,9 +38,9 @@ export default function LoginPage() {
     }
   };
 
-  const fillDemo = (demoEmail: string, demoPassword = "Password@123") => {
+  const fillEmail = (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword(demoPassword);
+    setPassword("");
   };
 
   return (
@@ -110,6 +110,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   className="pl-9"
+                  autoComplete="current-password"
                   required
                 />
               </div>
@@ -121,17 +122,17 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Quick Demo Credentials Autofill */}
+          {/* Quick Staff Account Selector */}
           <div className="pt-4 border-t border-slate-100">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 mb-2">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-              <span>Click to auto-fill development roles:</span>
+              <span>Select email address (enter your password above):</span>
             </div>
 
             <div className="grid grid-cols-2 gap-1.5 text-xs">
               <button
                 type="button"
-                onClick={() => fillDemo("paytharlaa@gmail.com", "Abhiram@1289")}
+                onClick={() => fillEmail("paytharlaa@gmail.com")}
                 className="col-span-2 px-2.5 py-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-[11px] font-semibold text-left flex items-center justify-between transition-colors"
               >
                 <span>👑 Super Admin (Abhiram)</span>
@@ -139,36 +140,33 @@ export default function LoginPage() {
               </button>
               <button
                 type="button"
-                onClick={() => fillDemo("admin@msbpharmachem.com")}
+                onClick={() => fillEmail("admin@msbpharmachem.com")}
                 className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left truncate transition-colors"
               >
                 👑 Admin (Mohan K)
               </button>
               <button
                 type="button"
-                onClick={() => fillDemo("sales@msbpharmachem.com")}
+                onClick={() => fillEmail("sales@msbpharmachem.com")}
                 className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left truncate transition-colors"
               >
                 💼 Sales Lead
               </button>
               <button
                 type="button"
-                onClick={() => fillDemo("accounts@msbpharmachem.com")}
+                onClick={() => fillEmail("accounts@msbpharmachem.com")}
                 className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left truncate transition-colors"
               >
                 📊 Accounts Dept
               </button>
               <button
                 type="button"
-                onClick={() => fillDemo("inventory@msbpharmachem.com")}
+                onClick={() => fillEmail("inventory@msbpharmachem.com")}
                 className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left truncate transition-colors"
               >
                 📦 Inventory Officer
               </button>
             </div>
-            <p className="text-[10px] text-slate-400 mt-2 text-center">
-              Password for all test accounts: <code className="text-slate-600 font-mono">Password@123</code>
-            </p>
           </div>
         </div>
 
