@@ -11,14 +11,18 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const post = await prisma.blogPost.findUnique({ where: { slug } });
-  if (!post) return { title: "Article Not Found | MSB PHARMACHEM" };
+  try {
+    const { slug } = await params;
+    const post = await prisma.blogPost.findUnique({ where: { slug } });
+    if (!post) return { title: "Article Not Found | MSB PHARMACHEM" };
 
-  return {
-    title: `${post.title} | MSB PHARMACHEM`,
-    description: post.excerpt,
-  };
+    return {
+      title: `${post.title} | MSB PHARMACHEM`,
+      description: post.excerpt,
+    };
+  } catch (err) {
+    return { title: "Industry Insights | MSB PHARMACHEM" };
+  }
 }
 
 export default async function BlogPostPage({
