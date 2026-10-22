@@ -27,9 +27,15 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await prisma.blogPost.findUnique({
-    where: { slug },
-  });
+  let post = null;
+
+  try {
+    post = await prisma.blogPost.findUnique({
+      where: { slug },
+    });
+  } catch (err) {
+    console.error("BlogPostPage query error:", err);
+  }
 
   if (!post) {
     notFound();

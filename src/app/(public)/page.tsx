@@ -20,22 +20,63 @@ import { PublicEnquiryForm } from "@/components/public-site/PublicEnquiryForm";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const featuredProducts = await prisma.product.findMany({
-    where: { isApprovedForPublic: true, isActive: true },
-    take: 6,
-    include: { category: true },
-    orderBy: { createdAt: "asc" },
-  });
+  let featuredProducts: Array<{
+    id: string;
+    sku: string;
+    name: string;
+    grade: string | null;
+    casNumber: string | null;
+    therapeuticCategory: string | null;
+    ihDmf: string | null;
+    description: string | null;
+    category: { id: string; name: string; slug: string };
+  }> = [];
 
-  const categories = await prisma.productCategory.findMany({
-    orderBy: { sortOrder: "asc" },
-  });
+  let categories: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+  }> = [];
 
-  const recentPosts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    take: 3,
-    orderBy: { publishedDate: "desc" },
-  });
+  let recentPosts: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    coverImage: string | null;
+    publishedDate: Date;
+    author: string;
+  }> = [];
+
+  try {
+    featuredProducts = await prisma.product.findMany({
+      where: { isApprovedForPublic: true, isActive: true },
+      take: 6,
+      include: { category: true },
+      orderBy: { createdAt: "asc" },
+    });
+  } catch (err) {
+    console.error("HomePage featuredProducts query error:", err);
+  }
+
+  try {
+    categories = await prisma.productCategory.findMany({
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch (err) {
+    console.error("HomePage categories query error:", err);
+  }
+
+  try {
+    recentPosts = await prisma.blogPost.findMany({
+      where: { isPublished: true },
+      take: 3,
+      orderBy: { publishedDate: "desc" },
+    });
+  } catch (err) {
+    console.error("HomePage recentPosts query error:", err);
+  }
 
   return (
     <div className="space-y-0">

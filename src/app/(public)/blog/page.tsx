@@ -13,10 +13,24 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    orderBy: { publishedDate: "desc" },
-  });
+  let posts: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    coverImage: string | null;
+    publishedDate: Date;
+    author: string;
+  }> = [];
+
+  try {
+    posts = await prisma.blogPost.findMany({
+      where: { isPublished: true },
+      orderBy: { publishedDate: "desc" },
+    });
+  } catch (err) {
+    console.error("BlogPage query error:", err);
+  }
 
   return (
     <div className="py-16 bg-slate-50 min-h-screen">
