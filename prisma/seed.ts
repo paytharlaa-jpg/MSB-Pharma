@@ -7,6 +7,8 @@ async function main() {
   console.log("🌱 Starting MSB PHARMACHEM database seed...");
 
   // 1. Clean existing records if any
+  await prisma.notification.deleteMany();
+  await prisma.passwordResetToken.deleteMany();
   await prisma.auditLog.deleteMany();
   await prisma.documentSequence.deleteMany();
   await prisma.paymentRecord.deleteMany();
@@ -46,6 +48,7 @@ async function main() {
       bankDetails: "Bank: HDFC Bank, Kukatpally Branch\nA/C No: 50200000000000\nIFSC: HDFC0000000",
       invoiceTerms: "1. Payment due within 30 days of invoice date.\n2. Goods once sold will not be accepted back unless verified COA discrepancy within 7 days.\n3. Subject to Hyderabad jurisdiction.",
       quotationTerms: "1. Prices are valid for 15 days from issue date.\n2. GST applicable as per statutory rates.\n3. Delivery subject to stock availability.",
+      enquiryNotificationEmail: "paytharlaa@gmail.com",
     },
   });
 

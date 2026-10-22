@@ -40,6 +40,7 @@ export async function PUT(request: Request) {
       bankDetails,
       invoiceTerms,
       quotationTerms,
+      enquiryNotificationEmail,
     } = body;
 
     const updated = await prisma.siteSettings.upsert({
@@ -54,6 +55,7 @@ export async function PUT(request: Request) {
         bankDetails,
         invoiceTerms,
         quotationTerms,
+        enquiryNotificationEmail: enquiryNotificationEmail ? enquiryNotificationEmail.trim().toLowerCase() : undefined,
       },
       create: {
         id: "default",
@@ -66,6 +68,7 @@ export async function PUT(request: Request) {
         bankDetails,
         invoiceTerms,
         quotationTerms,
+        enquiryNotificationEmail: enquiryNotificationEmail ? enquiryNotificationEmail.trim().toLowerCase() : "paytharlaa@gmail.com",
       },
     });
 

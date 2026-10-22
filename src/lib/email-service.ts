@@ -101,3 +101,46 @@ export function buildNewEnquiryEmailHtml(enquiry: {
     </div>
   `;
 }
+
+/**
+ * Builds HTML template for Staff Password Reset
+ */
+export function buildPasswordResetEmailHtml(params: {
+  userName: string;
+  resetUrl: string;
+  expiryMinutes?: number;
+}): string {
+  const expiry = params.expiryMinutes || 30;
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+      <div style="background-color: #0b1f33; padding: 20px; color: #ffffff;">
+        <h2 style="margin: 0; color: #ffffff;">MSB PHARMACHEM</h2>
+        <p style="margin: 4px 0 0 0; color: #16b8a6; font-size: 14px;">Staff Security Portal — Password Reset</p>
+      </div>
+      <div style="padding: 24px; color: #1e293b;">
+        <p>Hello <strong>${params.userName}</strong>,</p>
+        <p>A password reset request was initiated for your MSB PHARMACHEM operational staff account.</p>
+        <p>Click the secure button below to choose a new password. This link is single-use and will expire in <strong>${expiry} minutes</strong>:</p>
+        
+        <div style="text-align: center; margin: 28px 0;">
+          <a href="${params.resetUrl}" style="background-color: #00488f; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            Reset Your Password
+          </a>
+        </div>
+
+        <p style="font-size: 12px; color: #64748b; word-break: break-all;">
+          Or copy and paste this link into your browser:<br/>
+          <a href="${params.resetUrl}" style="color: #00488f;">${params.resetUrl}</a>
+        </p>
+
+        <p style="font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 24px;">
+          If you did not request this password reset, please contact your Super Admin immediately. Your existing password remains secure until you complete the reset process.
+        </p>
+      </div>
+      <div style="background: #f1f5f9; padding: 12px 24px; font-size: 12px; color: #64748b; text-align: center;">
+        MSB PHARMACHEM Security System • Hyderabad, India • msbpharmachem.com
+      </div>
+    </div>
+  `;
+}
+

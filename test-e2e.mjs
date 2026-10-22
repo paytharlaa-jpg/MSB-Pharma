@@ -148,6 +148,86 @@ async function runTests() {
     const auditData = await resAudit.json();
     assert(auditData.logs && auditData.logs.length > 0, `10b. Structured audit trail active (${auditData.logs.length} audit entries logged)`);
 
+    // 11. Settings & Enquiry Notification Email Check (paytharlaa@gmail.com)
+    const resSettings = await fetch(`${baseUrl}/api/settings`);
+    assert(resSettings.status === 200, "11. Settings API responds with HTTP 200");
+    const settingsData = await resSettings.json();
+    assert(
+      settingsData.settings?.enquiryNotificationEmail === "paytharlaa@gmail.com",
+      `11b. Enquiry notification recipient verified as ${settingsData.settings?.enquiryNotificationEmail}`
+    );
+
+    // 12. In-Panel Notifications API (Durable persistence & unread counts)
+    const resNotifs = await fetch(`${baseUrl}/api/notifications`, {
+      headers: authHeaders,
+    });
+    assert(resNotifs.status === 200, "12. In-panel Notifications API responds with HTTP 200");
+    const notifsData = await resNotifs.json();
+    assert(notifsData.notifications && notifsData.notifications.length > 0, `12b. Notifications persisted in database (${notifsData.notifications.length} notifications)`);
+
+    const resMarkAll = await fetch(`${baseUrl}/api/notifications`, {
+      method: "PATCH",
+      headers: authHeaders,
+      body: JSON.stringify({ all: true }),
+    });
+    assert(resMarkAll.status === 200, "12c. Mark all notifications as read responds with HTTP 200");
+
+    // 13. Forgot Password API (Enumeration-proof response)
+    const resForgot = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "paytharlaa@gmail.com" }),
+    });
+    assert(resForgot.status === 200, "13. Forgot Password request responds with HTTP 200");
+    const forgotData = await resForgot.json();
+    assert(forgotData.success === true && forgotData.message, "13b. Forgot password returns generic enumeration-safe message");
+
+    // 14. Super Admin Staff Reset Password API
+    const resUsers = await fetch(`${baseUrl}/api/admin/users`, {
+      headers: authHeaders,
+    });
+    assert(resUsers.status === 200, "14. Admin users listing responds with HTTP 200");
+    const usersData = await resUsers.json();
+    const targetStaff = usersData.users.find(u => u.email === "sales@msbpharmachem.com");
+    assert(targetStaff && targetStaff.id, "14b. Sales staff member located for admin reset");
+
+    const resAdminReset = await fetch(`${baseUrl}/api/admin/users/reset-password`, {
+      method: "POST",
+      headers: authHeaders,
+      body: JSON.stringify({ userId: targetStaff.id, sendEmail: false }),
+    });
+    assert(resAdminReset.status === 200, "14c. Super Admin staff reset initiation responds with HTTP 200");
+    const adminResetData = await resAdminReset.json();
+    assert(adminResetData.resetUrl && adminResetData.resetUrl.includes("token="), "14d. Single-use reset link successfully generated");
+
+    // 15. Reset Password Token Validation & Execution
+    const resetUrlObj = new URL(adminResetData.resetUrl);
+    const testToken = resetUrlObj.searchParams.get("token");
+
+    const resValidateToken = await fetch(`${baseUrl}/api/auth/reset-password?token=${testToken}`);
+    assert(resValidateToken.status === 200, "15. Reset token validation responds with HTTP 200");
+    const validateData = await resValidateToken.json();
+    assert(validateData.valid === true, "15b. Reset token verified as valid before consumption");
+
+    const resCommitReset = await fetch(`${baseUrl}/api/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: testToken, password: "SalesPassword@2026" }),
+    });
+    assert(resCommitReset.status === 200, "15c. Password reset execution succeeds with HTTP 200");
+
+    // Verify token is now invalidated (single-use constraint)
+    const resReusedToken = await fetch(`${baseUrl}/api/auth/reset-password?token=${testToken}`);
+    assert(resReusedToken.status === 400, "15d. Reused reset token rejected with HTTP 400 (single-use enforced)");
+
+    // Restore sales password for future dev predictability
+    const { PrismaClient } = await import("@prisma/client");
+    const bcrypt = (await import("bcryptjs")).default;
+    const p = new PrismaClient();
+    const defaultHash = await bcrypt.hash("Password@123", 10);
+    await p.user.update({ where: { email: "sales@msbpharmachem.com" }, data: { passwordHash: defaultHash } });
+    await p.$disconnect();
+
     console.log(`\n=== Verification Results: ${passed} PASSED, ${failed} FAILED ===`);
   } catch (err) {
     console.error("Test execution failed:", err);

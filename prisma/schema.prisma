@@ -28,6 +28,8 @@ model User {
   paymentRecords      PaymentRecord[]
   deliveryChallans    DeliveryChallan[]
   auditLogs           AuditLog[]
+  passwordResetTokens PasswordResetToken[]
+  notifications       Notification[]
 }
 
 // 2. Customers
@@ -434,8 +436,42 @@ model SiteSettings {
   gstNumber      String   @default("36AAAAA0000A1Z5") // [Placeholder - Configurable]
   panNumber      String   @default("AAAAA0000A")     // [Placeholder - Configurable]
   bankDetails    String   @default("Bank: HDFC Bank, Kukatpally Branch\nA/C No: 50200000000000\nIFSC: HDFC0000000") // [Placeholder]
-  invoiceTerms   String   @default("1. Payment due within 30 days of invoice date.\n2. Goods once sold will not be taken back unless quality dispute is raised within 7 days with COA analysis.\n3. Subject to Hyderabad jurisdiction.")
-  quotationTerms String   @default("1. Prices are valid for 15 days from date of issue.\n2. GST will be applicable as per prevailing statutory rates.\n3. Delivery subject to stock availability and prior sale.")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  invoiceTerms             String   @default("1. Payment due within 30 days of invoice date.\n2. Goods once sold will not be taken back unless quality dispute is raised within 7 days with COA analysis.\n3. Subject to Hyderabad jurisdiction.")
+  quotationTerms           String   @default("1. Prices are valid for 15 days from date of issue.\n2. GST will be applicable as per prevailing statutory rates.\n3. Delivery subject to stock availability and prior sale.")
+  enquiryNotificationEmail String   @default("paytharlaa@gmail.com") // Initial enquiry notification recipient (configurable)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 }
+
+// 20. Password Reset Tokens (Single-use, cryptographically secure hash, time-limited)
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+}
+
+// 21. Persistent In-Panel Notifications (for Super Admin & Enquiry-Authorized Staff)
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String    @default("ENQUIRY") // "ENQUIRY", "SYSTEM", "ALERT"
+  title     String
+  message   String
+  link      String?   // e.g. "/dashboard/enquiries"
+  entityId  String?   // related entity id e.g. enquiry.id
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+

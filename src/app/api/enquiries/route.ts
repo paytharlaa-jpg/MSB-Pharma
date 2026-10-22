@@ -113,15 +113,46 @@ export async function POST(request: Request) {
       },
     });
 
-    // Send email notification to admin
-    const adminEmail = process.env.EMAIL_ADMIN_RECIPIENT || "mohank9@gmail.com";
-    await sendNotificationEmail({
-      to: adminEmail,
-      subject: `New Commercial Enquiry: ${enquiryNumber} - ${contactName}`,
-      html: buildNewEnquiryEmailHtml(enquiry),
-    });
+    // 1. Send email notification to configured recipient (default: paytharlaa@gmail.com)
+    try {
+      const siteSettings = await prisma.siteSettings.findUnique({ where: { id: "default" } });
+      const adminEmail = siteSettings?.enquiryNotificationEmail || process.env.EMAIL_ADMIN_RECIPIENT || "paytharlaa@gmail.com";
+      await sendNotificationEmail({
+        to: adminEmail,
+        subject: `New Commercial Enquiry: ${enquiryNumber} - ${contactName}`,
+        html: buildNewEnquiryEmailHtml(enquiry),
+      });
+    } catch (emailErr) {
+      console.error("Failed to send enquiry notification email (enquiry preserved):", emailErr);
+    }
 
-    // Audit log
+    // 2. Create durable in-panel notifications for Super Admin and Sales staff
+    try {
+      const eligibleStaff = await prisma.user.findMany({
+        where: {
+          isActive: true,
+          role: { in: ["SUPER_ADMIN", "SALES"] },
+        },
+        select: { id: true },
+      });
+
+      for (const staff of eligibleStaff) {
+        await prisma.notification.create({
+          data: {
+            userId: staff.id,
+            type: "ENQUIRY",
+            title: `New Enquiry ${enquiryNumber}`,
+            message: `${contactName} (${companyName || "Direct Client"}) requested ${requestedQuantity || ""} ${unit || ""} of ${productOfInterest || "Pharma Products"}.`,
+            link: "/dashboard/enquiries",
+            entityId: enquiry.id,
+          },
+        });
+      }
+    } catch (notifErr) {
+      console.error("Failed to create in-panel notification:", notifErr);
+    }
+
+    // 3. Audit log
     await createAuditLog({
       entityType: "ENQUIRY",
       entityId: enquiry.id,
