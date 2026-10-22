@@ -38,9 +38,9 @@ export default function LoginPage() {
     }
   };
 
-  const fillDemo = (demoEmail: string) => {
+  const fillDemo = (demoEmail: string, demoPassword = "Password@123") => {
     setEmail(demoEmail);
-    setPassword("Password@123");
+    setPassword(demoPassword);
   };
 
   return (
@@ -131,10 +131,18 @@ export default function LoginPage() {
             <div className="grid grid-cols-2 gap-1.5 text-xs">
               <button
                 type="button"
+                onClick={() => fillDemo("paytharlaa@gmail.com", "Abhiram@1289")}
+                className="col-span-2 px-2.5 py-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-[11px] font-semibold text-left flex items-center justify-between transition-colors"
+              >
+                <span>👑 Super Admin (Abhiram)</span>
+                <span className="text-[10px] text-blue-600 font-mono">paytharlaa@gmail.com</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => fillDemo("admin@msbpharmachem.com")}
                 className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left truncate transition-colors"
               >
-                👑 Super Admin
+                👑 Admin (Mohan K)
               </button>
               <button
                 type="button"

@@ -85,6 +85,17 @@ async function main() {
     },
   });
 
+  const abhiramAdminPasswordHash = await bcrypt.hash("Abhiram@1289", salt);
+  await prisma.user.create({
+    data: {
+      name: "Abhiram (Super Admin)",
+      email: "paytharlaa@gmail.com",
+      passwordHash: abhiramAdminPasswordHash,
+      role: "SUPER_ADMIN",
+      isActive: true,
+    },
+  });
+
   const salesUser = await prisma.user.create({
     data: {
       name: "Ramesh Kumar (Sales)",

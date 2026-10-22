@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Settings, Save, CheckCircle2, AlertCircle, Shield, Mail, MessageCircle, Database } from "lucide-react";
+import { Settings, Save, CheckCircle2, Shield, Mail, MessageCircle, Database } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
