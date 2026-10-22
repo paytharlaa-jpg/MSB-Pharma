@@ -1,0 +1,29 @@
+﻿A2: Our APIs Products
+A3: (WHO-GMP, GLP & ISO Approved Facility )
+A4: Sr. No. | B4: Product Name | C4: IH-DMF | D4: Grade | E4: Therapeutic Category | F4: CAS Number | G4: Know More | H4: Request Sample
+A5: OUR STRONG PRODUCTS | B5:  | C5:  | D5:  | E5:  | F5:  | G5:  | H5: 
+A6: 1.0 | B6: Know More | C6: Atorvastatin Calcium | D6: √ | E6: IP/BP/USP | F6: Cardiovascular | G6: 344423-98-9 | H6: 
+A7: 2.0 | B7: 2-[(5-Bromo-2-methylphenyl)methyl]-5-(4-fluorophenyl)thiophene | C7:  | D7: 1030825-20-7 | E7: Canagliflozin | F7:  | G7: Azithromycin | H7: Dapagliflozin
+A8: 3.0 | B8:  | C8: Atorvastatin Calcium | D8: Know More | E8:  | F8: Request Sample | G8: (3S)-3-[4-[(2-Chloro-5-iodophenyl)methyl]phenoxy]tetrahydrofuran | H8: Citicoline Sodium
+A9: 4.0 | B9: Know More | C9: Atorvastatin Calcium | D9: 1030825-20-7 | E9:  | F9: Request Sample | G9: 1-(3,4-Dimethoxyphenethyl)urea | H9: 
+A10: 5.0 | B10: Request Sample | C10: Atorvastatin Calcium | D10: √ | E10:  | F10: Request Sample | G10: 8-Bromo-7-(but-2-yn-1-yl)-3-methyl-1H-purine-2,6(3H,7H)-dione | H10: 130693-82-2
+A11: 6.0 | B11: 8-Bromo-7-but-2-ynyl-3-methyl-1-[(4-methylquinazolin-2-yl)methyl]purine-2,6-dione | C11: Atorvastatin Calcium | D11: 853029-57-9 | E11:  | F11: Know More | G11:  | H11: Know More
+A12: 7.0 | B12:  | C12: Atorvastatin Calcium | D12: 853029-57-9 | E12: Request Sample | F12: 4-(Chloromethyl)-5-methyl-1,3-dioxol-2-one | G12: 80841-78-7 | H12: Request Sample
+A13: 8.0 | B13: Ethyl 4-(2-hydroxy-2-propyl)-2-propyl-imidazole-5-carboxylate | C13:  | D13: √ | E13: IP/BP/USP | F13: 144689-93-0 | G13: Olmesartan-OLMI-1 | H13: 
+A14: 9.0 | B14:  | C14: Atorvastatin Calcium | D14: √ | E14: Know More | F14: Montelukast Sodium | G14: IP/EP/USP | H14: Anti-Asthmatic
+A15: 10.0 | B15: 151767-02-1 | C15: Atorvastatin Calcium | D15: √ | E15:  | F15: Know More | G15:  | H15: Request Sample
+A16: 5-(4'-(Bromomethyl)-[1,1'-biphenyl]-2-yl)-1-trityl-1H-tetrazole (TTBB) | B16:  | C16:  | D16:  | E16:  | F16:  | G16:  | H16: 
+A17: 1.0 | B17: 124750-51-2 | C17:  | D17: Sartan Family - TTBB | E17:  | F17: Know More | G17:  | H17: Request Sample
+A18: 2.0 | B18: Nitrofurantoin | C18:  | D18: Sartan Family - TTBB | E18: Antibiotic/Anti-Bacterial | F18: 67-20-9 | G18:  | H18: Know More
+A19: 3.0 | B19:  | C19:  | D19: √ | E19: Request Sample | F19: D-Tryptophan Methyl Ester Hydrochloride | G19: 14907-27-8 | H19: Tadalafil
+A20: 4.0 | B20:  | C20:  | D20: √ | E20: Know More | F20:  | G20: Request Sample | H20: 
+A21: 5.0 | B21: Request Sample | C21:  | D21: Sartan Family - TTBB | E21: Rosuvastatin Calcium | F21: 147098-20-2 | G21:  | H21: Know More
+A22: 6.0 | B22:  | C22:  | D22: Request Sample | E22: Erectile Dysfunction | F22: 171596-29-5 | G22:  | H22: Know More
+A23: 7.0 | B23:  | C23:  | D23: 1030825-20-7 | E23: Request Sample | F23: Tigecycline | G23: Anti-Bacterial | H23: 220620-09-7
+A24: 8.0 | B24:  | C24:  | D24: Sartan Family - TTBB | E24: Know More | F24:  | G24: Request Sample | H24: OUR CAMPAIGN PRODUCTS
+A25: 9.0 | B25: Acotiamide | C25:  | D25: IH | E25: Gastrointestinal Prokinetic Agent | F25: 185106-16-5 | G25:  | H25: Know More
+A26:  | B26:  | C26:  | D26:  | E26:  | F26:  | G26:  | H26: 
+A27: 1.0 | B27: Request Sample | C27:  | D27: √ | E27: Benfotiamine | F27: Diabetic Polyneuropathy | G27: 22457-89-2 | H27: 
+A28: 2.0 | B28: Know More | C28:  | D28: √ | E28:  | F28: Request Sample | G28: 22457-89-2 | H28: Deferoxamine Mesylate
+A29: 3.0 | B29: Iron Chelating Agent | C29:  | D29: √ | E29: 138-14-7 | F29:  | G29: 22457-89-2 | H29: Know More
+A30: 4.0 | B30:  | C30:  | D30: √ | E30: Know More | F30: Request Sample | G30: 22457-89-2 | H30: Fexofenadine HCl

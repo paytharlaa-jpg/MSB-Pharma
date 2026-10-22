@@ -1,0 +1,441 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Staff Authentication and RBAC
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("SALES") // "SUPER_ADMIN", "SALES", "ACCOUNTS", "INVENTORY"
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enquiriesAssigned   Enquiry[]         @relation("EnquiryAssigned")
+  enquiryNotes        EnquiryNote[]
+  stockAdjustments    StockAdjustment[]
+  purchaseOrders      PurchaseOrder[]
+  goodsReceiptNotes   GoodsReceiptNote[]
+  quotations          Quotation[]
+  invoices            Invoice[]
+  paymentRecords      PaymentRecord[]
+  deliveryChallans    DeliveryChallan[]
+  auditLogs           AuditLog[]
+}
+
+// 2. Customers
+model Customer {
+  id            String   @id @default(cuid())
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  gstin         String?
+  pan           String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  quotations       Quotation[]
+  invoices         Invoice[]
+  deliveryChallans DeliveryChallan[]
+}
+
+// 3. Suppliers
+model Supplier {
+  id            String   @id @default(cuid())
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  gstin         String?
+  pan           String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  purchaseOrders    PurchaseOrder[]
+  goodsReceiptNotes GoodsReceiptNote[]
+  batches           ProductBatch[]
+}
+
+// 4. Product Categories
+model ProductCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0)
+  products    Product[]
+}
+
+// 5. Product Master
+model Product {
+  id                  String   @id @default(cuid())
+  sku                 String   @unique
+  name                String
+  categoryId          String
+  category            ProductCategory @relation(fields: [categoryId], references: [id])
+  grade               String?  // e.g. IP/BP/USP
+  therapeuticCategory String?  // e.g. Cardiovascular
+  casNumber           String?  // e.g. 344423-98-9
+  ihDmf               String?  // e.g. Yes / DMF Available
+  description         String?
+  unitOfMeasurement   String   @default("KG")
+  minimumStock        Float    @default(0)
+  isApprovedForPublic Boolean  @default(true)
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  batches             ProductBatch[]
+  stockAdjustments    StockAdjustment[]
+  poItems             PurchaseOrderItem[]
+  grnItems            GRNItem[]
+  quotationItems      QuotationItem[]
+  invoiceItems        InvoiceItem[]
+  challanItems        DeliveryChallanItem[]
+}
+
+// 6. Product Batch & Expiry Records
+model ProductBatch {
+  id              String    @id @default(cuid())
+  productId       String
+  product         Product   @relation(fields: [productId], references: [id])
+  batchNumber     String
+  mfgDate         DateTime?
+  expiryDate      DateTime?
+  currentQuantity Float     @default(0)
+  unit            String    @default("KG")
+  storageLocation String    @default("Main Warehouse - Kukatpally")
+  supplierId      String?
+  supplier        Supplier? @relation(fields: [supplierId], references: [id])
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  stockAdjustments StockAdjustment[]
+  challanItems     DeliveryChallanItem[]
+
+  @@unique([productId, batchNumber])
+}
+
+// 7. Manual Stock Adjustments (Audit Trail)
+model StockAdjustment {
+  id                String       @id @default(cuid())
+  batchId           String
+  batch             ProductBatch @relation(fields: [batchId], references: [id])
+  productId         String
+  product           Product      @relation(fields: [productId], references: [id])
+  type              String       // "OPENING_BALANCE", "INCREASE", "DECREASE", "RECONCILIATION"
+  quantityChange    Float
+  quantityBefore    Float
+  quantityAfter     Float
+  reason            String
+  documentRef       String?      // Reference to GRN or invoice or manual slip
+  performedByUserId String
+  performedBy       User         @relation(fields: [performedByUserId], references: [id])
+  createdAt         DateTime     @default(now())
+}
+
+// 8. Enquiries
+model Enquiry {
+  id                String   @id @default(cuid())
+  enquiryNumber     String   @unique
+  contactName       String
+  companyName       String?
+  email             String
+  phone             String
+  productOfInterest String?
+  category          String?
+  requestedQuantity Float?
+  unit              String?  @default("KG")
+  message           String
+  status            String   @default("NEW") // "NEW", "ASSIGNED", "IN_PROGRESS", "AWAITING_CUSTOMER", "QUOTATION_SENT", "WON", "LOST", "CLOSED"
+  source            String   @default("WEBSITE")
+  assignedToUserId  String?
+  assignedTo        User?    @relation("EnquiryAssigned", fields: [assignedToUserId], references: [id])
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  enquiryNotes EnquiryNote[]
+}
+
+// 9. Enquiry Notes
+model EnquiryNote {
+  id           String   @id @default(cuid())
+  enquiryId    String
+  enquiry      Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  authorUserId String
+  author       User     @relation(fields: [authorUserId], references: [id])
+  content      String
+  createdAt    DateTime @default(now())
+}
+
+// 10. Purchase Orders (PO)
+model PurchaseOrder {
+  id                   String              @id @default(cuid())
+  poNumber             String              @unique
+  supplierId           String
+  supplier             Supplier            @relation(fields: [supplierId], references: [id])
+  orderDate            DateTime            @default(now())
+  expectedDeliveryDate DateTime?
+  status               String              @default("DRAFT") // "DRAFT", "ISSUED", "PARTIALLY_RECEIVED", "COMPLETED", "CANCELLED"
+  notes                String?
+  paymentTerms         String?
+  totalAmount          Float               @default(0)
+  createdByUserId      String
+  createdBy            User                @relation(fields: [createdByUserId], references: [id])
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  items                PurchaseOrderItem[]
+  goodsReceiptNotes    GoodsReceiptNote[]
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product       @relation(fields: [productId], references: [id])
+  quantity        Float
+  unit            String        @default("KG")
+  unitPrice       Float
+  lineTotal       Float
+}
+
+// 11. Goods Receipt Notes (GRN)
+model GoodsReceiptNote {
+  id              String        @id @default(cuid())
+  grnNumber       String        @unique
+  supplierId      String
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  purchaseOrderId String?
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+  receiptDate     DateTime      @default(now())
+  status          String        @default("VERIFIED") // "DRAFT", "VERIFIED", "CANCELLED"
+  notes           String?
+  receivedByUserId String
+  receivedBy      User          @relation(fields: [receivedByUserId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  items           GRNItem[]
+}
+
+model GRNItem {
+  id               String           @id @default(cuid())
+  grnId            String
+  grn              GoodsReceiptNote @relation(fields: [grnId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product          @relation(fields: [productId], references: [id])
+  batchNumber      String
+  expiryDate       DateTime?
+  receivedQuantity Float
+  acceptedQuantity Float
+  rejectedQuantity Float            @default(0)
+  unit             String           @default("KG")
+  storageLocation  String           @default("Main Warehouse - Kukatpally")
+}
+
+// 12. Quotations
+model Quotation {
+  id              String          @id @default(cuid())
+  quotationNumber String          @unique
+  customerId      String
+  customer        Customer        @relation(fields: [customerId], references: [id])
+  quotationDate   DateTime        @default(now())
+  validUntilDate  DateTime?
+  status          String          @default("DRAFT") // "DRAFT", "SENT", "ACCEPTED", "REJECTED", "EXPIRED"
+  notes           String?
+  terms           String?
+  subtotal        Float           @default(0)
+  taxRate         Float           @default(18) // 18% GST typical
+  taxAmount       Float           @default(0)
+  discountAmount  Float           @default(0)
+  grandTotal      Float           @default(0)
+  createdByUserId String
+  createdBy       User            @relation(fields: [createdByUserId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  items           QuotationItem[]
+  invoices        Invoice[]
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  description String?
+  quantity    Float
+  unit        String    @default("KG")
+  unitPrice   Float
+  lineTotal   Float
+}
+
+// 13. Invoices and Payment Tracking
+model Invoice {
+  id              String          @id @default(cuid())
+  invoiceNumber   String          @unique
+  customerId      String
+  customer        Customer        @relation(fields: [customerId], references: [id])
+  quotationId     String?
+  quotation       Quotation?      @relation(fields: [quotationId], references: [id])
+  invoiceDate     DateTime        @default(now())
+  dueDate         DateTime?
+  status          String          @default("ISSUED") // "DRAFT", "ISSUED", "CANCELLED"
+  paymentStatus   String          @default("UNPAID") // "UNPAID", "PARTIALLY_PAID", "PAID"
+  currency        String          @default("INR")
+  subtotal        Float           @default(0)
+  taxRate         Float           @default(18)
+  taxAmount       Float           @default(0)
+  discountAmount  Float           @default(0)
+  grandTotal      Float           @default(0)
+  paidAmount      Float           @default(0)
+  balanceAmount   Float           @default(0)
+  notes           String?
+  terms           String?
+  createdByUserId String
+  createdBy       User            @relation(fields: [createdByUserId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  items            InvoiceItem[]
+  payments         PaymentRecord[]
+  deliveryChallans DeliveryChallan[]
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  description String?
+  quantity    Float
+  unit        String   @default("KG")
+  unitPrice   Float
+  lineTotal   Float
+}
+
+// 14. Payment Records
+model PaymentRecord {
+  id                String   @id @default(cuid())
+  invoiceId         String
+  invoice           Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount            Float
+  paymentDate       DateTime @default(now())
+  paymentMethod     String   @default("BANK_TRANSFER") // "BANK_TRANSFER", "NEFT/RTGS", "CHEQUE", "UPI", "CASH"
+  referenceNumber   String?
+  notes             String?
+  recordedByUserId  String
+  recordedBy        User     @relation(fields: [recordedByUserId], references: [id])
+  createdAt         DateTime @default(now())
+}
+
+// 15. Delivery Challan
+model DeliveryChallan {
+  id              String                @id @default(cuid())
+  challanNumber   String                @unique
+  customerId      String
+  customer        Customer              @relation(fields: [customerId], references: [id])
+  invoiceId       String?
+  invoice         Invoice?              @relation(fields: [invoiceId], references: [id])
+  deliveryDate    DateTime              @default(now())
+  deliveryAddress String?
+  dispatchDetails String?
+  vehicleNumber   String?
+  status          String                @default("DISPATCHED") // "DRAFT", "DISPATCHED", "DELIVERED", "CANCELLED"
+  notes           String?
+  createdByUserId String
+  createdBy       User                  @relation(fields: [createdByUserId], references: [id])
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  items           DeliveryChallanItem[]
+}
+
+model DeliveryChallanItem {
+  id                String          @id @default(cuid())
+  deliveryChallanId String
+  deliveryChallan   DeliveryChallan @relation(fields: [deliveryChallanId], references: [id], onDelete: Cascade)
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+  batchId           String?
+  batch             ProductBatch?   @relation(fields: [batchId], references: [id])
+  quantity          Float
+  unit              String          @default("KG")
+}
+
+// 16. Document Numbering Sequence
+model DocumentSequence {
+  id           String @id @default(cuid())
+  docType      String // "ENQ", "PO", "GRN", "QTN", "INV", "DC"
+  financialYear String // e.g. "2026-27"
+  lastSequence Int    @default(0)
+  prefix       String // e.g. "MSB/INV/26-27/"
+
+  @@unique([docType, financialYear])
+}
+
+// 17. Audit Log
+model AuditLog {
+  id                String   @id @default(cuid())
+  entityType        String   // "USER", "PRODUCT", "BATCH", "STOCK", "ENQUIRY", "PO", "GRN", "QUOTATION", "INVOICE", "PAYMENT", "CHALLAN"
+  entityId          String
+  action            String   // "CREATE", "UPDATE", "STATUS_CHANGE", "STOCK_ADJUST", "PAYMENT_RECORD", "EXPORT"
+  performedByUserId String?
+  performedBy       User?    @relation(fields: [performedByUserId], references: [id])
+  userEmail         String?
+  details           String   // JSON string of before/after or action details
+  ipAddress         String?
+  createdAt         DateTime @default(now())
+}
+
+// 18. Blog Posts
+model BlogPost {
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  excerpt        String
+  content        String
+  coverImage     String?
+  author         String    @default("MSB PHARMACHEM Editorial")
+  publishedDate  DateTime  @default(now())
+  isPublished    Boolean   @default(true)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// 19. Site and Business Settings
+model SiteSettings {
+  id             String   @id @default("default")
+  companyName    String   @default("MSB PHARMACHEM")
+  logoUrl        String   @default("/images/logo-msb-pharmachem.png")
+  phone          String   @default("+91 8008335333")
+  email          String   @default("mohank9@gmail.com")
+  address        String   @default("Plot No. 128, Kamala Prasanna Nagar, Allwyn Colony, Kukatpally, Hyderabad – 500072, Telangana, India")
+  gstNumber      String   @default("36AAAAA0000A1Z5") // [Placeholder - Configurable]
+  panNumber      String   @default("AAAAA0000A")     // [Placeholder - Configurable]
+  bankDetails    String   @default("Bank: HDFC Bank, Kukatpally Branch\nA/C No: 50200000000000\nIFSC: HDFC0000000") // [Placeholder]
+  invoiceTerms   String   @default("1. Payment due within 30 days of invoice date.\n2. Goods once sold will not be taken back unless quality dispute is raised within 7 days with COA analysis.\n3. Subject to Hyderabad jurisdiction.")
+  quotationTerms String   @default("1. Prices are valid for 15 days from date of issue.\n2. GST will be applicable as per prevailing statutory rates.\n3. Delivery subject to stock availability and prior sale.")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
