@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "danger" | "ghost" | "brand-green";
+  variant?: "primary" | "secondary" | "outline" | "danger" | "ghost" | "brand-green" | "brand-teal";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -16,6 +16,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantClasses = {
       primary: "bg-[#00488F] text-white hover:bg-[#003870] focus:ring-[#00488F] shadow-sm",
       "brand-green": "bg-[#16A34A] text-white hover:bg-[#15803D] focus:ring-[#16A34A] shadow-sm",
+      "brand-teal": "bg-[#16B8A6] text-white hover:bg-[#0E8E83] focus:ring-[#16B8A6] shadow-sm",
       secondary: "bg-slate-100 text-slate-800 hover:bg-slate-200 focus:ring-slate-300",
       outline: "border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-slate-400",
       danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",

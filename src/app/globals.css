@@ -7,6 +7,10 @@
   --font-space-grotesk: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+html {
+  overflow-x: clip;
+}
+
 body {
   color: #071827;
   background-color: #ffffff;
@@ -19,13 +23,3 @@ table, .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
