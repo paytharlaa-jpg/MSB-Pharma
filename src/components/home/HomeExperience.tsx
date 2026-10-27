@@ -71,7 +71,7 @@ export function HomeExperience({ products, categories }: HomeExperienceProps) {
   }, [preloaderComplete]);
 
   return (
-    <div className="relative w-full bg-[#071827]">
+    <div className="relative w-full bg-white text-slate-900">
       {/* 1. Scroll Progress Bar */}
       <ScrollProgress />
 

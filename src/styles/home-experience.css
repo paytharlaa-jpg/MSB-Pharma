@@ -1,54 +1,69 @@
-/* MSB PHARMACHEM — Cinematic 3D Homepage Experience Styles */
+/* MSB PHARMACHEM — High-Precision Bright Experience Styles */
+/* Palette: Major #1b4db3 (Royal Blue) & #3a991d (Pharma Green) on Crisp White */
 
-/* Force zero secondary/section vertical scrollbars across the entire application */
+/* Prevent secondary horizontal scrollbars */
 section, main, #__next, body > div {
   overflow-x: clip !important;
-  overflow-y: visible !important;
 }
 
+/* Light Scientific Grids */
 .scientific-grid-bg {
   background-image: 
-    linear-gradient(to right, rgba(22, 184, 166, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(22, 184, 166, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(27, 77, 179, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 77, 179, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
 .scientific-grid-dense {
   background-image: 
-    linear-gradient(to right, rgba(22, 184, 166, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(22, 184, 166, 0.08) 1px, transparent 1px);
-  background-size: 20px 20px;
+    linear-gradient(to right, rgba(27, 77, 179, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(58, 153, 29, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .light-scientific-grid {
   background-image: 
-    linear-gradient(to right, rgba(11, 31, 51, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(11, 31, 51, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
-/* Glassmorphism panels */
-.glass-panel-dark {
-  background: rgba(11, 31, 51, 0.75);
+/* Glassmorphism panels for bright theme */
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(22, 184, 166, 0.25);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(27, 77, 179, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
 }
 
-.glass-panel-light {
+.glass-panel-card {
   background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(220, 228, 233, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 8px 24px -4px rgba(27, 77, 179, 0.06);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(27, 77, 179, 0.35);
+  box-shadow: 0 14px 34px -5px rgba(15, 23, 42, 0.3);
 }
 
 /* Glow highlights */
-.teal-glow {
-  box-shadow: 0 0 35px -5px rgba(22, 184, 166, 0.35);
+.blue-glow {
+  box-shadow: 0 0 35px -5px rgba(27, 77, 179, 0.35);
 }
 
-.teal-glow-subtle {
-  box-shadow: 0 0 20px -3px rgba(22, 184, 166, 0.18);
+.green-glow {
+  box-shadow: 0 0 35px -5px rgba(58, 153, 29, 0.35);
+}
+
+.dual-glow {
+  box-shadow: 0 12px 36px -8px rgba(27, 77, 179, 0.25), 0 6px 20px -4px rgba(58, 153, 29, 0.2);
 }
 
 /* Custom horizontal track */
@@ -73,7 +88,7 @@ section, main, #__next, body > div {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-18px) rotate(4deg);
+    transform: translateY(-16px) rotate(3deg);
   }
 }
 
@@ -82,7 +97,7 @@ section, main, #__next, body > div {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(18px) rotate(-4deg);
+    transform: translateY(16px) rotate(-3deg);
   }
 }
 
@@ -111,7 +126,7 @@ section, main, #__next, body > div {
   }
   50% {
     transform: scale(1.15);
-    opacity: 0.3;
+    opacity: 0.2;
   }
   100% {
     transform: scale(0.95);
@@ -128,6 +143,45 @@ section, main, #__next, body > div {
   }
 }
 
+/* Moving gradient mesh drift */
+@keyframes drift-gradient-1 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.95);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes drift-gradient-2 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-50px, 40px) scale(1.08);
+  }
+  66% {
+    transform: translate(35px, -35px) scale(0.92);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-drift-1 {
+  animation: drift-gradient-1 14s ease-in-out infinite;
+}
+
+.animate-drift-2 {
+  animation: drift-gradient-2 18s ease-in-out infinite;
+}
+
 .animate-float-slow {
   animation: float-slow 7s ease-in-out infinite;
 }
@@ -137,27 +191,27 @@ section, main, #__next, body > div {
 }
 
 .animate-spin-orbital {
-  animation: spin-orbital 25s linear infinite;
+  animation: spin-orbital 28s linear infinite;
 }
 
 .animate-spin-orbital-reverse {
-  animation: spin-orbital-reverse 35s linear infinite;
+  animation: spin-orbital-reverse 36s linear infinite;
 }
 
 .animate-pulse-ring {
   animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Waveform bars */
+/* Waveform bars for HPLC readouts */
 .waveform-bar {
   width: 3px;
-  background-color: #16b8a6;
+  background-color: #3a991d;
   border-radius: 2px;
   animation: waveform-pulse 1.2s ease-in-out infinite;
 }
 
 /* ============================================================
-   INTERACTIVE ALTERNATING TIMELINE (USER REQUESTED PATTERN)
+   INTERACTIVE ALTERNATING TIMELINE (BRIGHT THEME)
    ============================================================ */
 
 .tl-container {
@@ -171,12 +225,12 @@ section, main, #__next, body > div {
   padding: 20px 0;
 }
 
-/* The vertical dashed timeline ruler */
+/* Vertical dashed timeline ruler */
 .main-timeline::after {
   content: "";
   position: absolute;
   width: 0px;
-  border-left: 2px dashed rgba(22, 184, 166, 0.45);
+  border-left: 2px dashed rgba(27, 77, 179, 0.35);
   top: 0;
   bottom: 0px;
   left: 50%;
@@ -195,11 +249,11 @@ section, main, #__next, body > div {
   position: absolute;
   width: 22px;
   height: 22px;
-  border: 3px solid #071827;
-  outline: 2px solid #16b8a6;
+  border: 3px solid #ffffff;
+  outline: 2px solid #1b4db3;
   right: -11px;
-  background-color: #16b8a6;
-  box-shadow: 0 0 14px rgba(22, 184, 166, 0.9);
+  background-color: #3a991d;
+  box-shadow: 0 0 14px rgba(58, 153, 29, 0.7);
   top: 24px;
   border-radius: 50%;
   z-index: 10;
@@ -208,8 +262,8 @@ section, main, #__next, body > div {
 
 .timeline:hover::after {
   transform: scale(1.3);
-  background-color: #38bdf8;
-  outline-color: #38bdf8;
+  background-color: #1b4db3;
+  outline-color: #3a991d;
 }
 
 /* Left container placement */
@@ -233,7 +287,7 @@ section, main, #__next, body > div {
   right: 36px;
   border: medium solid white;
   border-width: 10px 0 10px 12px;
-  border-color: transparent transparent transparent #0b1f33;
+  border-color: transparent transparent transparent #e2e8f0;
 }
 
 /* Arrow for right container (pointing left) */
@@ -245,7 +299,7 @@ section, main, #__next, body > div {
   left: 36px;
   border: medium solid white;
   border-width: 10px 12px 10px 0;
-  border-color: transparent #0b1f33 transparent transparent;
+  border-color: transparent #e2e8f0 transparent transparent;
 }
 
 /* Fix circular node position on right containers */
@@ -267,11 +321,11 @@ section, main, #__next, body > div {
 }
 
 .tl-card:hover {
-  box-shadow: 0 15px 35px -5px rgba(22, 184, 166, 0.25);
+  box-shadow: 0 20px 40px -10px rgba(27, 77, 179, 0.15), 0 0 20px -3px rgba(58, 153, 29, 0.12);
 }
 
 .tl-card:hover .tl-img-scale {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 /* Responsive adjustments for screens under 768px */
@@ -291,7 +345,7 @@ section, main, #__next, body > div {
     left: 36px !important;
     right: auto !important;
     border-width: 10px 12px 10px 0 !important;
-    border-color: transparent #0b1f33 transparent transparent !important;
+    border-color: transparent #e2e8f0 transparent transparent !important;
   }
 
   .timeline.left::after,
@@ -328,17 +382,24 @@ section, main, #__next, body > div {
 .text-gradient-shimmer {
   background: linear-gradient(
     90deg,
-    #14b8a6 0%,
-    #38bdf8 25%,
-    #34d399 50%,
-    #38bdf8 75%,
-    #14b8a6 100%
+    #1b4db3 0%,
+    #2563eb 25%,
+    #3a991d 50%,
+    #2563eb 75%,
+    #1b4db3 100%
   );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   animation: text-shimmer 5s linear infinite;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #1b4db3 0%, #3a991d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @keyframes line-glow-sweep {
@@ -365,9 +426,9 @@ section, main, #__next, body > div {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(22, 184, 166, 0.6) 50%,
+    rgba(27, 77, 179, 0.4) 40%,
+    rgba(58, 153, 29, 0.5) 60%,
     transparent 100%
   );
   animation: line-glow-sweep 3.5s ease-in-out infinite;
 }
-

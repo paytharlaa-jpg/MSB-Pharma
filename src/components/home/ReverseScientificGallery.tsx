@@ -119,39 +119,39 @@ export function ReverseScientificGallery() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#071827] text-white overflow-hidden border-t border-slate-800"
+      className="relative bg-[#f8fafc] text-slate-900 overflow-hidden border-t border-slate-200"
       aria-label="Reverse Horizontal Scientific Gallery: Right to Left"
     >
       {/* Background dense grid */}
-      <div className="absolute inset-0 scientific-grid-dense opacity-25 pointer-events-none" />
+      <div className="absolute inset-0 scientific-grid-dense opacity-40 pointer-events-none" />
 
       {/* Radial accent glow */}
-      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-900/20 blur-[180px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#1b4db3]/8 blur-[180px] pointer-events-none" />
 
       <div className="h-[100svh] min-h-[640px] flex flex-col justify-center">
         {/* Section Top Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#3a991d] animate-ping" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#3a991d]">
               REVERSE SCIENTIFIC GALLERY · RIGHT TO LEFT SEQUENCE
             </span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-300">
-            <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
-              <ChevronLeft className="w-4 h-4 text-cyan-400 animate-pulse" />
+          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600">
+            <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
+              <ChevronLeft className="w-4 h-4 text-[#3a991d] animate-pulse" />
               <span>REVERSE FLOW DISCOVERY</span>
             </div>
 
-            <div className="w-24 sm:w-36 h-2 bg-slate-900 rounded-full overflow-hidden border border-cyan-500/30">
+            <div className="w-24 sm:w-36 h-2 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
               <div
                 ref={progressBarRef}
-                className="h-full bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400"
+                className="h-full bg-gradient-to-r from-[#3a991d] via-[#2563eb] to-[#1b4db3]"
                 style={{ width: "8%" }}
               />
             </div>
-            <span ref={progressTextRef} className="text-cyan-400 font-bold min-w-[34px] text-right">
+            <span ref={progressTextRef} className="text-[#3a991d] font-bold min-w-[34px] text-right">
               0%
             </span>
           </div>
@@ -165,11 +165,11 @@ export function ReverseScientificGallery() {
           {slides.map((slide) => (
             <div
               key={slide.id}
-              className="w-[85vw] sm:w-[500px] lg:w-[620px] shrink-0 bg-[#0B1F33] rounded-3xl border border-cyan-500/20 p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group"
+              className="w-[85vw] sm:w-[500px] lg:w-[620px] shrink-0 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-[#3a991d]/40 transition-colors"
             >
               <div>
                 {/* Visual Header */}
-                <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 bg-slate-900 border border-slate-800/80">
+                <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 bg-slate-900 border border-slate-200">
                   <Image
                     src={slide.image}
                     alt={slide.alt}
@@ -177,10 +177,10 @@ export function ReverseScientificGallery() {
                     className="object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
                     sizes="620px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F33] via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-80" />
 
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="px-3 py-1 rounded-full bg-[#071827]/90 text-[10px] font-mono font-bold text-cyan-300 border border-cyan-500/30">
+                    <span className="px-3 py-1 rounded-full bg-white/95 text-[10px] font-mono font-bold text-[#1b4db3] border border-slate-200 shadow-xs">
                       {slide.tag}
                     </span>
                   </div>
@@ -189,22 +189,22 @@ export function ReverseScientificGallery() {
                     <h3 className="text-2xl font-bold font-heading text-white">
                       {slide.title}
                     </h3>
-                    <p className="text-xs font-mono text-cyan-300 mt-0.5">
+                    <p className="text-xs font-mono text-emerald-300 mt-0.5">
                       {slide.subtitle}
                     </p>
                   </div>
                 </div>
 
                 {/* Narrative Description */}
-                <p className="text-sm text-slate-300 leading-relaxed font-normal">
+                <p className="text-sm text-slate-600 leading-relaxed font-normal">
                   {slide.description}
                 </p>
               </div>
 
               {/* Bottom Decorative Indicator */}
-              <div className="pt-4 mt-6 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
                 <span>MSB PHARMACHEM AUDIT TRAIL</span>
-                <span className="text-cyan-400 font-bold">100% VERIFIED</span>
+                <span className="text-[#3a991d] font-bold">100% VERIFIED</span>
               </div>
             </div>
           ))}

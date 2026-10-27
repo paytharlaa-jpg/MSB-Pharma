@@ -92,13 +92,13 @@ export function TrustValuesSection() {
   return (
     <section
       ref={sectionRef}
-      className="py-14 sm:py-16 bg-[#F3F6F8] text-slate-900 border-t border-slate-200 relative overflow-clip"
+      className="py-14 sm:py-16 bg-white text-slate-900 border-t border-slate-200 relative overflow-clip"
       aria-label="Quality, Reliability, Trust: Deep Dive"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 space-y-3">
-          <span className="text-xs font-mono font-bold text-teal-800 uppercase tracking-widest bg-teal-100/60 px-3 py-1 rounded-md border border-teal-200">
+          <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
             TECHNICAL DEEP DIVE
           </span>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
@@ -139,7 +139,7 @@ export function TrustValuesSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
 
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                      <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md flex items-center justify-center text-teal-700 shadow-md">
+                      <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md flex items-center justify-center text-[#1b4db3] shadow-md">
                         <Icon className="w-4 h-4" />
                       </div>
                       <span className="px-3 py-1 rounded-full bg-slate-900/90 text-white text-[11px] font-mono font-bold border border-slate-700">
@@ -148,7 +148,7 @@ export function TrustValuesSection() {
                     </div>
 
                     <div className="absolute bottom-4 left-4 right-4 z-10 text-white">
-                      <div className="text-xs font-mono text-teal-300 italic">
+                      <div className="text-xs font-mono text-emerald-300 italic">
                         &ldquo;{item.quote}&rdquo;
                       </div>
                     </div>
@@ -161,8 +161,8 @@ export function TrustValuesSection() {
                     isReversed ? "lg:order-1" : "lg:order-2"
                   }`}
                 >
-                  <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-teal-800">
-                    <span className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-teal-800 font-bold">
+                  <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#1b4db3]">
+                    <span className="w-6 h-6 rounded-full bg-[#edf3fd] flex items-center justify-center text-[#1b4db3] font-bold">
                       {item.step}
                     </span>
                     <span className="uppercase tracking-widest">{item.pillar}</span>
@@ -183,7 +183,7 @@ export function TrustValuesSection() {
                         key={i}
                         className="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs text-center"
                       >
-                        <div className="text-base sm:text-lg font-extrabold text-teal-700 font-heading">
+                        <div className="text-base sm:text-lg font-extrabold text-[#1b4db3] font-heading">
                           {m.value}
                         </div>
                         <div className="text-[10px] text-slate-500 font-medium mt-0.5 uppercase tracking-wider">
@@ -196,7 +196,7 @@ export function TrustValuesSection() {
                   <div className="pt-2">
                     <a
                       href="#rfq-section"
-                      className="inline-flex items-center text-xs font-bold text-teal-800 hover:text-teal-900 group/link"
+                      className="inline-flex items-center text-xs font-bold text-[#1b4db3] hover:text-[#153e94] group/link"
                     >
                       <span>Inquire About Our {item.pillar} Protocols</span>
                       <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover/link:translate-x-1" />

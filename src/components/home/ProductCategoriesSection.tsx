@@ -115,14 +115,14 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
     <section
       ref={sectionRef}
       id="product-categories"
-      className="py-14 sm:py-16 bg-[#F3F6F8] text-slate-900 border-t border-slate-200 relative overflow-clip"
+      className="py-14 sm:py-16 bg-[#f8fafc] text-slate-900 border-t border-slate-200/80 relative overflow-clip"
       aria-label="Product Categories Section"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header with Ref */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6">
           <div className="max-w-2xl space-y-3">
-            <span className="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-md border border-teal-200">
+            <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
               CORE PORTFOLIO
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
@@ -135,7 +135,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
 
           <Link
             href="/products"
-            className="inline-flex items-center text-sm font-bold text-teal-800 hover:text-teal-900 group shrink-0"
+            className="inline-flex items-center text-sm font-bold text-[#1b4db3] hover:text-[#153e94] group shrink-0"
           >
             <span>Explore Complete Master Catalog</span>
             <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
@@ -159,7 +159,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
               <Link
                 key={cat.id || idx}
                 href={`/products?category=${cat.slug}`}
-                className="group relative bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-teal-500/50 transition-all duration-300 flex flex-col justify-between"
+                className="group relative bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#1b4db3]/40 transition-all duration-300 flex flex-col justify-between"
               >
                 {/* Visual Header */}
                 <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
@@ -173,13 +173,13 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
 
                   <div className="absolute top-3 left-3 z-10">
-                    <span className="px-2.5 py-1 rounded-md bg-white/90 backdrop-blur-md text-[10px] font-mono font-bold text-slate-800 shadow-xs">
+                    <span className="px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-md text-[10px] font-mono font-bold text-[#1b4db3] shadow-xs">
                       {meta.tag}
                     </span>
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-white">
-                    <div className="w-8 h-8 rounded-lg bg-teal-500/30 border border-teal-400/40 backdrop-blur-md flex items-center justify-center text-teal-200">
+                    <div className="w-8 h-8 rounded-lg bg-[#1b4db3]/80 border border-white/20 backdrop-blur-md flex items-center justify-center text-white">
                       <Icon className="w-4 h-4" />
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
                 {/* Card Info */}
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-teal-700 transition-colors font-heading leading-snug">
+                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#1b4db3] transition-colors font-heading leading-snug">
                       {cat.name}
                     </h3>
                     <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
@@ -196,9 +196,9 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-teal-700 group-hover:text-teal-800">
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#1b4db3] group-hover:text-[#3a991d] transition-colors">
                     <span>View Specifications & Inquire</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
               </Link>

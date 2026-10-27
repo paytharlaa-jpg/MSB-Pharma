@@ -112,9 +112,9 @@ export function BrandPromiseSection() {
       metricLabel: "ASSAY PURITY",
       metricValue: "≥ 99.0%",
       metricUnit: "HPLC CONFIRMED",
-      accentColor: "from-teal-500/15 via-teal-500/5 to-transparent",
-      accentBorder: "border-teal-500/40 hover:border-teal-500",
-      accentBadge: "text-teal-800 bg-teal-50 border-teal-200",
+      accentColor: "from-[#1b4db3]/15 via-[#1b4db3]/5 to-transparent",
+      accentBorder: "border-[#1b4db3]/40 hover:border-[#1b4db3]",
+      accentBadge: "text-[#1b4db3] bg-[#edf3fd] border-[#1b4db3]/20",
       image: "/images/quality-science-visual.webp",
       alt: "Quality Control Laboratory HPLC Assay",
       description:
@@ -140,9 +140,9 @@ export function BrandPromiseSection() {
       metricLabel: "DISPATCH READY",
       metricValue: "24–48h",
       metricUnit: "HYDERABAD HUB",
-      accentColor: "from-blue-500/15 via-blue-500/5 to-transparent",
-      accentBorder: "border-blue-500/40 hover:border-blue-500",
-      accentBadge: "text-blue-800 bg-blue-50 border-blue-200",
+      accentColor: "from-[#3a991d]/15 via-[#3a991d]/5 to-transparent",
+      accentBorder: "border-[#3a991d]/40 hover:border-[#3a991d]",
+      accentBadge: "text-[#3a991d] bg-[#edf8eb] border-[#3a991d]/20",
       image: "/images/reliability-logistics-visual.webp",
       alt: "Climate-Controlled Pharmaceutical Distribution",
       description:
@@ -168,9 +168,9 @@ export function BrandPromiseSection() {
       metricLabel: "AUDIT DOSSIERS",
       metricValue: "100%",
       metricUnit: "AUTHENTICATED",
-      accentColor: "from-emerald-500/15 via-emerald-500/5 to-transparent",
-      accentBorder: "border-emerald-500/40 hover:border-emerald-500",
-      accentBadge: "text-emerald-800 bg-emerald-50 border-emerald-200",
+      accentColor: "from-[#1b4db3]/15 via-[#3a991d]/10 to-transparent",
+      accentBorder: "border-[#1b4db3]/40 hover:border-[#3a991d]",
+      accentBadge: "text-[#1b4db3] bg-[#edf3fd] border-[#1b4db3]/20",
       image: "/images/trust-documentation-visual.webp",
       alt: "Pharmaceutical Regulatory Dossier and Audit Records",
       description:
@@ -204,8 +204,8 @@ export function BrandPromiseSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold tracking-wider uppercase font-mono shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#edf3fd] border border-[#1b4db3]/25 text-[#1b4db3] text-xs font-semibold tracking-wider uppercase font-mono shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#1b4db3]" />
             <span>CORE PHILOSOPHY · TRI-CORE STANDARD</span>
           </div>
 
@@ -229,15 +229,15 @@ export function BrandPromiseSection() {
                   onClick={() => setActivePillar(p.id)}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
                     isActive
-                      ? "bg-slate-900 text-white shadow-md scale-105"
-                      : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200"
+                      ? "bg-[#1b4db3] text-white shadow-md scale-105"
+                      : "bg-white text-slate-600 hover:text-[#1b4db3] hover:bg-slate-50 border border-slate-200"
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-teal-400" : "text-slate-400"}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-400"}`} />
                   <span>
                     {p.number} · {p.title}
                   </span>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />}
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#3a991d] animate-pulse" />}
                 </button>
               );
             })}

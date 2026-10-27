@@ -153,32 +153,32 @@ export function TimelineMotionSection() {
   return (
     <section
       ref={sectionRef}
-      className="py-14 sm:py-16 bg-[#0B1F33] text-white border-t border-slate-800 relative overflow-clip"
+      className="py-14 sm:py-16 bg-white text-slate-900 border-t border-slate-200 relative overflow-clip"
       aria-label="How MSB PHARMACHEM Delivers Molecular Excellence Timeline"
     >
       {/* Background scientific grid */}
-      <div className="absolute inset-0 scientific-grid-dense opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 scientific-grid-dense opacity-35 pointer-events-none" />
 
       {/* Ambient background glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-teal-500/10 blur-[170px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-[#1b4db3]/5 blur-[170px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-950/80 border border-teal-500/40 text-teal-300 text-xs font-mono font-bold tracking-widest uppercase shadow-md">
-            <Clock className="w-3.5 h-3.5 text-teal-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#edf3fd] border border-[#1b4db3]/30 text-[#1b4db3] text-xs font-mono font-bold tracking-widest uppercase shadow-xs">
+            <Clock className="w-3.5 h-3.5 text-[#1b4db3]" />
             <span>INTERACTIVE TIMELINE · VERIFIED LIFECYCLE</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-heading leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
             How We Deliver Molecular Excellence
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             A step-by-step verified workflow from raw synthesis validation to commercial delivery, engineered for zero formulation disruption.
           </p>
 
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-teal-400 to-transparent mx-auto mt-6" />
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#1b4db3] to-transparent mx-auto mt-6" />
         </div>
 
         {/* The Timeline Container (Exact Pattern requested by User) */}
@@ -194,7 +194,7 @@ export function TimelineMotionSection() {
                   className={`timeline ${step.side}`}
                 >
                   <div
-                    className={`tl-card ${step.origin} bg-[#071827] rounded-3xl border border-teal-500/25 shadow-2xl overflow-hidden`}
+                    className={`tl-card ${step.origin} bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden`}
                   >
                     {/* Timeline Image Header with Hover Scale */}
                     <div className="relative h-48 sm:h-56 w-full bg-slate-900 overflow-hidden">
@@ -205,20 +205,20 @@ export function TimelineMotionSection() {
                         className="tl-img-scale object-cover transition-transform duration-700 ease-out"
                         sizes="(max-width: 768px) 100vw, 500px"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#071827] via-transparent to-transparent opacity-90" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-90" />
 
                       {/* Top Badges */}
                       <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                        <span className="px-3 py-1 rounded-full bg-[#0B1F33]/90 text-[10px] font-mono font-bold text-teal-300 border border-teal-500/30 backdrop-blur-md">
+                        <span className="px-3 py-1 rounded-full bg-white/90 text-[10px] font-mono font-bold text-[#1b4db3] border border-slate-200 backdrop-blur-md shadow-xs">
                           {step.tag}
                         </span>
                       </div>
 
                       <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-white">
-                        <span className="text-xs font-mono font-bold text-teal-400">
+                        <span className="text-xs font-mono font-bold text-emerald-300">
                           {step.specBadge}
                         </span>
-                        <span className="text-xl font-extrabold font-mono text-white/30">
+                        <span className="text-xl font-extrabold font-mono text-white/50">
                           {step.step}
                         </span>
                       </div>
@@ -230,15 +230,15 @@ export function TimelineMotionSection() {
                       <button
                         type="button"
                         onClick={() => toggleItem(idx)}
-                        className={`w-full p-5 sm:p-6 text-left flex items-center justify-between transition-colors border-b border-slate-800 ${
+                        className={`w-full p-5 sm:p-6 text-left flex items-center justify-between transition-colors border-b border-slate-100 ${
                           isOpen
-                            ? "bg-teal-950/40 text-teal-300"
-                            : "bg-[#071827] text-white hover:bg-slate-900"
+                            ? "bg-[#edf3fd]/80 text-[#1b4db3]"
+                            : "bg-white text-slate-900 hover:bg-slate-50"
                         }`}
                         aria-expanded={isOpen}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-[#edf3fd] border border-[#1b4db3]/20 flex items-center justify-center text-[#1b4db3] shrink-0">
                             <Icon className="w-4 h-4" />
                           </div>
                           <span className="font-bold text-base sm:text-lg font-heading leading-snug">
@@ -246,7 +246,7 @@ export function TimelineMotionSection() {
                           </span>
                         </div>
                         <ChevronDown
-                          className={`w-5 h-5 text-teal-400 transition-transform duration-300 shrink-0 ${
+                          className={`w-5 h-5 text-[#1b4db3] transition-transform duration-300 shrink-0 ${
                             isOpen ? "rotate-180" : ""
                           }`}
                         />
@@ -258,17 +258,17 @@ export function TimelineMotionSection() {
                           isOpen ? "max-h-[500px] opacity-100 p-6" : "max-h-0 opacity-0 p-0"
                         }`}
                       >
-                        <p className="text-xs sm:text-sm font-semibold text-teal-200 mb-2 leading-relaxed">
+                        <p className="text-xs sm:text-sm font-semibold text-[#1b4db3] mb-2 leading-relaxed">
                           {step.lead}
                         </p>
-                        <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
                           {step.body}
                         </p>
 
-                        <div className="space-y-2 pt-2 border-t border-slate-800">
+                        <div className="space-y-2 pt-2 border-t border-slate-100">
                           {step.bullets.map((b, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0 mt-0.5" />
+                            <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#3a991d] shrink-0 mt-0.5" />
                               <span>{b}</span>
                             </div>
                           ))}
@@ -276,11 +276,11 @@ export function TimelineMotionSection() {
                       </div>
 
                       {/* Card Footer */}
-                      <div className="px-6 py-3.5 bg-[#0B1F33]/80 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                      <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                         <span className="font-mono">MSB PHARMA PROTOCOL {step.step}</span>
                         <a
                           href="#rfq-section"
-                          className="text-teal-400 hover:text-teal-300 font-bold inline-flex items-center gap-1 transition-colors"
+                          className="text-[#1b4db3] hover:text-[#153e94] font-bold inline-flex items-center gap-1 transition-colors"
                         >
                           <Info className="w-3.5 h-3.5" />
                           <span>Technical Details</span>

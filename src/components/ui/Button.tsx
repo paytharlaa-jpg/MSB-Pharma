@@ -14,11 +14,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none";
 
     const variantClasses = {
-      primary: "bg-[#00488F] text-white hover:bg-[#003870] focus:ring-[#00488F] shadow-sm",
-      "brand-green": "bg-[#16A34A] text-white hover:bg-[#15803D] focus:ring-[#16A34A] shadow-sm",
-      "brand-teal": "bg-[#16B8A6] text-white hover:bg-[#0E8E83] focus:ring-[#16B8A6] shadow-sm",
+      primary: "bg-[#1b4db3] text-white hover:bg-[#153e94] focus:ring-[#1b4db3] shadow-md shadow-[#1b4db3]/20 hover:shadow-lg hover:shadow-[#1b4db3]/30",
+      "brand-green": "bg-[#3a991d] text-white hover:bg-[#2e7b17] focus:ring-[#3a991d] shadow-md shadow-[#3a991d]/20 hover:shadow-lg hover:shadow-[#3a991d]/30",
+      "brand-teal": "bg-gradient-to-r from-[#1b4db3] to-[#3a991d] text-white hover:opacity-95 focus:ring-[#1b4db3] shadow-md shadow-[#1b4db3]/20",
       secondary: "bg-slate-100 text-slate-800 hover:bg-slate-200 focus:ring-slate-300",
-      outline: "border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-slate-400",
+      outline: "border border-slate-300 text-slate-800 bg-white hover:bg-slate-50 focus:ring-slate-400 shadow-2xs",
       danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",
       ghost: "text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:ring-slate-200",
     };

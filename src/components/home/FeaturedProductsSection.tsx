@@ -378,66 +378,66 @@ export function FeaturedProductsSection({
           ))}
         </div>
 
-        {/* Commercial RFQ Container — Dense, balanced, with NO empty space */}
-        <div className="rfq-container-reveal rounded-3xl bg-[#0B1F33] text-white p-6 sm:p-10 lg:p-12 shadow-2xl border border-slate-800 relative overflow-hidden">
+        {/* Commercial RFQ Container — Dense, balanced, bright & high trust */}
+        <div className="rfq-container-reveal rounded-3xl bg-gradient-to-br from-[#edf3fd]/90 via-white to-[#edf8eb]/90 text-slate-900 p-6 sm:p-10 lg:p-12 shadow-xl border-2 border-slate-200/90 relative overflow-hidden">
           {/* Subtle background grid */}
-          <div className="absolute inset-0 scientific-grid-bg opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 scientific-grid-bg opacity-35 pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
             {/* Left Column: Full context and assurance cards that match the height of the right form */}
             <div className="lg:col-span-5 space-y-5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-950/90 border border-teal-500/40 text-teal-300 text-xs font-mono font-bold tracking-widest uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf3fd] border border-[#1b4db3]/30 text-[#1b4db3] text-xs font-mono font-bold tracking-widest uppercase">
+                <Sparkles className="w-3.5 h-3.5 text-[#1b4db3]" />
                 <span>FAST COMMERCIAL RESPONSE</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight font-heading">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight font-heading">
                 Looking for a Specific Pharmaceutical Material?
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                 Tell us your target molecule, grade, and delivery volume. Our commercial team in Hyderabad immediately verifies batch availability, confirms COA specifications, and returns competitive B2B quotation terms.
               </p>
 
               {/* 3 Value Assurance Highlights — Fills empty space with high-value technical context */}
               <div className="space-y-3 pt-2">
-                <div className="p-3.5 rounded-xl bg-[#071827] border border-slate-800 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0 mt-0.5">
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#edf3fd] border border-[#1b4db3]/25 flex items-center justify-center text-[#1b4db3] shrink-0 mt-0.5">
                     <Zap className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white font-heading">
+                    <h4 className="text-xs font-bold text-slate-900 font-heading">
                       24-Hour Commercial Dispatch
                     </h4>
-                    <p className="text-[11px] text-slate-400 leading-normal mt-0.5">
+                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
                       Stocked in Hyderabad warehouse corridor for immediate domestic transit & air cargo staging.
                     </p>
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#071827] border border-slate-800 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0 mt-0.5">
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#edf8eb] border border-[#3a991d]/25 flex items-center justify-center text-[#3a991d] shrink-0 mt-0.5">
                     <FileCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white font-heading">
+                    <h4 className="text-xs font-bold text-slate-900 font-heading">
                       Audit-Ready Dossiers
                     </h4>
-                    <p className="text-[11px] text-slate-400 leading-normal mt-0.5">
+                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
                       Batch-specific manufacturer COA, analytical method, MSDS, and open-part DMF documentation provided.
                     </p>
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#071827] border border-slate-800 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0 mt-0.5">
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#edf3fd] border border-[#1b4db3]/25 flex items-center justify-center text-[#1b4db3] shrink-0 mt-0.5">
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white font-heading">
+                    <h4 className="text-xs font-bold text-slate-900 font-heading">
                       WHO-GMP Vetted Manufacturers
                     </h4>
-                    <p className="text-[11px] text-slate-400 leading-normal mt-0.5">
+                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
                       Audited manufacturing sites meeting stringent IP, BP, USP, and EP compendial monographs.
                     </p>
                   </div>
@@ -445,41 +445,41 @@ export function FeaturedProductsSection({
               </div>
 
               {/* Verified Contact Details Box */}
-              <div className="p-4 rounded-2xl bg-[#071827] border border-slate-800 space-y-2.5 text-xs">
-                <div className="flex items-center justify-between text-slate-400">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5 text-xs">
+                <div className="flex items-center justify-between text-slate-600">
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-[#1b4db3] shrink-0" />
                     <span>Headquarters:</span>
                   </span>
-                  <span className="text-white font-medium text-right truncate">Kukatpally, Hyderabad</span>
+                  <span className="text-slate-900 font-medium text-right truncate">Kukatpally, Hyderabad</span>
                 </div>
 
-                <div className="flex items-center justify-between text-slate-400">
+                <div className="flex items-center justify-between text-slate-600">
                   <span className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <Phone className="w-3.5 h-3.5 text-[#3a991d] shrink-0" />
                     <span>Commercial Desk:</span>
                   </span>
-                  <a href="tel:+918008335333" className="text-teal-400 font-mono font-bold hover:underline">
+                  <a href="tel:+918008335333" className="text-[#1b4db3] font-mono font-bold hover:underline">
                     +91 8008335333
                   </a>
                 </div>
 
-                <div className="flex items-center justify-between text-slate-400">
+                <div className="flex items-center justify-between text-slate-600">
                   <span className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-[#1b4db3] shrink-0" />
                     <span>Procurement Mail:</span>
                   </span>
-                  <a href="mailto:mohank9@gmail.com" className="text-white font-mono hover:underline">
+                  <a href="mailto:mohank9@gmail.com" className="text-[#1b4db3] font-mono font-medium hover:underline">
                     mohank9@gmail.com
                   </a>
                 </div>
 
-                <div className="flex items-center justify-between text-slate-400 pt-1 border-t border-slate-800/80">
+                <div className="flex items-center justify-between text-slate-500 pt-1 border-t border-slate-100">
                   <span className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <Clock className="w-3.5 h-3.5 text-[#3a991d] shrink-0" />
                     <span>Working Hours:</span>
                   </span>
-                  <span className="text-slate-300 font-mono text-[11px]">Mon–Sat: 9 AM–6:30 PM IST</span>
+                  <span className="text-slate-700 font-mono text-[11px]">Mon–Sat: 9 AM–6:30 PM IST</span>
                 </div>
               </div>
 
@@ -492,7 +492,7 @@ export function FeaturedProductsSection({
                 })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors flex items-center justify-center gap-2 shadow-md"
+                className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-[#3a991d] hover:bg-[#2e7b17] text-white transition-colors flex items-center justify-center gap-2 shadow-md shadow-[#3a991d]/20"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Quick WhatsApp Quote (+91 8008335333)</span>

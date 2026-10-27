@@ -138,37 +138,37 @@ export function HorizontalProductJourney() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#071827] text-white overflow-hidden border-t border-slate-800"
+      className="relative bg-white text-slate-900 overflow-hidden border-t border-slate-200"
       aria-label="Horizontal Product Journey: Left to Right"
     >
       {/* Background scientific grid */}
-      <div className="absolute inset-0 scientific-grid-bg opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 scientific-grid-bg opacity-60 pointer-events-none" />
 
       {/* Main Track Wrapper */}
       <div className="h-[100svh] min-h-[640px] flex flex-col justify-center">
         {/* Top Header Label */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-ping" />
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-teal-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1b4db3] animate-ping" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#1b4db3]">
               SIGNATURE INTERACTION · HORIZONTAL SOURCING JOURNEY (LEFT TO RIGHT)
             </span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-300">
-            <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
+          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600">
+            <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
               <span>SCROLL DOWN TO PROGRESS</span>
-              <ChevronRight className="w-4 h-4 text-teal-400 animate-pulse" />
+              <ChevronRight className="w-4 h-4 text-[#1b4db3] animate-pulse" />
             </div>
 
-            <div className="w-24 sm:w-36 h-2 bg-slate-900 rounded-full overflow-hidden border border-teal-500/30">
+            <div className="w-24 sm:w-36 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-300">
               <div
                 ref={progressBarRef}
-                className="h-full bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400"
+                className="h-full bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d]"
                 style={{ width: "8%" }}
               />
             </div>
-            <span ref={progressTextRef} className="text-teal-400 font-bold min-w-[34px] text-right">
+            <span ref={progressTextRef} className="text-[#1b4db3] font-bold min-w-[34px] text-right">
               0%
             </span>
           </div>
@@ -182,29 +182,29 @@ export function HorizontalProductJourney() {
           {panels.map((panel) => (
             <div
               key={panel.id}
-              className="w-[85vw] sm:w-[480px] lg:w-[560px] shrink-0 bg-[#0B1F33] rounded-3xl border border-teal-500/20 p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group"
+              className="w-[85vw] sm:w-[480px] lg:w-[560px] shrink-0 bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-[#1b4db3]/40 transition-colors"
             >
               {/* Background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1b4db3]/5 via-transparent to-[#3a991d]/5 pointer-events-none" />
 
               <div>
                 {/* Panel Top Meta */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-teal-400 bg-teal-950/80 px-2.5 py-1 rounded-md border border-teal-800">
+                    <span className="text-xs font-mono font-bold text-[#1b4db3] bg-[#edf3fd] px-2.5 py-1 rounded-md border border-[#1b4db3]/20">
                       {panel.category}
                     </span>
-                    <span className="text-[11px] text-slate-400 font-medium">
+                    <span className="text-[11px] text-slate-500 font-medium">
                       {panel.tagline}
                     </span>
                   </div>
-                  <span className="text-2xl font-extrabold font-mono text-teal-400/40">
+                  <span className="text-2xl font-extrabold font-mono text-[#1b4db3]/30">
                     {panel.number}
                   </span>
                 </div>
 
                 {/* Panel Image */}
-                <div className="relative h-56 sm:h-64 rounded-2xl overflow-hidden mb-6 bg-slate-900 border border-slate-800">
+                <div className="relative h-56 sm:h-64 rounded-2xl overflow-hidden mb-6 bg-slate-100 border border-slate-200">
                   <Image
                     src={panel.image}
                     alt={panel.alt}
@@ -212,22 +212,22 @@ export function HorizontalProductJourney() {
                     className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     sizes="560px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F33] via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
                 </div>
 
                 {/* Title and Description */}
-                <h3 className="text-xl sm:text-2xl font-bold font-heading text-white mb-2 leading-snug">
+                <h3 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 mb-2 leading-snug">
                   {panel.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 font-normal">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
                   {panel.description}
                 </p>
 
                 {/* Technical Specs List */}
                 <div className="space-y-2 mb-6">
                   {panel.specs.map((spec, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-slate-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <div key={i} className="flex items-center gap-2 text-xs text-slate-700">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#3a991d] shrink-0" />
                       <span>{spec}</span>
                     </div>
                   ))}
@@ -235,9 +235,9 @@ export function HorizontalProductJourney() {
               </div>
 
               {/* Action Button */}
-              <div className="pt-4 border-t border-slate-800/80">
+              <div className="pt-4 border-t border-slate-100">
                 <Link href={panel.ctaHref} className="w-full">
-                  <Button variant="brand-teal" size="md" className="w-full text-xs font-semibold justify-between">
+                  <Button variant="primary" size="md" className="w-full text-xs font-semibold justify-between bg-[#1b4db3] hover:bg-[#153e94]">
                     <span>{panel.ctaText}</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>

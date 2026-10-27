@@ -63,13 +63,13 @@ export function SupplyChainStorySection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Text Column */}
           <div ref={textColRef} className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-bold tracking-wider uppercase">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf3fd] border border-[#1b4db3]/20 text-[#1b4db3] text-xs font-mono font-bold tracking-wider uppercase">
               <span>HYDERABAD PHARMACEUTICAL HUB</span>
             </div>
 
             <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
               Beyond Supply. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-blue-700">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1b4db3] to-[#3a991d]">
                 Built Around Reliability.
               </span>
             </h2>
@@ -85,8 +85,8 @@ export function SupplyChainStorySection() {
             {/* Key Capability Badges */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-                <div className="flex items-center gap-2 text-teal-700 font-bold text-sm">
-                  <Clock className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-[#1b4db3] font-bold text-sm">
+                  <Clock className="w-4 h-4 text-[#1b4db3]" />
                   <span>18+ Years Experience</span>
                 </div>
                 <p className="text-xs text-slate-500">
@@ -95,8 +95,8 @@ export function SupplyChainStorySection() {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-                <div className="flex items-center gap-2 text-teal-700 font-bold text-sm">
-                  <MapPin className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-[#3a991d] font-bold text-sm">
+                  <MapPin className="w-4 h-4 text-[#3a991d]" />
                   <span>Kukatpally, Hyderabad</span>
                 </div>
                 <p className="text-xs text-slate-500">
@@ -105,8 +105,8 @@ export function SupplyChainStorySection() {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-                <div className="flex items-center gap-2 text-teal-700 font-bold text-sm">
-                  <ShieldCheck className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-[#1b4db3] font-bold text-sm">
+                  <ShieldCheck className="w-4 h-4 text-[#1b4db3]" />
                   <span>Verified COA Support</span>
                 </div>
                 <p className="text-xs text-slate-500">
@@ -115,8 +115,8 @@ export function SupplyChainStorySection() {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-                <div className="flex items-center gap-2 text-teal-700 font-bold text-sm">
-                  <Award className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-[#3a991d] font-bold text-sm">
+                  <Award className="w-4 h-4 text-[#3a991d]" />
                   <span>WHO-GMP Audited</span>
                 </div>
                 <p className="text-xs text-slate-500">
@@ -127,7 +127,7 @@ export function SupplyChainStorySection() {
 
             <div className="pt-4 flex items-center gap-4">
               <Link href="/about">
-                <Button variant="primary" size="md">
+                <Button variant="primary" size="md" className="bg-[#1b4db3] hover:bg-[#153e94]">
                   <span>Read Full Company Profile</span>
                   <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>

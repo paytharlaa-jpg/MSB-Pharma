@@ -49,7 +49,7 @@ export function ScrollProgress() {
     >
       <div
         ref={barRef}
-        className="h-full w-full bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400 shadow-[0_0_10px_rgba(22,184,166,0.6)] origin-left"
+        className="h-full w-full bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d] shadow-[0_0_10px_rgba(27,77,179,0.5)] origin-left"
         style={{ transform: "scaleX(0)" }}
       />
     </div>

@@ -14,14 +14,12 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // If reduced motion is requested, dismiss immediately
     if (prefersReducedMotion) {
       setHidden(true);
       onComplete?.();
       return;
     }
 
-    // Check session storage so preloader doesn't annoy user during subsequent navigations
     try {
       const alreadyViewed = sessionStorage.getItem("msb_preloader_seen");
       if (alreadyViewed) {
@@ -34,14 +32,13 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
       // Ignore sessionStorage errors
     }
 
-    // Sequence timer: Phase 1 -> 2 -> 3 -> Done (fast, sleek 1.2s reveal)
-    const t1 = setTimeout(() => setPhase(2), 300);
-    const t2 = setTimeout(() => setPhase(3), 850);
+    const t1 = setTimeout(() => setPhase(2), 250);
+    const t2 = setTimeout(() => setPhase(3), 750);
     const t3 = setTimeout(() => {
       setPhase(4);
       setHidden(true);
       onComplete?.();
-    }, 1250);
+    }, 1100);
 
     return () => {
       clearTimeout(t1);
@@ -54,18 +51,23 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
 
   return (
     <aside
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#071827] text-white transition-opacity duration-700 ease-in-out ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white text-slate-900 transition-opacity duration-600 ease-in-out ${
         phase === 3 ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
       aria-label="MSB PHARMACHEM introductory loading sequence"
     >
       {/* Background scientific grid pattern */}
-      <div className="absolute inset-0 scientific-grid-dense opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 scientific-grid-dense opacity-30 pointer-events-none" />
 
-      {/* Ambient background teal glow */}
+      {/* Ambient background soft glow */}
       <div
-        className={`absolute w-[450px] h-[450px] rounded-full bg-teal-500/10 blur-[120px] transition-all duration-1000 ease-out pointer-events-none ${
-          phase >= 2 ? "scale-125 opacity-40" : "scale-75 opacity-10"
+        className={`absolute w-[450px] h-[450px] rounded-full bg-[#1b4db3]/8 blur-[120px] transition-all duration-1000 ease-out pointer-events-none ${
+          phase >= 2 ? "scale-125 opacity-50" : "scale-75 opacity-15"
+        }`}
+      />
+      <div
+        className={`absolute w-[400px] h-[400px] rounded-full bg-[#3a991d]/8 blur-[120px] transition-all duration-1000 ease-out pointer-events-none ${
+          phase >= 2 ? "scale-110 opacity-50" : "scale-75 opacity-15"
         }`}
       />
 
@@ -73,12 +75,12 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
         {/* Phase 1: Molecular emerging indicator */}
         <div className="relative mb-6">
           <div
-            className={`w-20 h-20 rounded-full border border-teal-500/30 flex items-center justify-center transition-all duration-700 ${
+            className={`w-20 h-20 rounded-full border border-[#1b4db3]/30 flex items-center justify-center transition-all duration-700 ${
               phase >= 2 ? "scale-100 opacity-100" : "scale-90 opacity-40"
             }`}
           >
-            <div className="w-16 h-16 rounded-full border-2 border-teal-400/40 border-t-teal-300 animate-spin" />
-            <div className="absolute w-3 h-3 rounded-full bg-teal-400 shadow-[0_0_12px_#16B8A6] animate-ping" />
+            <div className="w-16 h-16 rounded-full border-2 border-[#1b4db3]/30 border-t-[#3a991d] animate-spin" />
+            <div className="absolute w-3 h-3 rounded-full bg-[#3a991d] shadow-[0_0_10px_#3a991d] animate-ping" />
           </div>
 
           {/* Logo container (Phase 2) */}
@@ -87,7 +89,7 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
               phase >= 2 ? "scale-100 opacity-100" : "scale-75 opacity-0"
             }`}
           >
-            <div className="w-14 h-14 rounded-full bg-white p-1 shadow-lg shadow-teal-500/20">
+            <div className="w-14 h-14 rounded-full bg-white p-1 shadow-md border border-slate-200">
               <Image
                 src="/images/logo-msb-pharmachem.png"
                 alt="MSB PHARMACHEM"
@@ -106,25 +108,25 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
             phase >= 2 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
-          <div className="text-xl sm:text-2xl font-extrabold tracking-tight text-white font-heading">
+          <div className="text-xl sm:text-2xl font-black tracking-tight text-[#1b4db3] font-heading">
             MSB PHARMACHEM
           </div>
-          <div className="text-xs uppercase tracking-[0.25em] text-teal-400 font-semibold flex items-center justify-center gap-2">
+          <div className="text-xs uppercase tracking-[0.25em] text-[#3a991d] font-bold flex items-center justify-center gap-2">
             <span>Quality</span>
-            <span className="text-teal-600">•</span>
+            <span className="text-slate-300">•</span>
             <span>Reliability</span>
-            <span className="text-teal-600">•</span>
+            <span className="text-slate-300">•</span>
             <span>Trust</span>
           </div>
         </div>
 
-        {/* Phase 1 & 2 subtitle status */}
+        {/* Phase status indicator */}
         <div
-          className={`mt-6 text-[11px] text-slate-400 tracking-wider uppercase font-mono transition-opacity duration-500 ${
-            phase === 1 ? "opacity-80" : phase === 2 ? "opacity-60" : "opacity-0"
+          className={`mt-6 text-[11px] text-slate-500 tracking-wider uppercase font-mono transition-opacity duration-500 ${
+            phase === 1 ? "opacity-80" : phase === 2 ? "opacity-70" : "opacity-0"
           }`}
         >
-          {phase === 1 ? "Initializing Molecular Environment..." : "Precision in Every Molecule"}
+          {phase === 1 ? "Initializing Pharmaceutical Environment..." : "Precision in Every Molecule"}
         </div>
       </div>
     </aside>
