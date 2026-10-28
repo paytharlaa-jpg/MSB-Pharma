@@ -1,41 +1,139 @@
 "use client";
 
-import React, { useState } from "react";
-import { MessageCircle, CheckCircle2, AlertCircle, Send } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  MessageCircle,
+  CheckCircle2,
+  AlertCircle,
+  Send,
+  User,
+  Building2,
+  Mail,
+  Phone,
+  FlaskConical,
+  Scale,
+  FileText,
+  Copy,
+  Check,
+  ShieldCheck,
+  Award,
+  Clock,
+  ArrowRight,
+  RefreshCw,
+} from "lucide-react";
+import { getWhatsAppClickToChatUrl } from "@/lib/whatsapp-service";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 interface Category {
   id: string;
   name: string;
 }
 
+export interface PublicEnquiryFormProps {
+  categories?: Category[];
+  defaultProduct?: string;
+  asCard?: boolean;
+  className?: string;
+  title?: string;
+  subtitle?: string;
+  showLogo?: boolean;
+}
+
+const PHARMACOPOEIA_GRADES = [
+  { id: "IP", label: "IP (Indian)" },
+  { id: "BP", label: "BP (British)" },
+  { id: "USP", label: "USP (United States)" },
+  { id: "EP", label: "EP (European)" },
+  { id: "SAMPLE", label: "Working Sample" },
+];
+
 export function PublicEnquiryForm({
   categories = [],
   defaultProduct = "",
-}: {
-  categories?: Category[];
-  defaultProduct?: string;
-}) {
+  asCard = true,
+  className = "",
+  title = "Commercial Request for Quotation (RFQ)",
+  subtitle = "Direct submission to Hyderabad procurement desk. Technical COA, MOA & pricing dispatched within 24h.",
+  showLogo = true,
+}: PublicEnquiryFormProps) {
   const [form, setForm] = useState({
     contactName: "",
     companyName: "",
     email: "",
     phone: "",
-    productOfInterest: defaultProduct,
+    productOfInterest: defaultProduct || "",
     category: "",
     requestedQuantity: "",
     unit: "KG",
     message: "",
   });
 
+  const [selectedGrade, setSelectedGrade] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState<{
     enquiryNumber: string;
     whatsappUrl: string;
+    contactName: string;
+    product: string;
   } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Sync defaultProduct when prop changes
+  useEffect(() => {
+    if (defaultProduct) {
+      setForm((prev) => ({
+        ...prev,
+        productOfInterest: defaultProduct,
+      }));
+    }
+  }, [defaultProduct]);
+
+  const toggleGrade = (gradeId: string, gradeLabel: string) => {
+    if (selectedGrade === gradeId) {
+      setSelectedGrade(null);
+    } else {
+      setSelectedGrade(gradeId);
+      // If message is empty or doesn't mention grade, gently append it
+      if (!form.message.includes(gradeId)) {
+        setForm((prev) => ({
+          ...prev,
+          message: prev.message
+            ? `${prev.message.trim()} (Required Grade: ${gradeId})`
+            : `Please provide quote and COA for ${gradeLabel} standard.`,
+        }));
+      }
+    }
+  };
+
+  const copyEnquiryNumber = async () => {
+    if (!submitted?.enquiryNumber) return;
+    try {
+      await navigator.clipboard.writeText(submitted.enquiryNumber);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // fallback
+    }
+  };
+
+  const resetForm = () => {
+    setSubmitted(null);
+    setSelectedGrade(null);
+    setForm({
+      contactName: "",
+      companyName: "",
+      email: "",
+      phone: "",
+      productOfInterest: "",
+      category: "",
+      requestedQuantity: "",
+      unit: "KG",
+      message: "",
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +153,8 @@ export function PublicEnquiryForm({
       setSubmitted({
         enquiryNumber: data.enquiry.enquiryNumber,
         whatsappUrl: data.whatsappUrl,
+        contactName: form.contactName,
+        product: form.productOfInterest,
       });
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "Submission failed");
@@ -63,158 +163,454 @@ export function PublicEnquiryForm({
     }
   };
 
+  // SUCCESS / CONFIRMATION TICKET VIEW
   if (submitted) {
-    return (
-      <div className="py-8 text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
-          <CheckCircle2 className="w-10 h-10" />
+    const successContent = (
+      <div className="py-6 px-2 sm:px-4 text-center space-y-6">
+        {/* Check Icon with Brand Gradient Glow */}
+        <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#edf8eb] via-emerald-100 to-[#edf3fd] border-2 border-[#3a991d]/30 flex items-center justify-center text-[#3a991d] shadow-lg shadow-emerald-500/10">
+          <CheckCircle2 className="w-9 h-9" />
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900">Enquiry Received Successfully!</h3>
-
-        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-md mx-auto space-y-1">
-          <p>
-            Your Reference Number is: <strong className="text-blue-700 font-mono">{submitted.enquiryNumber}</strong>
-          </p>
-          <p className="text-slate-500">
-            Our commercial sales team in Hyderabad will review your requirement and email the technical COA and quotation shortly.
+        <div className="space-y-1.5">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-[#edf8eb] to-[#edf3fd] text-[#3a991d] border border-[#3a991d]/30">
+            <Check className="w-3 h-3 text-[#3a991d]" />
+            <span>RFQ Registered Successfully</span>
+          </span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-heading pt-1">
+            Commercial Enquiry Dispatched
+          </h3>
+          <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            Our procurement desk in Kukatpally, Hyderabad has received your requirement. Batch COA, pharmacopoeial monograph confirmation, and wholesale pricing will be emailed promptly.
           </p>
         </div>
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a href={submitted.whatsappUrl} target="_blank" rel="noopener noreferrer">
-            <Button variant="brand-green" size="md">
-              <MessageCircle className="w-4 h-4" />
-              <span>Connect Immediately on WhatsApp</span>
-            </Button>
+        {/* Official Reference Ticket Box */}
+        <div className="max-w-md mx-auto rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200 p-5 shadow-xs text-left space-y-3">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                Official Reference ID
+              </p>
+              <p className="text-lg font-bold font-mono text-[#1b4db3]">
+                {submitted.enquiryNumber}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={copyEnquiryNumber}
+              className="px-2.5 py-1 rounded-lg border border-slate-200 hover:border-slate-300 bg-white text-slate-700 hover:text-slate-900 text-xs font-semibold flex items-center gap-1 transition-colors shadow-2xs"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-600">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 pt-1">
+            <div>
+              <span className="text-slate-400 text-[10px] block">Procurement Officer:</span>
+              <span className="font-semibold text-slate-800 truncate block">
+                {submitted.contactName}
+              </span>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Material Sourced:</span>
+              <span className="font-semibold text-slate-800 truncate block">
+                {submitted.product || "Commercial Inquiry"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action CTAs */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <a
+            href={submitted.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#3a991d] hover:bg-[#2e7b17] text-white text-xs font-bold transition-all shadow-md shadow-[#3a991d]/20 flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Track on WhatsApp Instantly</span>
           </a>
 
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => {
-              setSubmitted(null);
-              setForm({
-                contactName: "",
-                companyName: "",
-                email: "",
-                phone: "",
-                productOfInterest: "",
-                category: "",
-                requestedQuantity: "",
-                unit: "KG",
-                message: "",
-              });
-            }}
+          <button
+            type="button"
+            onClick={resetForm}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
           >
-            Submit Another Request
-          </Button>
+            Submit Another RFQ
+          </button>
         </div>
+      </div>
+    );
+
+    if (!asCard) return successContent;
+
+    return (
+      <div
+        className={twMerge(
+          "relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/10 text-slate-900",
+          className
+        )}
+      >
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d]" />
+        <div className="p-6 sm:p-8">{successContent}</div>
       </div>
     );
   }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="border-b border-slate-100 pb-3">
-        <h3 className="text-lg font-bold text-slate-900">Commercial Request for Quotation (RFQ)</h3>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Enter requirement specifications for fast commercial quote & analytical documentation.
-        </p>
+  // FORM CONTENT
+  const formContent = (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Brand Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div className="flex items-start gap-3">
+          {showLogo && (
+            <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-white via-slate-50 to-slate-100 p-1 border border-slate-200 shadow-sm shrink-0 flex items-center justify-center">
+              <Image
+                src="/images/logo-msb-pharmachem.png"
+                alt="MSB PHARMACHEM"
+                width={38}
+                height={38}
+                className="rounded-xl object-contain"
+              />
+            </div>
+          )}
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-[#edf3fd] to-[#edf8eb] text-[#1b4db3] border border-[#1b4db3]/20">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3a991d] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#3a991d]"></span>
+                </span>
+                <span>Commercial Desk</span>
+              </span>
+              <span className="text-[11px] font-medium text-slate-400">• Hyderabad</span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-heading">
+              {title}
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
+              {subtitle}
+            </p>
+          </div>
+        </div>
       </div>
 
+      {/* Selected Product Pill (if present) */}
+      {form.productOfInterest && (
+        <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#edf3fd] via-[#f7faff] to-[#edf8eb] border border-[#1b4db3]/25 text-xs text-slate-700">
+          <div className="flex items-center gap-2 min-w-0">
+            <FlaskConical className="w-4 h-4 text-[#1b4db3] shrink-0" />
+            <span className="text-slate-500 text-[11px] font-medium">Target Material:</span>
+            <span className="font-bold text-[#1b4db3] font-mono truncate">
+              {form.productOfInterest}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setForm({ ...form, productOfInterest: "" })}
+            className="text-[11px] text-slate-400 hover:text-slate-700 hover:underline shrink-0 ml-2"
+          >
+            Clear
+          </button>
+        </div>
+      )}
+
+      {/* Pharmacopoeial Standard Chips */}
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+            <Award className="w-3.5 h-3.5 text-[#3a991d]" />
+            <span>Target Standard / Grade:</span>
+          </label>
+          <span className="text-[10px] text-slate-400">Click to tag in requirement</span>
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {PHARMACOPOEIA_GRADES.map((grade) => {
+            const active = selectedGrade === grade.id;
+            return (
+              <button
+                key={grade.id}
+                type="button"
+                onClick={() => toggleGrade(grade.id, grade.label)}
+                className={twMerge(
+                  "text-xs px-2.5 py-1 rounded-lg border transition-all duration-150 select-none flex items-center gap-1",
+                  active
+                    ? "bg-gradient-to-r from-[#1b4db3] to-[#3a991d] text-white border-transparent shadow-xs font-semibold"
+                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 font-medium"
+                )}
+              >
+                {active && <Check className="w-3 h-3 text-white" />}
+                <span>{grade.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Error Alert */}
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-red-50 text-red-700 text-xs flex items-center gap-2">
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
+      {/* Row 1: Contact Name & Company */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        <Input
-          label="Your Full Name *"
-          value={form.contactName}
-          onChange={(e) => setForm({ ...form, contactName: e.target.value })}
-          placeholder="e.g. Dr. Ramesh Kumar"
-          required
-        />
-
-        <Input
-          label="Company / Formulation Plant"
-          value={form.companyName}
-          onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-          placeholder="e.g. Aurobindo Pharma Ltd"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        <Input
-          label="Corporate Email *"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          placeholder="procurement@company.com"
-          required
-        />
-
-        <Input
-          label="Phone / Mobile Number *"
-          value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-          placeholder="+91 98490..."
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="sm:col-span-2">
-          <Input
-            label="Product of Interest (API / CAS / Intermediate)"
-            value={form.productOfInterest}
-            onChange={(e) => setForm({ ...form, productOfInterest: e.target.value })}
-            placeholder="e.g. Atorvastatin Calcium or Montelukast"
-          />
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Full Name / Officer <span className="text-[#1b4db3]">*</span>
+          </label>
+          <div className="relative">
+            <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={form.contactName}
+              onChange={(e) => setForm({ ...form, contactName: e.target.value })}
+              placeholder="e.g. Dr. Ramesh Kumar"
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+            />
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-1.5">
-          <Input
-            label="Quantity"
-            type="number"
-            value={form.requestedQuantity}
-            onChange={(e) => setForm({ ...form, requestedQuantity: e.target.value })}
-            placeholder="50"
-          />
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-700">Unit</label>
-            <select
-              value={form.unit}
-              onChange={(e) => setForm({ ...form, unit: e.target.value })}
-              className="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#00488F]"
-            >
-              <option value="KG">KG</option>
-              <option value="G">Grams</option>
-              <option value="MT">MT</option>
-              <option value="L">Liters</option>
-            </select>
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Company / Formulation Plant
+          </label>
+          <div className="relative">
+            <Building2 className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={form.companyName}
+              onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+              placeholder="e.g. Aurobindo Pharma Ltd"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+            />
           </div>
         </div>
       </div>
 
-      <Textarea
-        label="Requirement Details / Message *"
-        value={form.message}
-        onChange={(e) => setForm({ ...form, message: e.target.value })}
-        placeholder="Please specify grade (IP/BP/USP), delivery timeline, target quantity, or sample requirements..."
-        rows={3}
-        required
-      />
+      {/* Row 2: Corporate Email & Phone */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Corporate Email <span className="text-[#1b4db3]">*</span>
+          </label>
+          <div className="relative">
+            <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="procurement@company.com"
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+            />
+          </div>
+        </div>
 
-      <div className="pt-2">
-        <Button type="submit" variant="primary" size="md" className="w-full" isLoading={loading}>
-          <Send className="w-4 h-4 mr-1.5" />
-          <span>Submit Commercial RFQ</span>
-        </Button>
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Phone / Mobile (WhatsApp) <span className="text-[#3a991d]">*</span>
+          </label>
+          <div className="relative">
+            <Phone className="w-4 h-4 text-[#3a991d] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="+91 98490..."
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#3a991d] focus:ring-4 focus:ring-[#3a991d]/10 transition-colors"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Row 3: Product Name & Quantity + Unit */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div className="sm:col-span-2">
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Product of Interest (API / CAS / Intermediate)
+          </label>
+          <div className="relative">
+            <FlaskConical className="w-4 h-4 text-[#1b4db3] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={form.productOfInterest}
+              onChange={(e) => setForm({ ...form, productOfInterest: e.target.value })}
+              placeholder="e.g. Atorvastatin Calcium or Montelukast Sodium"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Requested Quantity
+          </label>
+          <div className="grid grid-cols-5 gap-1.5">
+            <div className="col-span-3 relative">
+              <Scale className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="number"
+                value={form.requestedQuantity}
+                onChange={(e) => setForm({ ...form, requestedQuantity: e.target.value })}
+                placeholder="50"
+                className="w-full rounded-xl border border-slate-300 bg-white pl-8 pr-2 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              />
+            </div>
+            <div className="col-span-2">
+              <select
+                value={form.unit}
+                onChange={(e) => setForm({ ...form, unit: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-white px-2 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
+              >
+                <option value="KG">KG</option>
+                <option value="G">Grams</option>
+                <option value="MT">MT</option>
+                <option value="L">Liters</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 4: Category (if provided) */}
+      {categories.length > 0 && (
+        <div>
+          <label className="text-xs font-semibold text-slate-700 block mb-1">
+            Product Category (Optional)
+          </label>
+          <select
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+          >
+            <option value="">Select Category...</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* Row 5: Requirement Details / Message */}
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+            <FileText className="w-3.5 h-3.5 text-[#1b4db3]" />
+            <span>Material Specifications & Commercial Notes <span className="text-[#1b4db3]">*</span></span>
+          </label>
+          <span className="text-[10px] text-slate-400">COA, delivery timeline, payment terms</span>
+        </div>
+        <textarea
+          value={form.message}
+          onChange={(e) => setForm({ ...form, message: e.target.value })}
+          placeholder="Please specify target assay purity, delivery timeline to facility, sample dispatch requirement, or packaging specifications..."
+          rows={3}
+          required
+          className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors resize-none"
+        />
+      </div>
+
+      {/* Logo Colors Grade CTA Submit Button */}
+      <div className="pt-1">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full relative group overflow-hidden rounded-xl bg-gradient-to-r from-[#1b4db3] via-[#1a44a1] to-[#3a991d] hover:from-[#153e94] hover:to-[#2e7b17] text-white font-bold py-3.5 px-6 shadow-lg shadow-[#1b4db3]/20 hover:shadow-xl hover:shadow-[#3a991d]/25 transition-all duration-300 flex items-center justify-center gap-2 text-sm select-none disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {/* Subtle light shimmer overlay */}
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000" />
+          {loading ? (
+            <>
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              <span>Dispatching RFQ to Commercial Desk...</span>
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <span>Submit Commercial RFQ</span>
+              <ArrowRight className="w-4 h-4 opacity-75 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Fast WhatsApp Alternative Row */}
+      <div className="p-3 rounded-xl bg-gradient-to-r from-[#edf8eb] to-[#edf3fd] border border-[#3a991d]/25 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
+        <div className="flex items-center gap-2 text-slate-700 text-left">
+          <MessageCircle className="w-4 h-4 text-[#3a991d] shrink-0" />
+          <span className="text-[11px] sm:text-xs">
+            Need urgent pricing or working sample availability?
+          </span>
+        </div>
+        <a
+          href={getWhatsAppClickToChatUrl({
+            customText: form.productOfInterest
+              ? `Hello MSB PHARMACHEM, I am requesting instant quote and COA for ${form.productOfInterest}.`
+              : "Hello MSB PHARMACHEM, I would like to inquire about material availability and commercial pricing.",
+          })}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 px-3 py-1.5 rounded-lg bg-[#3a991d] hover:bg-[#2e7b17] text-white text-[11px] font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+        >
+          <MessageCircle className="w-3.5 h-3.5" />
+          <span>WhatsApp Sales Desk (+91 8008335333)</span>
+        </a>
+      </div>
+
+      {/* Trust Badges Strip (Card Footer) */}
+      <div className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-slate-600">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#1b4db3] shrink-0" />
+          <span className="font-medium">WHO-GMP & cGMP Vetted</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Award className="w-4 h-4 text-[#3a991d] shrink-0" />
+          <span className="font-medium">Batch Analytical COA Included</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-[#1b4db3] shrink-0" />
+          <span className="font-medium">24h Dispatch from Hyderabad</span>
+        </div>
       </div>
     </form>
+  );
+
+  if (!asCard) return formContent;
+
+  return (
+    <div
+      className={twMerge(
+        "relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/10 text-slate-900 transition-all",
+        className
+      )}
+    >
+      {/* Top Logo-Color Brand Gradient Accent Line */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d]" />
+
+      {/* Soft Decorative Ambient Background Glows in Brand Logo Colors */}
+      <div className="pointer-events-none absolute -top-24 -right-24 w-60 h-60 bg-gradient-to-br from-[#1b4db3]/15 via-[#2563eb]/10 to-[#3a991d]/10 rounded-full blur-3xl opacity-60" />
+      <div className="pointer-events-none absolute -bottom-24 -left-24 w-60 h-60 bg-gradient-to-tr from-[#3a991d]/15 via-[#2563eb]/10 to-[#1b4db3]/10 rounded-full blur-3xl opacity-50" />
+
+      <div className="relative p-6 sm:p-8">{formContent}</div>
+    </div>
   );
 }

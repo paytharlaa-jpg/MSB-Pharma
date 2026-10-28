@@ -499,24 +499,8 @@ export function FeaturedProductsSection({
               </a>
             </div>
 
-            {/* Right Column: PublicEnquiryForm */}
-            <div className="lg:col-span-7 bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200">
-              <div className="mb-5 pb-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 font-heading">
-                    Send Material RFQ
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Direct submission to commercial procurement desk in Hyderabad.
-                  </p>
-                </div>
-                {selectedProduct && (
-                  <span className="text-xs font-mono bg-teal-50 text-teal-800 px-2.5 py-1 rounded-md border border-teal-200">
-                    Selected: {selectedProduct}
-                  </span>
-                )}
-              </div>
-
+            {/* Right Column: PublicEnquiryForm Template Card */}
+            <div className="lg:col-span-7">
               <PublicEnquiryForm
                 categories={categories}
                 defaultProduct={selectedProduct}

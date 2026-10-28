@@ -128,8 +128,8 @@ export default async function ContactPage() {
             </div>
           </div>
 
-          {/* Right: Interactive Commercial RFQ Form */}
-          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs">
+          {/* Right: Interactive Commercial RFQ Form Template Card */}
+          <div className="lg:col-span-7">
             <PublicEnquiryForm categories={categories} />
           </div>
         </div>

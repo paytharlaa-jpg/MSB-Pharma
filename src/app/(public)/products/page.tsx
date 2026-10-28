@@ -212,6 +212,7 @@ function ProductsContent() {
         <PublicEnquiryForm
           categories={categories}
           defaultProduct={selectedProduct}
+          asCard={false}
         />
       </Modal>
     </div>
