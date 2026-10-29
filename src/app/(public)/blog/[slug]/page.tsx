@@ -58,7 +58,7 @@ export default async function BlogPostPage({
 
         {/* Title & Metadata */}
         <div className="space-y-4">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-[#143e94] tracking-tight leading-tight font-heading">
             {post.title}
           </h1>
 
@@ -102,8 +102,8 @@ export default async function BlogPostPage({
         {/* Call to Action Box */}
         <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200 mt-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="font-bold text-base text-slate-900">Need Reliable API or Intermediate Sourcing?</h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="font-bold text-lg text-[#143e94] font-heading">Need Reliable API or Intermediate Sourcing?</h3>
+            <p className="text-sm text-slate-600">
               Our commercial procurement desk in Hyderabad provides fast quotes, COA, and export documentation.
             </p>
           </div>

@@ -79,13 +79,13 @@ function ProductsContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold text-[#00488F] uppercase tracking-wider">
+          <span className="text-xs sm:text-sm font-bold text-[#1b4db3] uppercase tracking-wider bg-[#edf3fd] px-3.5 py-1 rounded-full border border-[#1b4db3]/20 inline-block">
             Approved Product Catalog
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-[#143e94] tracking-tight font-heading anim-text-wipe">
             Pharmaceutical APIs, Intermediates & Standards
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+          <p className="text-base text-slate-700 leading-relaxed">
             Browse our commercial inventory. All products are backed by verified COA specifications, authentic manufacturer provenance, and compliance documentation.
           </p>
         </div>
@@ -148,13 +148,13 @@ function ProductsContent() {
                     <span className="text-[11px] text-slate-500 font-medium">{p.category.name}</span>
                   </div>
 
-                  <h3 className="font-bold text-base text-slate-900 leading-snug">{p.name}</h3>
+                  <h3 className="font-bold text-lg sm:text-xl text-[#143e94] font-heading leading-snug">{p.name}</h3>
                   {p.therapeuticCategory && (
-                    <p className="text-xs text-emerald-700 font-semibold mt-1">{p.therapeuticCategory}</p>
+                    <p className="text-xs sm:text-sm text-[#3a991d] font-bold mt-1">{p.therapeuticCategory}</p>
                   )}
 
                   {p.description && (
-                    <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-slate-600 mt-2 line-clamp-2 leading-relaxed">
                       {p.description}
                     </p>
                   )}
@@ -179,13 +179,13 @@ function ProductsContent() {
 
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2">
                   <Button
-                    variant="primary"
-                    size="sm"
-                    className="flex-1 text-xs"
+                    variant="brand-green"
+                    size="md"
+                    className="flex-1 text-xs sm:text-sm font-bold bg-gradient-to-r from-[#3a991d] to-[#2563eb] hover:from-[#2e7b17] hover:to-[#1d4ed8] text-white shadow-md shadow-[#3a991d]/25 hover:shadow-lg hover:shadow-[#3a991d]/35 transition-all rounded-xl py-2.5"
                     onClick={() => handleOpenRfq(p.name)}
                   >
                     <span>Request Quotation</span>
-                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                    <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                 </div>
               </div>

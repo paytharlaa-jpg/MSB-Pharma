@@ -78,6 +78,7 @@ export async function POST(request: Request) {
     const {
       contactName,
       companyName,
+      businessType,
       email,
       phone,
       productOfInterest,
@@ -108,6 +109,7 @@ export async function POST(request: Request) {
         requestedQuantity: requestedQuantity ? Number(requestedQuantity) : null,
         unit: unit || "KG",
         message: message.trim(),
+        notes: businessType ? `Business Type: ${businessType}` : null,
         status: "NEW",
         source: "WEBSITE",
       },

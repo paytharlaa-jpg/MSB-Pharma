@@ -67,18 +67,18 @@ export function SupplyChainStorySection() {
               <span>HYDERABAD PHARMACEUTICAL HUB</span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+            <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-reveal-up">
               Beyond Supply. <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1b4db3] to-[#3a991d]">
                 Built Around Reliability.
               </span>
             </h2>
 
-            <p className="text-base text-slate-600 leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed">
               Hyderabad is globally recognized as the &ldquo;Bulk Drug Capital of India,&rdquo; producing over a third of the world&apos;s vaccines and driving immense formulation capacity. This is where MSB PHARMACHEM was founded, rooted in deep local relationships and rigorous international standards.
             </p>
 
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-base text-slate-700 leading-relaxed">
               Our core team brings more than 18 years of specialized experience in raw material procurement, vendor compliance verification, and proactive inventory buffer management. We eliminate production standstills by keeping critical active ingredients and excipients available on demand.
             </p>
 
@@ -89,7 +89,7 @@ export function SupplyChainStorySection() {
                   <Clock className="w-4 h-4 text-[#1b4db3]" />
                   <span>18+ Years Experience</span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm text-slate-600">
                   Decades of specialized expertise in active raw material logistics and vendor auditing.
                 </p>
               </div>
@@ -99,7 +99,7 @@ export function SupplyChainStorySection() {
                   <MapPin className="w-4 h-4 text-[#3a991d]" />
                   <span>Kukatpally, Hyderabad</span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm text-slate-600">
                   Direct physical presence in Telangana&apos;s prime pharmaceutical manufacturing corridor.
                 </p>
               </div>
@@ -109,7 +109,7 @@ export function SupplyChainStorySection() {
                   <ShieldCheck className="w-4 h-4 text-[#1b4db3]" />
                   <span>Verified COA Support</span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm text-slate-600">
                   Every batch verified with manufacturer certificate of analysis, MSDS, and HPLC reports.
                 </p>
               </div>
@@ -119,7 +119,7 @@ export function SupplyChainStorySection() {
                   <Award className="w-4 h-4 text-[#3a991d]" />
                   <span>WHO-GMP Audited</span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm text-slate-600">
                   Exclusive partnerships with certified, inspected, and compliant manufacturing sites.
                 </p>
               </div>

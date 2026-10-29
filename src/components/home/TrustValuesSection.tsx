@@ -101,10 +101,10 @@ export function TrustValuesSection() {
           <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
             TECHNICAL DEEP DIVE
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+          <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight">
             How We Execute Our Promise
           </h2>
-          <p className="text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
             A comprehensive look at our three operational pillars: laboratory-verified quality, supply-chain resilience, and audit-ready documentation.
           </p>
         </div>
@@ -168,11 +168,11 @@ export function TrustValuesSection() {
                     <span className="uppercase tracking-widest">{item.pillar}</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-heading leading-tight">
+                  <h3 className="text-2xl sm:text-4xl font-extrabold text-[#143e94] font-heading leading-tight">
                     {item.title}
                   </h3>
 
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                  <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
                     {item.body}
                   </p>
 

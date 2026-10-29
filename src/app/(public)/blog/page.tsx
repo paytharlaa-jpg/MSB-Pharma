@@ -36,13 +36,13 @@ export default async function BlogPage() {
     <div className="py-16 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold text-[#00488F] uppercase tracking-wider">
+          <span className="text-xs sm:text-sm font-bold text-[#1b4db3] uppercase tracking-wider bg-[#edf3fd] px-3.5 py-1 rounded-full border border-[#1b4db3]/20 inline-block">
             Technical Editorial
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-[#143e94] tracking-tight font-heading anim-text-wipe">
             Industry Insights & Sourcing Intelligence
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+          <p className="text-base text-slate-700 leading-relaxed">
             Technical perspectives on API self-reliance, regulatory standards, impurity profiling, and global pharmaceutical supply chain resilience.
           </p>
         </div>
@@ -78,11 +78,11 @@ export default async function BlogPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base text-slate-900 group-hover:text-[#00488F] transition-colors leading-snug">
+                  <h3 className="font-bold text-lg text-[#143e94] group-hover:text-[#1b4db3] transition-colors leading-snug font-heading">
                     {post.title}
                   </h3>
 
-                  <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                  <p className="text-sm text-slate-600 leading-relaxed line-clamp-3 font-medium">
                     {post.excerpt}
                   </p>
                 </div>

@@ -63,41 +63,41 @@ export function Navbar() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-22 sm:h-24 flex items-center justify-between">
         {/* Brand Logo & Title */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-12 h-12 rounded-full bg-white p-0.5 shrink-0 shadow-sm border border-slate-200 flex items-center justify-center transition-transform group-hover:scale-105">
+        <Link href="/" className="flex items-center gap-3.5 group">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white p-1 shrink-0 shadow-md border-2 border-[#1b4db3]/20 flex items-center justify-center transition-transform group-hover:scale-105">
             <Image
               src="/images/logo-msb-pharmachem.png"
               alt="MSB PHARMACHEM"
-              width={46}
-              height={46}
-              className="rounded-full"
+              width={58}
+              height={58}
+              className="rounded-full object-contain"
               priority
             />
           </div>
           <div>
-            <span className="font-extrabold text-lg tracking-tight text-[#1b4db3] block leading-tight font-heading">
+            <span className="font-black text-xl sm:text-2xl tracking-tight text-[#143e94] group-hover:text-[#1b4db3] transition-colors block leading-tight font-heading">
               MSB PHARMACHEM
             </span>
-            <span className="text-[10px] text-[#3a991d] font-bold tracking-wider uppercase block">
+            <span className="text-xs text-[#3a991d] font-extrabold tracking-wider uppercase block mt-0.5">
               Quality • Reliability • Trust
             </span>
           </div>
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden lg:flex items-center gap-7">
+        <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-[#1b4db3] relative py-1 ${
+                className={`text-base font-semibold transition-colors hover:text-[#1b4db3] relative py-1.5 ${
                   isActive
                     ? "text-[#1b4db3] font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#1b4db3] after:rounded-full"
-                    : "text-slate-600"
+                    : "text-slate-700"
                 }`}
               >
                 {link.label}
@@ -107,21 +107,21 @@ export function Navbar() {
         </nav>
 
         {/* CTA Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3.5">
           <Link href="/products">
             <Button
               variant="outline"
-              size="sm"
-              className="border-slate-300 text-slate-700 hover:text-[#1b4db3] hover:border-[#1b4db3]"
+              size="md"
+              className="border-slate-300 text-slate-700 hover:text-[#1b4db3] hover:border-[#1b4db3] font-semibold text-sm"
             >
               Explore Catalog
             </Button>
           </Link>
 
           <Link href="/contact">
-            <Button variant="brand-green" size="sm">
+            <Button variant="brand-green" size="md" className="font-bold text-sm shadow-md shadow-[#3a991d]/20">
               <span>Request Quote</span>
-              <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
           </Link>
         </div>
@@ -147,10 +147,10 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`block px-3.5 py-2.5 rounded-xl text-base font-semibold transition-colors ${
                     isActive
                       ? "text-[#1b4db3] bg-[#edf3fd] font-bold"
-                      : "text-slate-700 hover:text-[#1b4db3] hover:bg-slate-50"
+                      : "text-slate-800 hover:text-[#1b4db3] hover:bg-slate-50"
                   }`}
                 >
                   {link.label}

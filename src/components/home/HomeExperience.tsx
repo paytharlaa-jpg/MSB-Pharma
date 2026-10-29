@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ScrollProgress } from "./ScrollProgress";
 import { CinematicPreloader } from "./CinematicPreloader";
 import { HeroSequence } from "./HeroSequence";
+import { ProductRangeSection } from "./ProductRangeSection";
 import { BrandPromiseSection } from "./BrandPromiseSection";
 import { ProductCategoriesSection } from "./ProductCategoriesSection";
 import { HorizontalProductJourney } from "./HorizontalProductJourney";
@@ -81,7 +82,10 @@ export function HomeExperience({ products, categories }: HomeExperienceProps) {
       {/* 4. Section 1 — Cinematic Hero Transformation & Rich 3D Graphics */}
       <HeroSequence />
 
-      {/* 5. Section 2 — Brand Promise (Quality. Reliability. Trust.) */}
+      {/* 5. Section 2 — Product Range Showcase (3D Rotating Pharma Molecule & Glowing Moving Gradient Box) */}
+      <ProductRangeSection />
+
+      {/* 6. Section 3 — Brand Promise (Quality. Reliability. Trust.) */}
       <BrandPromiseSection />
 
       {/* 6. Section 3 — Product Categories */}

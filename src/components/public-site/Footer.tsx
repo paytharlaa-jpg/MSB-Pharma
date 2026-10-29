@@ -10,39 +10,39 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Info (2 cols) */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-white p-0.5 shadow-sm border border-slate-200 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3.5">
+              <div className="w-14 h-14 rounded-full bg-white p-1 shadow-sm border border-[#1b4db3]/20 flex items-center justify-center shrink-0">
                 <Image
                   src="/images/logo-msb-pharmachem.png"
                   alt="MSB PHARMACHEM"
-                  width={46}
-                  height={46}
-                  className="rounded-full"
+                  width={52}
+                  height={52}
+                  className="rounded-full object-contain"
                 />
               </div>
               <div>
-                <span className="font-extrabold text-base tracking-tight text-[#1b4db3] block font-heading">
+                <span className="font-extrabold text-lg tracking-tight text-[#143e94] block font-heading">
                   MSB PHARMACHEM
                 </span>
-                <span className="text-[10px] text-[#3a991d] font-bold tracking-wider uppercase block">
+                <span className="text-xs text-[#3a991d] font-extrabold tracking-wider uppercase block">
                   Quality • Reliability • Trust
                 </span>
               </div>
             </div>
 
-            <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-sm">
               Trusted supplier of Active Pharmaceutical Ingredients (APIs), Bulk Drugs, Pharma Raw Materials, Excipients, Domestic Chemicals, Solvents and Impurity Standards from Kukatpally, Hyderabad to manufacturers across India and global markets.
             </p>
 
-            <div className="pt-2 flex items-center gap-2 text-slate-600 font-medium">
+            <div className="pt-2 flex items-center gap-2 text-slate-700 font-medium">
               <ShieldCheck className="w-4 h-4 text-[#3a991d]" />
-              <span className="text-[11px]">COA, MSDS & WHO-GMP compliant documentation support.</span>
+              <span className="text-xs">COA, MSDS & WHO-GMP compliant documentation support.</span>
             </div>
           </div>
 
           {/* Product Categories (1 col) */}
           <div>
-            <h4 className="text-slate-900 font-bold uppercase tracking-wider text-[11px] mb-4">
+            <h4 className="text-[#143e94] font-bold uppercase tracking-wider text-xs mb-4 font-heading">
               Product Categories
             </h4>
             <ul className="space-y-2.5">
@@ -76,7 +76,7 @@ export function Footer() {
 
           {/* Quick Navigation (1 col) */}
           <div>
-            <h4 className="text-slate-900 font-bold uppercase tracking-wider text-[11px] mb-4">
+            <h4 className="text-[#143e94] font-bold uppercase tracking-wider text-xs mb-4 font-heading">
               Company & Links
             </h4>
             <ul className="space-y-2.5">
@@ -116,7 +116,7 @@ export function Footer() {
 
           {/* Contact Details (1 col) */}
           <div>
-            <h4 className="text-slate-900 font-bold uppercase tracking-wider text-[11px] mb-4">
+            <h4 className="text-[#143e94] font-bold uppercase tracking-wider text-xs mb-4 font-heading">
               Headquarters
             </h4>
             <div className="space-y-3 text-slate-600">

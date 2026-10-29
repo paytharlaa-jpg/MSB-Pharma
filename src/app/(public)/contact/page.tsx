@@ -22,13 +22,13 @@ export default async function ContactPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold text-[#00488F] uppercase tracking-wider">
+          <span className="text-xs sm:text-sm font-bold text-[#1b4db3] uppercase tracking-wider bg-[#edf3fd] px-3.5 py-1 rounded-full border border-[#1b4db3]/20 inline-block">
             Commercial Communications
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-[#143e94] tracking-tight font-heading anim-text-reveal-up">
             Contact MSB PHARMACHEM
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+          <p className="text-base text-slate-700 leading-relaxed">
             Connect with our sales and sourcing desk in Kukatpally, Hyderabad. We provide fast technical specifications, COA documents, and competitive quotes.
           </p>
         </div>
@@ -37,17 +37,17 @@ export default async function ContactPage() {
           {/* Left: Contact Info & WhatsApp */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs space-y-6">
-              <h3 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
+              <h3 className="text-xl font-bold text-[#143e94] border-b border-slate-100 pb-3 font-heading">
                 Corporate Headquarters
               </h3>
 
-              <div className="space-y-4 text-xs">
+              <div className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-blue-50 text-[#00488F] shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4" />
+                  <div className="p-2.5 rounded-xl bg-blue-50 text-[#1b4db3] shrink-0 mt-0.5">
+                    <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Registered Address</span>
+                    <span className="text-xs text-slate-500 uppercase font-bold block">Registered Address</span>
                     <span className="text-slate-800 font-medium leading-relaxed block mt-0.5">
                       Plot No. 128, Kamala Prasanna Nagar, Allwyn Colony, Kukatpally, Hyderabad – 500072, Telangana, India
                     </span>
@@ -55,14 +55,14 @@ export default async function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-50 text-emerald-700 shrink-0 mt-0.5">
-                    <Phone className="w-4 h-4" />
+                  <div className="p-2.5 rounded-xl bg-[#edf8eb] text-[#3a991d] shrink-0 mt-0.5">
+                    <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Direct Telephone</span>
+                    <span className="text-xs text-slate-500 uppercase font-bold block">Direct Telephone</span>
                     <a
                       href="tel:+918008335333"
-                      className="text-slate-900 font-bold hover:text-emerald-600 transition-colors block mt-0.5 text-sm"
+                      className="text-[#3a991d] font-bold hover:text-[#2e7b17] transition-colors block mt-0.5 text-base"
                     >
                       +91 8008335333
                     </a>
@@ -70,14 +70,14 @@ export default async function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-blue-50 text-blue-700 shrink-0 mt-0.5">
-                    <Mail className="w-4 h-4" />
+                  <div className="p-2.5 rounded-xl bg-[#edf3fd] text-[#1b4db3] shrink-0 mt-0.5">
+                    <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Official Commercial Email</span>
+                    <span className="text-xs text-slate-500 uppercase font-bold block">Official Commercial Email</span>
                     <a
                       href="mailto:mohank9@gmail.com"
-                      className="text-slate-900 font-bold hover:text-blue-600 transition-colors block mt-0.5"
+                      className="text-[#1b4db3] font-bold hover:text-[#153e94] transition-colors block mt-0.5 text-base"
                     >
                       mohank9@gmail.com
                     </a>

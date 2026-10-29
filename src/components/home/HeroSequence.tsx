@@ -7,10 +7,6 @@ import {
   ChevronDown,
   CheckCircle2,
   Send,
-  Activity,
-  MapPin,
-  ShieldCheck,
-  Globe2,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -125,21 +121,24 @@ export function HeroSequence() {
             {/* Precision Pill Badge */}
             <div className="hero-pill-badge inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#edf3fd] to-[#edf8eb] border border-[#1b4db3]/25 text-[#1b4db3] text-xs font-bold shadow-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-[#3a991d] animate-pulse shadow-[0_0_8px_#3a991d]" />
-              <span className="tracking-wide font-mono text-[11px] uppercase">
-                GLOBAL PHARMACEUTICAL SOURCING · HYDERABAD HUB
+              <span className="tracking-wide font-semibold text-xs sm:text-sm">
+                Trusted pharma supplier partner
               </span>
             </div>
 
-            {/* Main Headline with Kinetic Shimmer */}
-            <h1 className="hero-title-main text-4xl sm:text-6xl lg:text-[64px] font-black tracking-tight text-slate-900 leading-[1.08] font-heading">
-              World-Class APIs. <br />
+            {/* Main Headline with Kinetic Shimmer & Luxury Colors */}
+            <h1 className="hero-title-main text-5xl sm:text-6xl lg:text-[72px] font-black tracking-tight leading-[1.06] font-heading">
+              <span className="text-gradient-brand inline-block">
+                World-Class APIs.
+              </span>{" "}
+              <br />
               <span className="text-gradient-shimmer inline-block">
                 Precision in Every Molecule.
               </span>
             </h1>
 
             {/* Supporting Copy */}
-            <p className="hero-desc-text text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-xl">
+            <p className="hero-desc-text text-lg sm:text-xl text-slate-700 leading-relaxed font-normal max-w-xl">
               Reliable pharmaceutical active ingredients (APIs), excipients, intermediates, and verified supply-chain coordination. Sourced from accredited manufacturers, verified by COA monographs, and distributed worldwide.
             </p>
 
@@ -184,119 +183,24 @@ export function HeroSequence() {
               </Link>
             </div>
 
-            {/* Quick Metrics Ribbon */}
-            <div className="pt-4 border-t border-slate-200/80 flex items-center gap-6 sm:gap-8 text-xs font-mono">
-              <div>
-                <span className="block text-xl sm:text-2xl font-black text-[#1b4db3] font-heading">
-                  18+
-                </span>
-                <span className="text-slate-500 uppercase text-[10px]">Active APIs & Chemicals</span>
-              </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div>
-                <span className="block text-xl sm:text-2xl font-black text-[#3a991d] font-heading">
-                  ≥ 99.8%
-                </span>
-                <span className="text-slate-500 uppercase text-[10px]">Assay Purity Standard</span>
-              </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div>
-                <span className="block text-xl sm:text-2xl font-black text-slate-800 font-heading">
-                  24–48h
-                </span>
-                <span className="text-slate-500 uppercase text-[10px]">Hyderabad Dispatch</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* RIGHT COLUMN: 3D Rotating World / Globe Motion Scene (5.5 Cols) */}
+          {/* RIGHT COLUMN: 3D Rotating World / Globe Motion Scene */}
           <div
             ref={rightGraphicsRef}
-            className="lg:col-span-6 relative flex items-center justify-center min-h-[420px] sm:min-h-[480px] lg:min-h-[540px]"
+            className="lg:col-span-6 relative flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[580px] overflow-visible"
           >
             {/* Background Multi-Ring Orbital Circles */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] rounded-full border border-dashed border-[#1b4db3]/20 flex items-center justify-center animate-spin-orbital" />
-              <div className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] rounded-full border border-[#3a991d]/20 animate-spin-orbital-reverse" />
-              <div className="absolute w-[180px] h-[180px] rounded-full bg-gradient-to-tr from-[#1b4db3]/10 to-[#3a991d]/10 blur-xl" />
+              <div className="w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] rounded-full border border-dashed border-[#1b4db3]/20 flex items-center justify-center animate-spin-orbital" />
+              <div className="absolute w-[260px] h-[260px] sm:w-[330px] sm:h-[330px] rounded-full border border-[#3a991d]/20 animate-spin-orbital-reverse" />
+              <div className="absolute w-[200px] h-[200px] rounded-full bg-gradient-to-tr from-[#1b4db3]/10 to-[#3a991d]/10 blur-2xl" />
             </div>
 
             {/* 3D Rotating Interactive World/Globe Scene */}
-            <div className="relative z-10 w-full h-[360px] sm:h-[440px] lg:h-[500px] flex items-center justify-center">
+            <div className="relative z-10 w-full h-[460px] sm:h-[520px] lg:h-[580px] flex items-center justify-center pointer-events-auto overflow-visible">
               <RotatingGlobeScene scrollProgress={0} />
             </div>
-
-            {/* HUD CARD 1: Top-Right Chromatography & Purity Readout */}
-            <div className="absolute -top-3 right-0 sm:right-2 z-20 glass-panel-light p-3.5 rounded-2xl shadow-xl border border-slate-200/90 max-w-[210px] sm:max-w-[240px]">
-              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#1b4db3] pb-1.5 border-b border-slate-100">
-                <span className="flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-[#1b4db3]" />
-                  <span>HPLC ASSAY PURITY</span>
-                </span>
-                <span className="text-[#3a991d] font-bold">99.9%</span>
-              </div>
-
-              <div className="py-2 flex items-center justify-between gap-1 h-7">
-                <span className="waveform-bar" style={{ animationDelay: "0.1s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.4s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.2s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.6s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.3s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.5s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.25s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.7s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.35s" }} />
-                <span className="waveform-bar" style={{ animationDelay: "0.15s" }} />
-              </div>
-
-              <div className="text-[10px] text-slate-600 font-mono flex items-center justify-between">
-                <span>Monographs:</span>
-                <span className="text-[#1b4db3] font-bold">IP / BP / USP / EP</span>
-              </div>
-            </div>
-
-            {/* HUD CARD 2: Bottom-Right Hyderabad Logistics Node */}
-            <div className="absolute -bottom-3 right-1 sm:right-4 z-20 glass-panel-light p-3.5 rounded-2xl shadow-xl border border-slate-200/90 max-w-[220px] sm:max-w-[260px]">
-              <div className="flex items-center gap-1.5 text-[#1b4db3] text-[10px] font-mono font-bold">
-                <MapPin className="w-3.5 h-3.5 text-[#1b4db3]" />
-                <span>HYDERABAD CENTRAL DEPOT</span>
-              </div>
-              <div className="text-xs font-bold text-slate-800 mt-1">
-                Kukatpally Life Sciences Corridor
-              </div>
-              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 mt-1 pt-1.5 border-t border-slate-100">
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3a991d] animate-ping" />
-                  <span>Buffer Stock:</span>
-                </span>
-                <span className="text-[#3a991d] font-bold">Active & Ready</span>
-              </div>
-            </div>
-
-            {/* HUD CARD 3: Left Regulatory Badge */}
-            <div className="hidden sm:flex absolute top-1/2 -left-4 -translate-y-1/2 z-20 glass-panel-light px-3.5 py-2.5 rounded-2xl shadow-xl border border-slate-200/90 items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#edf8eb] border border-[#3a991d]/30 flex items-center justify-center text-[#3a991d]">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-[11px] font-bold text-slate-900 font-heading">
-                  WHO-GMP Vetted
-                </div>
-                <div className="text-[9px] font-mono text-[#3a991d] font-bold">
-                  Full Batch COA / DMF Support
-                </div>
-              </div>
-            </div>
-
-            {/* HUD CARD 4: Floating Global Connections Pill */}
-            <div className="hidden md:flex absolute bottom-24 -left-2 z-20 glass-panel-light px-3 py-1.5 rounded-full shadow-lg border border-slate-200/80 items-center gap-2">
-              <Globe2 className="w-3.5 h-3.5 text-[#1b4db3] animate-pulse" />
-              <span className="text-[10px] font-mono font-semibold text-slate-700">
-                50+ Global Supply Gateways
-              </span>
-            </div>
-
           </div>
         </div>
       </div>

@@ -72,11 +72,11 @@ export function HomeExitTransition() {
           </div>
         </div>
 
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-heading max-w-2xl mx-auto leading-tight">
+        <h2 className="text-3xl sm:text-5xl font-black text-[#143e94] font-heading max-w-3xl mx-auto leading-tight">
           Partner with Hyderabad&apos;s Dedicated Pharmaceutical Sourcing Specialist.
         </h2>
 
-        <p className="text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
           From R&D sample quantities to commercial metric tonnes, we coordinate certified raw materials and active pharmaceutical ingredients with complete regulatory assurance.
         </p>
 

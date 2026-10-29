@@ -12,10 +12,14 @@ html {
 }
 
 body {
-  color: #071827;
+  color: #1e293b;
   background-color: #ffffff;
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #143e94;
 }
 
 /* Tabular numerals for dense business tables */

@@ -125,10 +125,10 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
             <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
               CORE PORTFOLIO
             </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+            <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-wipe">
               Materials That Move Science Forward.
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
               High-purity pharmaceutical compounds, certified excipients, and analytical standards sourced from vetted WHO-GMP manufacturing sites.
             </p>
           </div>
@@ -188,10 +188,10 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
                 {/* Card Info */}
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-[#1b4db3] transition-colors font-heading leading-snug">
+                    <h3 className="font-bold text-xl text-[#143e94] group-hover:text-[#1b4db3] transition-colors font-heading leading-snug">
                       {cat.name}
                     </h3>
-                    <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-slate-600 mt-2 line-clamp-2 leading-relaxed font-medium">
                       {cat.description || "High-purity raw materials verified with complete regulatory and analytical documentation."}
                     </p>
                   </div>

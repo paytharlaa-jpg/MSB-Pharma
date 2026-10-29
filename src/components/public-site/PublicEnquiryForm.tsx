@@ -46,7 +46,27 @@ const PHARMACOPOEIA_GRADES = [
   { id: "BP", label: "BP (British)" },
   { id: "USP", label: "USP (United States)" },
   { id: "EP", label: "EP (European)" },
+  { id: "IN", label: "IN (In-House)" },
   { id: "SAMPLE", label: "Working Sample" },
+];
+
+const BUSINESS_TYPES = [
+  "Formulation / Finished Dosage Manufacturer",
+  "API / Bulk Drug Manufacturer",
+  "Contract Manufacturing (CDMO / CRAMS)",
+  "Pharmaceutical Trader / Distributor",
+  "R&D / Analytical Testing Laboratory",
+  "Biotech & Life Sciences",
+  "Hospital / Institutional Procurement",
+  "Other",
+];
+
+const DEFAULT_CATEGORIES = [
+  { id: "apis", name: "Active Pharmaceutical Ingredients (APIs)" },
+  { id: "excipients", name: "Pharmaceutical Excipients" },
+  { id: "intermediates", name: "Raw Materials & Intermediates" },
+  { id: "solvents", name: "Chemicals & Solvents" },
+  { id: "impurities", name: "Impurity Reference Standards" },
 ];
 
 export function PublicEnquiryForm({
@@ -58,9 +78,12 @@ export function PublicEnquiryForm({
   subtitle = "Direct submission to Hyderabad procurement desk. Technical COA, MOA & pricing dispatched within 24h.",
   showLogo = true,
 }: PublicEnquiryFormProps) {
+  const effectiveCategories = categories && categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+
   const [form, setForm] = useState({
     contactName: "",
     companyName: "",
+    businessType: "",
     email: "",
     phone: "",
     productOfInterest: defaultProduct || "",
@@ -125,6 +148,7 @@ export function PublicEnquiryForm({
     setForm({
       contactName: "",
       companyName: "",
+      businessType: "",
       email: "",
       phone: "",
       productOfInterest: "",
@@ -141,10 +165,17 @@ export function PublicEnquiryForm({
     setErrorMsg(null);
 
     try {
+      const payload = {
+        ...form,
+        message: form.businessType
+          ? `[Business Type: ${form.businessType}]\n${form.message}`
+          : form.message,
+      };
+
       const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -287,20 +318,20 @@ export function PublicEnquiryForm({
             </div>
           )}
           <div>
-            <div className="flex items-center gap-2 mb-0.5">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-[#edf3fd] to-[#edf8eb] text-[#1b4db3] border border-[#1b4db3]/20">
-                <span className="relative flex h-1.5 w-1.5">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase bg-gradient-to-r from-[#edf3fd] to-[#edf8eb] text-[#143e94] border border-[#1b4db3]/20">
+                <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3a991d] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#3a991d]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3a991d]"></span>
                 </span>
                 <span>Commercial Desk</span>
               </span>
-              <span className="text-[11px] font-medium text-slate-400">• Hyderabad</span>
+              <span className="text-xs font-medium text-slate-500">• Hyderabad</span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-heading">
+            <h3 className="text-xl sm:text-2xl font-black text-[#143e94] font-heading">
               {title}
             </h3>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
+            <p className="text-sm text-slate-600 leading-relaxed max-w-xl">
               {subtitle}
             </p>
           </div>
@@ -309,157 +340,169 @@ export function PublicEnquiryForm({
 
       {/* Selected Product Pill (if present) */}
       {form.productOfInterest && (
-        <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#edf3fd] via-[#f7faff] to-[#edf8eb] border border-[#1b4db3]/25 text-xs text-slate-700">
+        <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#edf3fd] via-[#f7faff] to-[#edf8eb] border border-[#1b4db3]/25 text-xs text-slate-700">
           <div className="flex items-center gap-2 min-w-0">
             <FlaskConical className="w-4 h-4 text-[#1b4db3] shrink-0" />
-            <span className="text-slate-500 text-[11px] font-medium">Target Material:</span>
-            <span className="font-bold text-[#1b4db3] font-mono truncate">
+            <span className="text-slate-600 text-xs font-semibold">Target Material:</span>
+            <span className="font-bold text-[#143e94] font-mono truncate text-sm">
               {form.productOfInterest}
             </span>
           </div>
           <button
             type="button"
             onClick={() => setForm({ ...form, productOfInterest: "" })}
-            className="text-[11px] text-slate-400 hover:text-slate-700 hover:underline shrink-0 ml-2"
+            className="text-xs text-slate-500 hover:text-red-600 hover:underline shrink-0 ml-2 font-medium"
           >
             Clear
           </button>
         </div>
       )}
 
-      {/* Pharmacopoeial Standard Chips */}
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-[#3a991d]" />
-            <span>Target Standard / Grade:</span>
-          </label>
-          <span className="text-[10px] text-slate-400">Click to tag in requirement</span>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {PHARMACOPOEIA_GRADES.map((grade) => {
-            const active = selectedGrade === grade.id;
-            return (
-              <button
-                key={grade.id}
-                type="button"
-                onClick={() => toggleGrade(grade.id, grade.label)}
-                className={twMerge(
-                  "text-xs px-2.5 py-1 rounded-lg border transition-all duration-150 select-none flex items-center gap-1",
-                  active
-                    ? "bg-gradient-to-r from-[#1b4db3] to-[#3a991d] text-white border-transparent shadow-xs font-semibold"
-                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 font-medium"
-                )}
-              >
-                {active && <Check className="w-3 h-3 text-white" />}
-                <span>{grade.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Error Alert */}
       {errorMsg && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Row 1: Contact Name & Company */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      {/* Row 1: Full Name & Company */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
-            Full Name / Officer <span className="text-[#1b4db3]">*</span>
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Full Name <span className="text-[#1b4db3]">*</span>
           </label>
           <div className="relative">
-            <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={form.contactName}
               onChange={(e) => setForm({ ...form, contactName: e.target.value })}
               placeholder="e.g. Dr. Ramesh Kumar"
               required
-              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
-            Company / Formulation Plant
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Company <span className="text-[#1b4db3]">*</span>
           </label>
           <div className="relative">
-            <Building2 className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={form.companyName}
               onChange={(e) => setForm({ ...form, companyName: e.target.value })}
               placeholder="e.g. Aurobindo Pharma Ltd"
-              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
             />
           </div>
         </div>
       </div>
 
-      {/* Row 2: Corporate Email & Phone */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      {/* Row 2: Business Type & Corporate Email */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Business Type <span className="text-[#1b4db3]">*</span>
+          </label>
+          <div className="relative">
+            <select
+              value={form.businessType}
+              onChange={(e) => setForm({ ...form, businessType: e.target.value })}
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
+            >
+              <option value="">Select Business Type...</option>
+              {BUSINESS_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
             Corporate Email <span className="text-[#1b4db3]">*</span>
           </label>
           <div className="relative">
-            <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder="procurement@company.com"
               required
-              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
             />
           </div>
         </div>
+      </div>
 
+      {/* Row 3: Phone & Product Name */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
             Phone / Mobile (WhatsApp) <span className="text-[#3a991d]">*</span>
           </label>
           <div className="relative">
-            <Phone className="w-4 h-4 text-[#3a991d] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Phone className="w-4 h-4 text-[#3a991d] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="tel"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               placeholder="+91 98490..."
               required
-              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#3a991d] focus:ring-4 focus:ring-[#3a991d]/10 transition-colors"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Row 3: Product Name & Quantity + Unit */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="sm:col-span-2">
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
-            Product of Interest (API / CAS / Intermediate)
-          </label>
-          <div className="relative">
-            <FlaskConical className="w-4 h-4 text-[#1b4db3] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              value={form.productOfInterest}
-              onChange={(e) => setForm({ ...form, productOfInterest: e.target.value })}
-              placeholder="e.g. Atorvastatin Calcium or Montelukast Sodium"
-              className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#3a991d] focus:ring-4 focus:ring-[#3a991d]/10 transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Product of Interest (API / CAS / Intermediates)
+          </label>
+          <div className="relative">
+            <FlaskConical className="w-4 h-4 text-[#1b4db3] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={form.productOfInterest}
+              onChange={(e) => setForm({ ...form, productOfInterest: e.target.value })}
+              placeholder="e.g. Atorvastatin Calcium or Montelukast Sodium"
+              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Row 4: Product Category (Required) & Quantity */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="sm:col-span-2">
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Product Category <span className="text-[#1b4db3]">*</span>
+          </label>
+          <select
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
+          >
+            <option value="">Select Category...</option>
+            {effectiveCategories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
             Requested Quantity
           </label>
           <div className="grid grid-cols-5 gap-1.5">
@@ -470,14 +513,14 @@ export function PublicEnquiryForm({
                 value={form.requestedQuantity}
                 onChange={(e) => setForm({ ...form, requestedQuantity: e.target.value })}
                 placeholder="50"
-                className="w-full rounded-xl border border-slate-300 bg-white pl-8 pr-2 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+                className="w-full rounded-xl border border-slate-300 bg-white pl-8 pr-2 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
               />
             </div>
             <div className="col-span-2">
               <select
                 value={form.unit}
                 onChange={(e) => setForm({ ...form, unit: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 bg-white px-2 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
+                className="w-full rounded-xl border border-slate-300 bg-white px-2 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
               >
                 <option value="KG">KG</option>
                 <option value="G">Grams</option>
@@ -489,35 +532,46 @@ export function PublicEnquiryForm({
         </div>
       </div>
 
-      {/* Row 4: Category (if provided) */}
-      {categories.length > 0 && (
-        <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">
-            Product Category (Optional)
+      {/* Target Standard / Grade: MOVED DIRECTLY BEHIND PRODUCT CATEGORY */}
+      <div className="rounded-2xl bg-gradient-to-r from-[#edf3fd]/60 to-[#edf8eb]/60 border border-[#1b4db3]/20 p-4">
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-bold text-[#143e94] flex items-center gap-1.5">
+            <Award className="w-4 h-4 text-[#3a991d]" />
+            <span>Target Standard / Grade:</span>
           </label>
-          <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
-          >
-            <option value="">Select Category...</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+          <span className="text-xs text-slate-500 font-medium">Select required pharmacopoeia</span>
         </div>
-      )}
+        <div className="flex flex-wrap gap-2">
+          {PHARMACOPOEIA_GRADES.map((grade) => {
+            const active = selectedGrade === grade.id;
+            return (
+              <button
+                key={grade.id}
+                type="button"
+                onClick={() => toggleGrade(grade.id, grade.label)}
+                className={twMerge(
+                  "text-xs sm:text-sm px-3.5 py-1.5 rounded-xl border transition-all duration-150 select-none flex items-center gap-1.5 shadow-2xs",
+                  active
+                    ? "bg-gradient-to-r from-[#1b4db3] to-[#3a991d] text-white border-transparent shadow-sm font-bold scale-102"
+                    : "bg-white hover:bg-slate-50 text-slate-700 border-slate-300 font-semibold"
+                )}
+              >
+                {active && <Check className="w-3.5 h-3.5 text-white" />}
+                <span>{grade.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Row 5: Requirement Details / Message */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-            <FileText className="w-3.5 h-3.5 text-[#1b4db3]" />
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="text-sm font-bold text-[#143e94] flex items-center gap-1.5">
+            <FileText className="w-4 h-4 text-[#1b4db3]" />
             <span>Material Specifications & Commercial Notes <span className="text-[#1b4db3]">*</span></span>
           </label>
-          <span className="text-[10px] text-slate-400">COA, delivery timeline, payment terms</span>
+          <span className="text-xs text-slate-500 font-medium">COA, delivery timeline, payment terms</span>
         </div>
         <textarea
           value={form.message}
@@ -525,7 +579,7 @@ export function PublicEnquiryForm({
           placeholder="Please specify target assay purity, delivery timeline to facility, sample dispatch requirement, or packaging specifications..."
           rows={3}
           required
-          className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors resize-none"
+          className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors resize-none font-medium"
         />
       </div>
 

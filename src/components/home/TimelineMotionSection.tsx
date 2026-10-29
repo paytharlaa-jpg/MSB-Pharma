@@ -156,11 +156,15 @@ export function TimelineMotionSection() {
       className="py-14 sm:py-16 bg-white text-slate-900 border-t border-slate-200 relative overflow-clip"
       aria-label="How MSB PHARMACHEM Delivers Molecular Excellence Timeline"
     >
-      {/* Background scientific grid */}
-      <div className="absolute inset-0 scientific-grid-dense opacity-35 pointer-events-none" />
+      {/* Slow Moving Neon Grid Lines Background */}
+      <div className="neon-timeline-grid" aria-hidden="true" />
+      <div className="neon-laser-line-1" aria-hidden="true" />
+      <div className="neon-laser-line-2" aria-hidden="true" />
 
-      {/* Ambient background glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-[#1b4db3]/5 blur-[170px] pointer-events-none" />
+      {/* Ambient Neon Glow Orbs */}
+      <div className="absolute top-1/4 left-10 w-[550px] h-[400px] rounded-full bg-[#06b6d4]/10 blur-[150px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-1/4 right-10 w-[600px] h-[450px] rounded-full bg-[#3a991d]/12 blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[500px] rounded-full bg-[#2563eb]/8 blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -170,11 +174,11 @@ export function TimelineMotionSection() {
             <span>INTERACTIVE TIMELINE · VERIFIED LIFECYCLE</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+          <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-glow-expand">
             How We Deliver Molecular Excellence
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
             A step-by-step verified workflow from raw synthesis validation to commercial delivery, engineered for zero formulation disruption.
           </p>
 
@@ -233,7 +237,7 @@ export function TimelineMotionSection() {
                         className={`w-full p-5 sm:p-6 text-left flex items-center justify-between transition-colors border-b border-slate-100 ${
                           isOpen
                             ? "bg-[#edf3fd]/80 text-[#1b4db3]"
-                            : "bg-white text-slate-900 hover:bg-slate-50"
+                            : "bg-white text-[#143e94] hover:bg-slate-50"
                         }`}
                         aria-expanded={isOpen}
                       >
@@ -241,7 +245,7 @@ export function TimelineMotionSection() {
                           <div className="w-8 h-8 rounded-lg bg-[#edf3fd] border border-[#1b4db3]/20 flex items-center justify-center text-[#1b4db3] shrink-0">
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className="font-bold text-base sm:text-lg font-heading leading-snug">
+                          <span className="font-bold text-lg sm:text-xl font-heading leading-snug text-[#143e94]">
                             {step.title}
                           </span>
                         </div>

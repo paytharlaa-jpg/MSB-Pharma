@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Phone } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import { getWhatsAppClickToChatUrl } from "@/lib/whatsapp-service";
 
 export function FloatingActionButtons() {
-  const [hoveredButton, setHoveredButton] = useState<"whatsapp" | "call" | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<"whatsapp" | "call" | "mail" | null>(null);
 
   const phoneHref = "tel:+918008335333";
+  const emailHref = "mailto:mohank9@gmail.com?subject=Commercial%20Product%20Inquiry%20-%20MSB%20PHARMACHEM";
   const whatsappHref = getWhatsAppClickToChatUrl({
     customMessage: "Hello MSB PHARMACHEM, I am contacting you from the website regarding pharmaceutical products & API requirements.",
   });
@@ -17,7 +18,38 @@ export function FloatingActionButtons() {
       className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3.5 select-none pointer-events-auto"
       aria-label="Direct Quick Contact Channels"
     >
-      {/* 1. Phone Call Floating Button */}
+      {/* 1. Direct Mail Floating Button */}
+      <div className="relative flex items-center justify-end">
+        {/* Tooltip Label on Desktop */}
+        <div
+          className={`absolute right-16 px-3.5 py-1.5 rounded-full bg-slate-900/95 text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-slate-700/60 transition-all duration-200 pointer-events-none hidden sm:block ${
+            hoveredButton === "mail"
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 translate-x-2"
+          }`}
+        >
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+            <span>Email: mohank9@gmail.com</span>
+          </div>
+        </div>
+
+        <a
+          href={emailHref}
+          onMouseEnter={() => setHoveredButton("mail")}
+          onMouseLeave={() => setHoveredButton(null)}
+          className="relative group w-14 h-14 rounded-full bg-gradient-to-tr from-[#143e94] to-[#2563eb] text-white flex items-center justify-center shadow-lg shadow-[#1b4db3]/35 hover:shadow-xl hover:shadow-[#2563eb]/50 hover:scale-108 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#2563eb]/40"
+          aria-label="Email MSB PHARMACHEM at mohank9@gmail.com"
+        >
+          {/* Ambient Breathing Glow */}
+          <span className="absolute -inset-1 rounded-full bg-[#2563eb]/30 blur-sm group-hover:bg-[#2563eb]/50 transition-all duration-300 pointer-events-none" />
+
+          {/* Mail Icon */}
+          <Mail className="w-6 h-6 transition-transform duration-200 group-hover:scale-110" />
+        </a>
+      </div>
+
+      {/* 2. Phone Call Floating Button */}
       <div className="relative flex items-center justify-end">
         {/* Tooltip Label on Desktop */}
         <div
@@ -48,7 +80,7 @@ export function FloatingActionButtons() {
         </a>
       </div>
 
-      {/* 2. WhatsApp Floating Button */}
+      {/* 3. WhatsApp Floating Button */}
       <div className="relative flex items-center justify-end">
         {/* Tooltip Label on Desktop */}
         <div

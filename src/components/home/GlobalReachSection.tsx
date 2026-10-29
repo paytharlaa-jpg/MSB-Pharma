@@ -89,14 +89,14 @@ export function GlobalReachSection() {
             <span>GLOBAL SUPPLY FOOTPRINT</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+          <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-wipe">
             Connected to Hyderabad. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d]">
               Ready to Serve Wider Markets.
             </span>
           </h2>
 
-          <p className="text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
             Rooted in Kukatpally, Hyderabad—the heart of Indian pharmaceutical innovation—MSB PHARMACHEM orchestrates procurement and supply across major Indian manufacturing belts and international export destinations.
           </p>
         </div>
@@ -122,7 +122,7 @@ export function GlobalReachSection() {
                     <MapPin className="w-5 h-5 text-[#1b4db3] animate-bounce" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold font-heading text-slate-900">
+                    <div className="text-base font-bold font-heading text-[#143e94]">
                       Kukatpally, Hyderabad (Telangana)
                     </div>
                     <div className="text-xs text-[#1b4db3] font-mono font-semibold">
@@ -142,7 +142,7 @@ export function GlobalReachSection() {
           {/* Right: Domestic & Global Hub Details (5 Cols) with Ref */}
           <div ref={hubsColRef} className="lg:col-span-5 space-y-6">
             <div className="space-y-3">
-              <h3 className="text-lg font-bold font-heading text-slate-900 flex items-center gap-2">
+              <h3 className="text-xl font-bold font-heading text-[#143e94] flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#1b4db3]" />
                 <span>Domestic Supply Corridors</span>
               </h3>
@@ -151,11 +151,10 @@ export function GlobalReachSection() {
                 {domesticHubs.map((hub, idx) => (
                   <div
                     key={idx}
-                    className={`p-3 rounded-xl border transition-all ${
-                      hub.prime
-                        ? "bg-[#edf3fd] border-[#1b4db3]/30 text-slate-900"
-                        : "bg-white border-slate-200 text-slate-700 shadow-xs"
-                    }`}
+                    className={`p-3 rounded-xl border transition-all ${hub.prime
+                      ? "bg-[#edf3fd] border-[#1b4db3]/30 text-slate-900"
+                      : "bg-white border-slate-200 text-slate-700 shadow-xs"
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">

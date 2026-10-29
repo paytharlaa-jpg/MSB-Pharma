@@ -196,7 +196,7 @@ export function ReverseScientificGallery() {
                 </div>
 
                 {/* Narrative Description */}
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                <p className="text-base text-slate-700 leading-relaxed font-medium">
                   {slide.description}
                 </p>
               </div>

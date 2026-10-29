@@ -216,18 +216,18 @@ export function HorizontalProductJourney() {
                 </div>
 
                 {/* Title and Description */}
-                <h3 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 mb-2 leading-snug">
+                <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#143e94] mb-2 leading-snug">
                   {panel.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
+                <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-6 font-medium">
                   {panel.description}
                 </p>
 
                 {/* Technical Specs List */}
                 <div className="space-y-2 mb-6">
                   {panel.specs.map((spec, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-slate-700">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#3a991d] shrink-0" />
+                    <div key={i} className="flex items-center gap-2.5 text-sm text-slate-700 font-medium">
+                      <CheckCircle2 className="w-4 h-4 text-[#3a991d] shrink-0" />
                       <span>{spec}</span>
                     </div>
                   ))}

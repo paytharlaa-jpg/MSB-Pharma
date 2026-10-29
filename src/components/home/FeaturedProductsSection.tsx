@@ -231,10 +231,10 @@ export function FeaturedProductsSection({
                 ● Ready for Commercial Dispatch
               </span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-reveal-up">
               Featured Pharmaceutical Materials & APIs
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
               High-purity active pharmaceutical ingredients, synthesis intermediates, and critical excipients verified for commercial formulation.
             </p>
           </div>
@@ -290,89 +290,95 @@ export function FeaturedProductsSection({
           </button>
         </div>
 
-        {/* Featured Products Grid — Rich, dense, informative */}
+        {/* Featured Products Grid — Rich, dense, informative with Gradient Moving Outline on Hover */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           {filteredProducts.map((p) => (
             <div
               key={p.id}
-              className="product-card-reveal bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:shadow-lg hover:border-teal-500/50 transition-all duration-200 flex flex-col justify-between"
+              className="product-card-reveal commercial-card-wrapper"
             >
-              <div>
-                {/* Status & Category Bar */}
-                <div className="flex items-center justify-between text-xs mb-3 pb-2.5 border-b border-slate-100">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[11px] font-mono text-emerald-700 font-bold">
-                      In Stock • Hyd Hub
+              {/* Animated Gradient Moving Outline Elements */}
+              <div className="gradient-moving-border" />
+              <div className="gradient-moving-glow" />
+
+              <div className="commercial-card-inner">
+                <div>
+                  {/* Status & Category Bar */}
+                  <div className="flex items-center justify-between text-xs mb-3 pb-2.5 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[11px] font-mono text-emerald-700 font-bold">
+                        In Stock • Hyd Hub
+                      </span>
+                    </div>
+                    <span className="font-mono text-[10px] text-teal-800 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                      {p.sku}
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] text-teal-800 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
-                    {p.sku}
-                  </span>
-                </div>
 
-                {/* Product Name */}
-                <h3 className="font-bold text-base sm:text-lg text-slate-900 font-heading leading-snug">
-                  {p.name}
-                </h3>
+                  {/* Product Name */}
+                  <h3 className="font-bold text-lg sm:text-xl text-[#143e94] font-heading leading-snug">
+                    {p.name}
+                  </h3>
 
-                {/* Therapeutic Tag */}
-                {p.therapeuticCategory && (
-                  <p className="text-xs text-teal-700 font-medium mt-1">
-                    {p.therapeuticCategory}
+                  {/* Therapeutic Tag */}
+                  {p.therapeuticCategory && (
+                    <p className="text-xs text-teal-700 font-medium mt-1">
+                      {p.therapeuticCategory}
+                    </p>
+                  )}
+
+                  {/* Description summary */}
+                  <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+                    {p.description || "High-purity pharmaceutical material ready for commercial supply with full regulatory dossier."}
                   </p>
-                )}
 
-                {/* Description summary */}
-                <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                  {p.description || "High-purity pharmaceutical material ready for commercial supply with full regulatory dossier."}
-                </p>
+                  {/* Technical Specifications Matrix */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-xs">
+                    <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <span className="text-[9px] text-slate-400 uppercase font-mono block">
+                        CAS NUMBER
+                      </span>
+                      <span className="font-mono font-bold text-slate-800 text-[11px] truncate block">
+                        {p.casNumber || "Available"}
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <span className="text-[9px] text-slate-400 uppercase font-mono block">
+                        STANDARD
+                      </span>
+                      <span className="font-semibold text-slate-800 text-[11px] truncate block">
+                        {p.grade || "IP / BP / USP"}
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <span className="text-[9px] text-slate-400 uppercase font-mono block">
+                        DISPATCH
+                      </span>
+                      <span className="font-semibold text-emerald-700 text-[11px] truncate block">
+                        24–48h
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Technical Specifications Matrix */}
-                <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-xs">
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <span className="text-[9px] text-slate-400 uppercase font-mono block">
-                      CAS NUMBER
-                    </span>
-                    <span className="font-mono font-bold text-slate-800 text-[11px] truncate block">
-                      {p.casNumber || "Available"}
-                    </span>
-                  </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <span className="text-[9px] text-slate-400 uppercase font-mono block">
-                      STANDARD
-                    </span>
-                    <span className="font-semibold text-slate-800 text-[11px] truncate block">
-                      {p.grade || "IP / BP / USP"}
-                    </span>
-                  </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <span className="text-[9px] text-slate-400 uppercase font-mono block">
-                      DISPATCH
-                    </span>
-                    <span className="font-semibold text-emerald-700 text-[11px] truncate block">
-                      24–48h
-                    </span>
+                  {/* Documentation Tag */}
+                  <div className="mt-3 text-[11px] text-slate-600 bg-teal-50/60 px-2.5 py-1.5 rounded-lg border border-teal-100 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                    <span className="truncate">{p.ihDmf || "Manufacturer COA & MSDS Included"}</span>
                   </div>
                 </div>
 
-                {/* Documentation Tag */}
-                <div className="mt-3 text-[11px] text-slate-600 bg-teal-50/60 px-2.5 py-1.5 rounded-lg border border-teal-100 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
-                  <span className="truncate">{p.ihDmf || "Manufacturer COA & MSDS Included"}</span>
+                {/* Action Button */}
+                <div className="mt-5 pt-3 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectProduct(p.name)}
+                    className="w-full py-2.5 px-3.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#1b4db3] to-[#3a991d] hover:from-[#153e94] hover:to-[#2e7b17] transition-all flex items-center justify-center gap-1.5 shadow-md shadow-[#1b4db3]/20"
+                  >
+                    <span>Request Quotation & COA</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-              </div>
-
-              {/* Action Button */}
-              <div className="mt-5 pt-3 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => handleSelectProduct(p.name)}
-                  className="w-full py-2.5 px-3.5 rounded-xl text-xs font-bold text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
-                >
-                  <span>Request Quotation & COA</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
               </div>
             </div>
           ))}
@@ -391,11 +397,11 @@ export function FeaturedProductsSection({
                 <span>FAST COMMERCIAL RESPONSE</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight font-heading">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#143e94] leading-tight font-heading">
                 Looking for a Specific Pharmaceutical Material?
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              <p className="text-base text-slate-700 leading-relaxed font-normal">
                 Tell us your target molecule, grade, and delivery volume. Our commercial team in Hyderabad immediately verifies batch availability, confirms COA specifications, and returns competitive B2B quotation terms.
               </p>
 
@@ -406,10 +412,10 @@ export function FeaturedProductsSection({
                     <Zap className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 font-heading">
+                    <h4 className="text-sm font-bold text-[#143e94] font-heading">
                       24-Hour Commercial Dispatch
                     </h4>
-                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
+                    <p className="text-xs text-slate-600 leading-normal mt-0.5">
                       Stocked in Hyderabad warehouse corridor for immediate domestic transit & air cargo staging.
                     </p>
                   </div>
@@ -420,10 +426,10 @@ export function FeaturedProductsSection({
                     <FileCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 font-heading">
+                    <h4 className="text-sm font-bold text-[#143e94] font-heading">
                       Audit-Ready Dossiers
                     </h4>
-                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
+                    <p className="text-xs text-slate-600 leading-normal mt-0.5">
                       Batch-specific manufacturer COA, analytical method, MSDS, and open-part DMF documentation provided.
                     </p>
                   </div>
@@ -434,10 +440,10 @@ export function FeaturedProductsSection({
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 font-heading">
+                    <h4 className="text-sm font-bold text-[#143e94] font-heading">
                       WHO-GMP Vetted Manufacturers
                     </h4>
-                    <p className="text-[11px] text-slate-500 leading-normal mt-0.5">
+                    <p className="text-xs text-slate-600 leading-normal mt-0.5">
                       Audited manufacturing sites meeting stringent IP, BP, USP, and EP compendial monographs.
                     </p>
                   </div>

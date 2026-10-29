@@ -209,11 +209,11 @@ export function BrandPromiseSection() {
             <span>CORE PHILOSOPHY · TRI-CORE STANDARD</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+          <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-glow-expand">
             Quality. Reliability. Trust.
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-2xl mx-auto">
             Three unshakeable pillars governing every gram of API, every analytical chromatogram, and every delivery coordinated from Hyderabad to global formulation leaders.
           </p>
 
@@ -331,7 +331,7 @@ export function BrandPromiseSection() {
 
                 {/* Card Body */}
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
                     {pillar.description}
                   </p>
 
