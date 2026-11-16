@@ -7,23 +7,14 @@ import Image from "next/image";
 import {
   LayoutDashboard,
   MessageSquare,
-  Package,
-  Boxes,
-  Users,
-  Truck,
-  FileSpreadsheet,
-  FileText,
   Receipt,
   FileCheck2,
   BarChart3,
-  ShieldCheck,
-  Settings,
   LogOut,
   ChevronRight,
   Menu,
   X,
 } from "lucide-react";
-import { canAccessModule } from "@/lib/permissions";
 
 interface UserInfo {
   id: string;
@@ -48,27 +39,12 @@ export function Sidebar({ user }: { user: UserInfo | null }) {
   };
 
   const navItems = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, module: "dashboard" },
-    { label: "Enquiries & Leads", href: "/dashboard/enquiries", icon: MessageSquare, module: "enquiries" },
-    { label: "Product Master", href: "/dashboard/products", icon: Package, module: "products" },
-    { label: "Inventory & Batches", href: "/dashboard/inventory", icon: Boxes, module: "inventory" },
-    { label: "Customers", href: "/dashboard/customers", icon: Users, module: "customers" },
-    { label: "Suppliers", href: "/dashboard/suppliers", icon: Truck, module: "suppliers" },
-    { label: "Purchase Orders", href: "/dashboard/purchasing", icon: FileSpreadsheet, module: "purchasing" },
-    { label: "Goods Receipt (GRN)", href: "/dashboard/grn", icon: FileCheck2, module: "grn" },
-    { label: "Quotations", href: "/dashboard/quotations", icon: FileText, module: "quotations" },
-    { label: "Invoices & Payments", href: "/dashboard/invoices", icon: Receipt, module: "invoices" },
-    { label: "Delivery Challans", href: "/dashboard/delivery-challans", icon: Truck, module: "challans" },
-    { label: "Reports & Exports", href: "/dashboard/reports", icon: BarChart3, module: "reports" },
-    { label: "Audit Logs", href: "/dashboard/audit-logs", icon: ShieldCheck, module: "audit-logs" },
-    { label: "System Settings", href: "/dashboard/settings", icon: Settings, module: "settings" },
+    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Enquiries & Leads", href: "/dashboard/enquiries", icon: MessageSquare },
+    { label: "Goods Receipt (GRN)", href: "/dashboard/grn", icon: FileCheck2 },
+    { label: "Invoices & Payments", href: "/dashboard/invoices", icon: Receipt },
+    { label: "Reports & Exports", href: "/dashboard/reports", icon: BarChart3 },
   ];
-
-  const filteredNav = navItems.filter((item) => {
-    if (item.module === "dashboard") return true;
-    if (!user) return true;
-    return canAccessModule(user.role, item.module);
-  });
 
   return (
     <>
@@ -118,7 +94,7 @@ export function Sidebar({ user }: { user: UserInfo | null }) {
 
         {/* Navigation Items */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          {filteredNav.map((item) => {
+          {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
 
@@ -147,10 +123,10 @@ export function Sidebar({ user }: { user: UserInfo | null }) {
         <div className="p-3 border-t border-slate-800 bg-[#071827]/60">
           <div className="flex items-center justify-between px-2 py-1.5 mb-2">
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-white truncate">{user?.name || "Staff Member"}</p>
+              <p className="text-xs font-semibold text-white truncate">{user?.name || "Admin"}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-semibold border border-emerald-800 uppercase">
-                  {user?.role || "GUEST"}
+                  Admin
                 </span>
               </div>
             </div>

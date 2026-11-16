@@ -32,3 +32,9 @@ Thumbs.db
 # TypeScript build info cache
 *.tsbuildinfo
 
+
+# IDE / AI tools
+.claude/
+
+# raw AI images waiting to be processed by scripts/process-images.mjs
+incoming-images/

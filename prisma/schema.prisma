@@ -166,6 +166,7 @@ model Enquiry {
   source            String   @default("WEBSITE")
   assignedToUserId  String?
   assignedTo        User?    @relation("EnquiryAssigned", fields: [assignedToUserId], references: [id])
+  assignedToName    String?  // free-text name of the person the admin assigned this lead to
   notes             String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -219,36 +220,70 @@ model PurchaseOrderItem {
 
 // 11. Goods Receipt Notes (GRN)
 model GoodsReceiptNote {
-  id              String        @id @default(cuid())
-  grnNumber       String        @unique
-  supplierId      String
-  supplier        Supplier      @relation(fields: [supplierId], references: [id])
-  purchaseOrderId String?
-  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
-  receiptDate     DateTime      @default(now())
-  status          String        @default("VERIFIED") // "DRAFT", "VERIFIED", "CANCELLED"
-  notes           String?
-  receivedByUserId String
-  receivedBy      User          @relation(fields: [receivedByUserId], references: [id])
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                String         @id @default(cuid())
+  grnNumber         String         @unique
+  supplierId        String?
+  supplier          Supplier?      @relation(fields: [supplierId], references: [id])
+  purchaseOrderId   String?
+  purchaseOrder     PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+  receiptDate       DateTime       @default(now())
+  receiptTime       String?
+  status            String         @default("VERIFIED") // "DRAFT", "VERIFIED", "CANCELLED"
+  notes             String?
 
-  items           GRNItem[]
+  // 1. Supplier & document details (as per GRN & Incoming Inspection Report format)
+  supplierName      String         @default("")
+  supplierAddress   String?
+  poNumberDate      String?
+  invoiceNumberDate String?
+  vehicleNumber     String?
+  transporterLr     String?
+  ewayBillNumber    String?
+  receivedAt        String?
+
+  // 3. Incoming inspection checklist: JSON { key: "YES" | "NO" | "NA" }
+  checklist         String         @default("{}")
+
+  // 4. QC sampling, disposition & three-way match
+  qcSampleRef       String?
+  sampledBy         String?
+  sampledDate       DateTime?
+  qcStatus          String?        // "QUARANTINE", "APPROVED", "REJECTED", "ON_HOLD"
+  storageLocation   String?
+  tempCondition     String?
+  rejectionAction   String?        // "RETURN_TO_SUPPLIER", "DEBIT_NOTE", "REPLACEMENT"
+  threeWayMatch     String         @default("[]") // JSON array of match keys ticked
+  remarks           String?
+
+  // Sign-off block: JSON { store|qc|purchase|approver: { name, date } }
+  signatories       String         @default("{}")
+
+  receivedByUserId  String
+  receivedBy        User           @relation(fields: [receivedByUserId], references: [id])
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  items             GRNItem[]
 }
 
 model GRNItem {
-  id               String           @id @default(cuid())
-  grnId            String
-  grn              GoodsReceiptNote @relation(fields: [grnId], references: [id], onDelete: Cascade)
-  productId        String
-  product          Product          @relation(fields: [productId], references: [id])
-  batchNumber      String
-  expiryDate       DateTime?
-  receivedQuantity Float
-  acceptedQuantity Float
-  rejectedQuantity Float            @default(0)
-  unit             String           @default("KG")
-  storageLocation  String           @default("Main Warehouse - Kukatpally")
+  id                  String           @id @default(cuid())
+  grnId               String
+  grn                 GoodsReceiptNote @relation(fields: [grnId], references: [id], onDelete: Cascade)
+  productId           String?
+  product             Product?         @relation(fields: [productId], references: [id])
+  materialDescription String           @default("")
+  batchNumber         String
+  mfgDate             DateTime?
+  expiryDate          DateTime?        // Exp / Retest date
+  qtyAsPerInvoice     Float?
+  receivedQuantity    Float
+  acceptedQuantity    Float
+  rejectedQuantity    Float            @default(0)
+  unit                String           @default("KG")
+  numContainers       Int?
+  remarks             String?
+  storageLocation     String           @default("Main Warehouse - Kukatpally")
 }
 
 // 12. Quotations
@@ -293,8 +328,8 @@ model QuotationItem {
 model Invoice {
   id              String          @id @default(cuid())
   invoiceNumber   String          @unique
-  customerId      String
-  customer        Customer        @relation(fields: [customerId], references: [id])
+  customerId      String?
+  customer        Customer?       @relation(fields: [customerId], references: [id])
   quotationId     String?
   quotation       Quotation?      @relation(fields: [quotationId], references: [id])
   invoiceDate     DateTime        @default(now())
@@ -302,8 +337,28 @@ model Invoice {
   status          String          @default("ISSUED") // "DRAFT", "ISSUED", "CANCELLED"
   paymentStatus   String          @default("UNPAID") // "UNPAID", "PARTIALLY_PAID", "PAID"
   currency        String          @default("INR")
-  subtotal        Float           @default(0)
+
+  // Recipient & GST details (as per Sales Register format)
+  customerName    String          @default("")
+  customerGstin   String?
+  customerAddress String?
+  customerPhone   String?
+  customerEmail   String?
+  placeOfSupply   String          @default("36-Telangana")
+  category        String          @default("B2B")     // B2B, B2CL, B2CS, Export
+  invoiceType     String          @default("Regular")
+  reverseCharge   String          @default("N")       // Y / N
+  supplyType      String          @default("Intra-State")
+  poReference     String?
+  vehicleNumber   String?
+  ewayBillNumber  String?
+
+  subtotal        Float           @default(0) // total taxable value
   taxRate         Float           @default(18)
+  igstAmount      Float           @default(0)
+  cgstAmount      Float           @default(0)
+  sgstAmount      Float           @default(0)
+  cessAmount      Float           @default(0)
   taxAmount       Float           @default(0)
   discountAmount  Float           @default(0)
   grandTotal      Float           @default(0)
@@ -322,16 +377,24 @@ model Invoice {
 }
 
 model InvoiceItem {
-  id          String   @id @default(cuid())
-  invoiceId   String
-  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  productId   String
-  product     Product  @relation(fields: [productId], references: [id])
-  description String?
-  quantity    Float
-  unit        String   @default("KG")
-  unitPrice   Float
-  lineTotal   Float
+  id           String   @id @default(cuid())
+  invoiceId    String
+  invoice      Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id])
+  description  String?
+  hsnCode      String?
+  quantity     Float
+  unit         String   @default("KGS") // UQC
+  unitPrice    Float
+  discount     Float    @default(0)
+  taxableValue Float    @default(0)
+  gstRate      Float    @default(18)
+  igst         Float    @default(0)
+  cgst         Float    @default(0)
+  sgst         Float    @default(0)
+  cess         Float    @default(0)
+  lineTotal    Float
 }
 
 // 14. Payment Records

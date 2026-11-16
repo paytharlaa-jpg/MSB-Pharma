@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { NotificationBell } from "./NotificationBell";
-import { User, Settings, Shield } from "lucide-react";
+import { User, Shield } from "lucide-react";
 import { SessionUser } from "@/lib/auth";
 
 interface DashboardHeaderProps {
@@ -56,16 +55,6 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           </div>
         </div>
 
-        {/* Quick Settings */}
-        {user.role === "SUPER_ADMIN" && (
-          <Link
-            href="/dashboard/settings"
-            title="System Settings"
-            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors hidden sm:flex items-center"
-          >
-            <Settings className="w-4 h-4" />
-          </Link>
-        )}
       </div>
     </header>
   );

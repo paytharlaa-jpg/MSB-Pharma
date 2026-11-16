@@ -1,24 +1,41 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { generateDocumentNumber } from "@/lib/document-number";
 import { createAuditLog } from "@/lib/audit";
+import { parseInvoiceInput, invoiceSearchWhere, InvoiceInput } from "@/lib/invoice-input";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const user = await requireAdmin(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
+    const { searchParams } = new URL(request.url);
+    const q = (searchParams.get("search") || "").trim();
+    const paymentStatus = searchParams.get("paymentStatus") || "";
+
     const invoices = await prisma.invoice.findMany({
+      where: { ...invoiceSearchWhere(q), ...(paymentStatus ? { paymentStatus } : {}) },
       orderBy: { invoiceDate: "desc" },
-      include: {
-        customer: true,
-        items: { include: { product: true } },
-        payments: {
-          include: { recordedBy: { select: { name: true } } },
-          orderBy: { paymentDate: "desc" },
-        },
-        createdBy: { select: { id: true, name: true } },
+      include: { items: true, payments: { orderBy: { paymentDate: "asc" } } },
+    });
+
+    // Distinct past customers, so the form can auto-fill details for repeat buyers
+    const customers = await prisma.invoice.findMany({
+      distinct: ["customerName"],
+      orderBy: { invoiceDate: "desc" },
+      select: {
+        customerName: true,
+        customerGstin: true,
+        customerAddress: true,
+        customerPhone: true,
+        customerEmail: true,
+        placeOfSupply: true,
+        category: true,
       },
     });
-    return NextResponse.json({ success: true, invoices });
+
+    return NextResponse.json({ success: true, invoices, customers });
   } catch (error: unknown) {
     console.error("Invoices GET error:", error);
     return NextResponse.json({ error: "Failed to fetch invoices" }, { status: 500 });
@@ -26,75 +43,26 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const user = await requireAdmin(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
-    const user = await getSessionUser(request);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { customerId, quotationId, dueDays = 30, notes, terms, taxRate = 18, discountAmount = 0, items } = body;
-
-    if (!customerId || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: "Customer and invoice items are required" },
-        { status: 400 }
-      );
-    }
+    const { errors, data, items } = parseInvoiceInput((await request.json()) as InvoiceInput);
+    if (errors.length) return NextResponse.json({ error: errors.join(". ") }, { status: 400 });
 
     const invoiceNumber = await generateDocumentNumber("INV");
-
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + Number(dueDays));
-
-    let subtotal = 0;
-    const validatedItems = items.map((item: {
-      productId: string;
-      description?: string;
-      quantity: number;
-      unitPrice: number;
-      unit?: string;
-    }) => {
-      const lineTotal = Number(item.quantity) * Number(item.unitPrice);
-      subtotal += lineTotal;
-      return {
-        productId: item.productId,
-        description: item.description?.trim() || null,
-        quantity: Number(item.quantity),
-        unit: item.unit || "KG",
-        unitPrice: Number(item.unitPrice),
-        lineTotal,
-      };
-    });
-
-    const taxAmount = (subtotal * Number(taxRate)) / 100;
-    const grandTotal = subtotal + taxAmount - Number(discountAmount || 0);
-
     const invoice = await prisma.invoice.create({
       data: {
+        ...data,
         invoiceNumber,
-        customerId,
-        quotationId: quotationId || null,
-        invoiceDate: new Date(),
-        dueDate,
         status: "ISSUED",
         paymentStatus: "UNPAID",
-        currency: "INR",
-        subtotal,
-        taxRate: Number(taxRate),
-        taxAmount,
-        discountAmount: Number(discountAmount || 0),
-        grandTotal,
         paidAmount: 0,
-        balanceAmount: grandTotal,
-        notes: notes?.trim() || null,
-        terms: terms?.trim() || null,
+        balanceAmount: data.grandTotal,
         createdByUserId: user.id,
-        items: {
-          create: validatedItems,
-        },
+        items: { create: items },
       },
-      include: { customer: true, items: true },
+      include: { items: true, payments: true },
     });
 
     await createAuditLog({
@@ -103,12 +71,12 @@ export async function POST(request: Request) {
       action: "CREATE",
       performedByUserId: user.id,
       userEmail: user.email,
-      details: { invoiceNumber, customerId, grandTotal },
+      details: { invoiceNumber, customerName: data.customerName, grandTotal: data.grandTotal },
     });
 
     return NextResponse.json({ success: true, invoice });
   } catch (error: unknown) {
-    console.error("Invoice POST error:", error);
+    console.error("Invoices POST error:", error);
     return NextResponse.json({ error: "Failed to create invoice" }, { status: 500 });
   }
 }

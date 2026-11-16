@@ -1,102 +1,144 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { ArrowRight } from "lucide-react";
+import { PageHero } from "@/components/public-site/PageHero";
+import { GalleryGrid, GalleryItem } from "@/components/public-site/GalleryGrid";
 
 export const metadata = {
-  title: "Supply Chain & Facility Gallery | MSB PHARMACHEM",
+  title: "Gallery | MSB PHARMACHEM: Science, Quality & Supply Chain",
   description:
-    "Explore MSB PHARMACHEM's pharmaceutical cold-chain logistics, analytical testing facilities, and warehouse storage operations.",
+    "A visual look at MSB PHARMACHEM: pharmaceutical science, quality documentation, warehousing and our supply network from Hyderabad.",
 };
 
-const galleryItems = [
+const ITEMS: GalleryItem[] = [
   {
-    title: "Global Air Freight & Temperature Controlled Logistics",
+    title: "Molecular architecture",
+    category: "Science",
+    image: "/images/gallery-molecular-architecture.webp",
+    caption: "Every API we supply starts as a precisely defined structure, verified against its pharmacopoeial monograph.",
+    isNew: true,
+  },
+  {
+    title: "Analytical quality control",
+    category: "Quality",
+    image: "/images/gallery-quality-control.webp",
+    caption: "HPLC purity profiling and reference-standard testing behind every Certificate of Analysis.",
+    tall: true,
+  },
+  {
+    title: "High-bay strategic warehousing",
+    category: "Facility",
+    image: "/images/msb-brand-highbay-warehouse.webp",
+    caption: "Multi-tier pharmaceutical storage racks with certified MSB PHARMACHEM batch inventory in Kukatpally, Hyderabad.",
+    tall: true,
+  },
+  {
+    title: "Integrated logistics & material handling",
     category: "Supply Chain",
-    image: "/images/global-supply.webp",
-    caption: "Cold-chain air freight dispatch from Hyderabad Air Cargo Terminal to international destination ports.",
+    image: "/images/msb-brand-logistics-forklift.webp",
+    caption: "Automated forklift handling, IBC containers, and dispatch-ready pallet staging.",
+    isNew: true,
   },
   {
-    title: "Analytical Quality Control & Chromatography",
-    category: "Quality Assurance",
-    image: "/images/about-company.webp",
-    caption: "HPLC purity profiling and reference standard testing in state-of-the-art analytical testing facilities.",
+    title: "Documentation with every batch",
+    category: "Quality",
+    image: "/images/gallery-quality-documentation.webp",
+    caption: "COA, MSDS and inspection records travel with each consignment, ready for your QA release.",
   },
   {
-    title: "API Molecular Synthesis & Chemical Precision",
-    category: "R&D Standards",
-    image: "/images/hero-scientific-background.webp",
-    caption: "Luminous molecular structure modeling for active ingredient synthesis and chiral purification.",
+    title: "Active pharmaceutical ingredients",
+    category: "Science",
+    image: "/images/gallery-api-materials.webp",
+    caption: "Human and veterinary APIs for generic formulation manufacturers.",
+    tall: true,
   },
   {
-    title: "Bulk Drug Handling & Tamper-Evident Packaging",
-    category: "Warehouse Logistics",
-    image: "/images/global-supply.webp",
-    caption: "Sealed drum packaging adhering to strict pharmacopoeial moisture and light-barrier standards.",
+    title: "Air freight & export dispatch",
+    category: "Supply Chain",
+    image: "/images/gallery-export-dispatch.webp",
+    caption: "Export-ready documentation and coordinated air and sea freight for international buyers.",
+  },
+  {
+    title: "Tamper-evident batch packaging",
+    category: "Quality",
+    image: "/images/msb-brand-batch-drum-closeup.webp",
+    caption: "Verified batch numbering, strict storage parameters, and intact security seals on MSB PHARMACHEM drums.",
+    isNew: true,
+  },
+  {
+    title: "Laboratory precision",
+    category: "Quality",
+    image: "/images/gallery-laboratory-precision.webp",
+    caption: "Analytical instruments and trained chemists supporting impurity and assay checks.",
+  },
+  {
+    title: "Impurity reference standards",
+    category: "Quality",
+    image: "/images/gallery-impurity-standards.webp",
+    caption: "Certified standards for method validation and quality control.",
+    tall: true,
+  },
+  {
+    title: "Cleanroom batch inspection & staging",
+    category: "Facility",
+    image: "/images/msb-brand-drum-staging.webp",
+    caption: "Dedicated laminar flow airlocks and sampling booths ensuring zero contamination during intake.",
+    isNew: true,
+  },
+  {
+    title: "Controlled sampling & dispensing suites",
+    category: "Science",
+    image: "/images/msb-brand-cleanroom-sampling.webp",
+    caption: "Stainless steel roller staging and HEPA-filtered quarantine bays for incoming active ingredients.",
+    isNew: true,
+  },
+  {
+    title: "Bulk chemical storage infrastructure",
+    category: "Facility",
+    image: "/images/msb-brand-racking-storage.webp",
+    caption: "Segregated, temperature-monitored pallet racking engineered for rapid formulation buffer orders.",
+  },
+  {
+    title: "Excipients for formulation",
+    category: "Science",
+    image: "/images/gallery-excipients.webp",
+    caption: "Binders, disintegrants and fillers that meet stability and dissolution needs.",
+  },
+  {
+    title: "Molecular close-up",
+    category: "Science",
+    image: "/images/gallery-molecular-closeup.webp",
+    caption: "Crystalline integrity and polymorphic form matter as much as chemical purity.",
+  },
+  {
+    title: "Regional & national transit network",
+    category: "Supply Chain",
+    image: "/images/gallery-supply-network.webp",
+    caption: "Dependable transport partners connecting Hyderabad's pharma corridor to formulation plants across India.",
   },
 ];
 
 export default function GalleryPage() {
   return (
-    <div className="py-16 bg-slate-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs sm:text-sm font-bold text-[#1b4db3] uppercase tracking-wider bg-[#edf3fd] px-3.5 py-1 rounded-full border border-[#1b4db3]/20 inline-block">
-            Supply Chain & Infrastructure
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-black text-[#143e94] tracking-tight font-heading anim-text-glow-expand">
-            Visual Gallery & Logistics Showcase
-          </h1>
-          <p className="text-base text-slate-700 leading-relaxed">
-            Illustrating our dedication to pharmaceutical quality assurance, continuous cold-chain management, and rapid dispatch capabilities from Kukatpally, Hyderabad.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {galleryItems.map((item, idx) => (
-            <div
-              key={idx}
-              className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
-            >
-              <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-slate-900">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-emerald-400 font-semibold text-[11px] border border-slate-700">
-                    {item.category}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-2">
-                <h3 className="font-bold text-lg text-[#143e94] font-heading">{item.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-medium">{item.caption}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="p-8 rounded-2xl bg-[#0B1F33] text-white text-center space-y-4 max-w-2xl mx-auto">
-          <ShieldCheck className="w-8 h-8 text-emerald-400 mx-auto" />
-          <h3 className="text-lg font-bold">Request Inspection Reports & Technical COA</h3>
-          <p className="text-xs text-slate-300">
-            All shipments are accompanied by authenticated manufacturer test certificates, MSDS, and batch release documentation.
-          </p>
-          <div className="pt-2">
-            <Link href="/contact">
-              <Button variant="brand-green" size="sm">
-                <span>Inquire About Batch Specifications</span>
-                <ArrowRight className="w-3.5 h-3.5 ml-1" />
-              </Button>
+    <div className="bg-white">
+      <PageHero
+        eyebrow="Gallery"
+        title="Science, quality and"
+        accent="supply in focus"
+        lead="A closer look at the materials, checks and logistics behind every MSB PHARMACHEM consignment."
+        image="/images/gallery-hero-facility.webp"
+      />
+      <section className="py-20 sm:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <GalleryGrid items={ITEMS} />
+          <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-[28px] bg-[#f6f8fc] px-8 py-8" data-reveal>
+            <p className="font-heading text-xl font-bold text-[#0f2d6b] text-center sm:text-left">Want to see our documentation or visit the warehouse?</p>
+            <Link href="/contact" className="btn-shine inline-flex items-center gap-2 rounded-full bg-[#0f2d6b] px-6 py-3.5 text-sm font-semibold text-white">
+              Contact us <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

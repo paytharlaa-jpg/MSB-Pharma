@@ -32,36 +32,70 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
   // Curated category metadata mapping to approved imagery and highlights
   const categoryMeta: Record<string, { image: string; icon: typeof FlaskConical; tag: string }> = {
     api: {
-      image: "/images/api-materials.webp",
+      image: "/images/category-apis.webp",
+      icon: FlaskConical,
+      tag: "IP / BP / USP Grades",
+    },
+    apis: {
+      image: "/images/category-apis.webp",
       icon: FlaskConical,
       tag: "IP / BP / USP Grades",
     },
     raw_materials: {
-      image: "/images/pharmaceutical-raw-materials.webp",
+      image: "/images/category-raw-materials.webp",
+      icon: Boxes,
+      tag: "Synthesis Intermediates",
+    },
+    "intermediates-raw-materials": {
+      image: "/images/category-raw-materials.webp",
       icon: Boxes,
       tag: "Synthesis Intermediates",
     },
     excipients: {
-      image: "/images/excipients-materials.webp",
+      image: "/images/category-excipients.webp",
       icon: Award,
       tag: "Bioavailability Enhancers",
     },
     chemicals: {
-      image: "/images/chemicals-solvents.webp",
+      image: "/images/category-chemicals.webp",
+      icon: Truck,
+      tag: "HPLC & Electronic Grade",
+    },
+    "chemicals-solvents": {
+      image: "/images/category-chemicals.webp",
       icon: Truck,
       tag: "HPLC & Electronic Grade",
     },
     impurities: {
-      image: "/images/impurity-standards.webp",
+      image: "/images/category-impurities.webp",
+      icon: ShieldCheck,
+      tag: "Analytical Standards",
+    },
+    "impurity-standards": {
+      image: "/images/category-impurities.webp",
       icon: ShieldCheck,
       tag: "Analytical Standards",
     },
     bulk_drugs: {
-      image: "/images/about-company.webp",
+      image: "/images/category-bulk-drugs.webp",
+      icon: Sparkles,
+      tag: "Commercial Tonnage",
+    },
+    "bulk-drugs": {
+      image: "/images/category-bulk-drugs.webp",
       icon: Sparkles,
       tag: "Commercial Tonnage",
     },
   };
+
+  const fallbackImages = [
+    { image: "/images/category-apis.webp", icon: FlaskConical, tag: "IP / BP / USP Grades" },
+    { image: "/images/category-raw-materials.webp", icon: Boxes, tag: "Synthesis Intermediates" },
+    { image: "/images/category-excipients.webp", icon: Award, tag: "Bioavailability Enhancers" },
+    { image: "/images/category-chemicals.webp", icon: Truck, tag: "HPLC & Electronic Grade" },
+    { image: "/images/category-impurities.webp", icon: ShieldCheck, tag: "Analytical Standards" },
+    { image: "/images/category-bulk-drugs.webp", icon: Sparkles, tag: "Commercial Tonnage" },
+  ];
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -122,9 +156,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
         {/* Section Header with Ref */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6">
           <div className="max-w-2xl space-y-3">
-            <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
-              CORE PORTFOLIO
-            </span>
+            <p className="eyebrow">Product categories</p>
             <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-wipe">
               Materials That Move Science Forward.
             </h2>
@@ -148,11 +180,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {displayCategories.map((cat, idx) => {
-            const meta = categoryMeta[cat.slug] || {
-              image: "/images/api-materials.webp",
-              icon: FlaskConical,
-              tag: "Certified Sourcing",
-            };
+            const meta = categoryMeta[cat.slug] || fallbackImages[idx % fallbackImages.length];
             const Icon = meta.icon;
 
             return (
@@ -164,6 +192,7 @@ export function ProductCategoriesSection({ categories = [] }: ProductCategoriesP
                 {/* Visual Header */}
                 <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
                   <Image
+                    data-parallax="7"
                     src={meta.image}
                     alt={cat.name}
                     fill

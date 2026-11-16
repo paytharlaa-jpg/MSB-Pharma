@@ -81,14 +81,9 @@ export function ProductRangeSection() {
           <div className="lg:col-span-6 relative flex flex-col items-center justify-center">
             
             {/* Top Indicator Tag */}
-            <div className="w-full flex items-center justify-between mb-2 px-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf3fd] border border-[#1b4db3]/20 text-[#143e94] text-xs font-mono font-bold tracking-wider uppercase shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#3a991d] animate-ping" />
-                <span>3D STEREOCHEMISTRY · MOLECULAR VISUALIZATION</span>
-              </div>
-              <span className="text-[11px] font-mono text-slate-500 hidden sm:inline-block">
-                Drag to Rotate 3D Molecule
-              </span>
+            <div className="w-full flex items-center justify-between mb-4 px-2">
+              <span className="eyebrow">Molecular capability</span>
+              <span className="text-[11px] font-medium text-slate-400 hidden sm:inline-block">Drag to rotate</span>
             </div>
 
             {/* Graphics Container with Multi-Ring Orbitals & Scientific Corners */}
@@ -136,10 +131,7 @@ export function ProductRangeSection() {
                 
                 {/* Header Badge & Title */}
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#edf3fd] to-[#edf8eb] border border-[#1b4db3]/25 text-[#143e94] text-xs font-mono font-bold tracking-wider uppercase mb-3 shadow-2xs">
-                    <Sparkles className="w-3.5 h-3.5 text-[#3a991d]" />
-                    <span>CENTRAL INVENTORY · KUKATPALLY DEPOT</span>
-                  </div>
+                  <p className="eyebrow">Ready stock · Kukatpally</p>
 
                   <h2 className="text-3xl sm:text-5xl font-black tracking-tight font-heading leading-tight text-[#143e94]">
                     Product Range

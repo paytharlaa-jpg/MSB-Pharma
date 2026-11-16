@@ -2,6 +2,7 @@ import React from "react";
 import { Navbar } from "@/components/public-site/Navbar";
 import { Footer } from "@/components/public-site/Footer";
 import { FloatingActionButtons } from "@/components/public-site/FloatingActionButtons";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
 
 export default function PublicLayout({
   children,
@@ -9,7 +10,8 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full bg-white relative">
+    <div className="public-site w-full bg-white relative">
+      <SmoothScroll />
       <Navbar />
       <main className="w-full">{children}</main>
       <Footer />

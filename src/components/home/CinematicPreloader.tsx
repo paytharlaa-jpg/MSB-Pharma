@@ -51,6 +51,7 @@ export function CinematicPreloader({ onComplete }: PreloaderProps) {
 
   return (
     <aside
+      data-preloader
       className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white text-slate-900 transition-opacity duration-600 ease-in-out ${
         phase === 3 ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}

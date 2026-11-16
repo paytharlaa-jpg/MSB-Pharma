@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronRight, CheckCircle2, FlaskConical, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, FlaskConical, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import gsap from "gsap";
@@ -68,7 +68,7 @@ export function HorizontalProductJourney() {
       number: "01",
       category: "RAW SYNTHESIS",
       title: "Pharmaceutical Materials & Intermediates",
-      image: "/images/pharmaceutical-raw-materials.webp",
+      image: "/images/journey-sourcing.webp",
       alt: "Pharmaceutical chemical intermediate synthesis",
       tagline: "The Bedrock of Active Synthesis",
       description:
@@ -82,7 +82,7 @@ export function HorizontalProductJourney() {
       number: "02",
       category: "ACTIVE SUBSTANCES",
       title: "Commercial APIs & Bulk Drugs",
-      image: "/images/api-materials.webp",
+      image: "/images/journey-synthesis.webp",
       alt: "Active Pharmaceutical Ingredients crystalline powder",
       tagline: "Potent, Regulatory-Compliant Actives",
       description:
@@ -96,7 +96,7 @@ export function HorizontalProductJourney() {
       number: "03",
       category: "FORMULATION MATRIX",
       title: "Functional Excipients",
-      image: "/images/excipients-materials.webp",
+      image: "/images/journey-formulation.webp",
       alt: "Pharmaceutical excipients pellets and binders",
       tagline: "Optimizing Bioavailability & Stability",
       description:
@@ -110,7 +110,7 @@ export function HorizontalProductJourney() {
       number: "04",
       category: "CRITICAL REAGENTS",
       title: "High-Purity Chemicals & Solvents",
-      image: "/images/chemicals-solvents.webp",
+      image: "/images/journey-extraction.webp",
       alt: "HPLC grade solvents in amber bottles",
       tagline: "Uncompromised Analytical & Process Purity",
       description:
@@ -124,7 +124,7 @@ export function HorizontalProductJourney() {
       number: "05",
       category: "ANALYTICAL RIGOR",
       title: "Certified Impurity Standards",
-      image: "/images/impurity-standards.webp",
+      image: "/images/journey-certification.webp",
       alt: "Analytical impurity standards autosampler",
       tagline: "Pharmacopeial Reference Integrity",
       description:
@@ -146,29 +146,20 @@ export function HorizontalProductJourney() {
 
       {/* Main Track Wrapper */}
       <div className="h-[100svh] min-h-[640px] flex flex-col justify-center">
-        {/* Top Header Label */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1b4db3] animate-ping" />
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#1b4db3]">
-              SIGNATURE INTERACTION · HORIZONTAL SOURCING JOURNEY (LEFT TO RIGHT)
-            </span>
+        {/* Section header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">Core portfolio</p>
+            <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-[44px] font-bold leading-[1.05] text-[#0f2d6b]">
+              From synthesis to formulation
+            </h2>
           </div>
-
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600">
-            <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
-              <span>SCROLL DOWN TO PROGRESS</span>
-              <ChevronRight className="w-4 h-4 text-[#1b4db3] animate-pulse" />
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span className="hidden sm:inline font-medium">Keep scrolling</span>
+            <div className="w-28 sm:w-40 h-1 bg-slate-200/80 rounded-full overflow-hidden">
+              <div ref={progressBarRef} className="h-full rounded-full bg-gradient-to-r from-[#1b4db3] to-[#3a991d]" style={{ width: "8%" }} />
             </div>
-
-            <div className="w-24 sm:w-36 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-300">
-              <div
-                ref={progressBarRef}
-                className="h-full bg-gradient-to-r from-[#1b4db3] via-[#2563eb] to-[#3a991d]"
-                style={{ width: "8%" }}
-              />
-            </div>
-            <span ref={progressTextRef} className="text-[#1b4db3] font-bold min-w-[34px] text-right">
+            <span ref={progressTextRef} className="text-[#1b4db3] font-bold min-w-[34px] text-right tabular-nums">
               0%
             </span>
           </div>

@@ -74,7 +74,7 @@ async function main() {
     });
   }
 
-  // 4. Users (RBAC)
+  // 4. Admin user (single login)
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash("Password@123", salt);
 
@@ -88,58 +88,12 @@ async function main() {
     },
   });
 
-  await prisma.user.create({
-    data: {
-      name: "Mohan K (Super Admin)",
-      email: "mohank9@gmail.com",
-      passwordHash,
-      role: "SUPER_ADMIN",
-      isActive: true,
-    },
-  });
+  // Back office is admin-only: every seeded record is owned by the single admin account.
+  const salesUser = superAdmin;
+  const accountsUser = superAdmin;
+  const inventoryUser = superAdmin;
 
-  const abhiramAdminPasswordHash = await bcrypt.hash("Abhiram@1289", salt);
-  await prisma.user.create({
-    data: {
-      name: "Abhiram (Super Admin)",
-      email: "paytharlaa@gmail.com",
-      passwordHash: abhiramAdminPasswordHash,
-      role: "SUPER_ADMIN",
-      isActive: true,
-    },
-  });
-
-  const salesUser = await prisma.user.create({
-    data: {
-      name: "Ramesh Kumar (Sales)",
-      email: "sales@msbpharmachem.com",
-      passwordHash,
-      role: "SALES",
-      isActive: true,
-    },
-  });
-
-  const accountsUser = await prisma.user.create({
-    data: {
-      name: "Priya Sharma (Accounts)",
-      email: "accounts@msbpharmachem.com",
-      passwordHash,
-      role: "ACCOUNTS",
-      isActive: true,
-    },
-  });
-
-  const inventoryUser = await prisma.user.create({
-    data: {
-      name: "Suresh Reddy (Inventory)",
-      email: "inventory@msbpharmachem.com",
-      passwordHash,
-      role: "INVENTORY",
-      isActive: true,
-    },
-  });
-
-  console.log("✅ Seeded Users: Super Admin, Sales, Accounts, Inventory");
+  console.log("✅ Seeded admin user");
 
   // 5. Product Categories
   const catApis = await prisma.productCategory.create({

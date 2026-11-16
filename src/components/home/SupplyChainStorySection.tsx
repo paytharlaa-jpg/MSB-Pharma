@@ -63,9 +63,7 @@ export function SupplyChainStorySection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Text Column */}
           <div ref={textColRef} className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf3fd] border border-[#1b4db3]/20 text-[#1b4db3] text-xs font-mono font-bold tracking-wider uppercase">
-              <span>HYDERABAD PHARMACEUTICAL HUB</span>
-            </div>
+            <p className="eyebrow">Hyderabad pharmaceutical hub</p>
 
             <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-reveal-up">
               Beyond Supply. <br />
@@ -140,7 +138,8 @@ export function SupplyChainStorySection() {
             {/* Primary Main Image */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-900 aspect-[4/3]">
               <Image
-                src="/images/supply-chain-editorial.webp"
+                data-parallax="7"
+                src="/images/story-kukatpally-hub.webp"
                 alt="Pharmaceutical climate-controlled logistics facility"
                 fill
                 className="object-cover"
@@ -162,7 +161,8 @@ export function SupplyChainStorySection() {
             <div className="hidden sm:block absolute -bottom-8 -left-8 w-64 bg-white rounded-2xl p-4 shadow-2xl border border-slate-200/90 backdrop-blur-md">
               <div className="relative h-28 rounded-xl overflow-hidden mb-3 bg-slate-100">
                 <Image
-                  src="/images/about-company.webp"
+                  data-parallax="7"
+                  src="/images/story-quality-desk.webp"
                   alt="Quality Control Testing"
                   fill
                   className="object-cover"

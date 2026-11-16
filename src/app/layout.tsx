@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "@/styles/home-experience.css";
+import "@/styles/premium.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "MSB PHARMACHEM",
     images: [
       {
-        url: "/images/hero-scientific-background.webp",
+        url: "/images/og-share-card.webp",
         width: 1200,
         height: 630,
         alt: "MSB PHARMACHEM - Global Pharma Supply",

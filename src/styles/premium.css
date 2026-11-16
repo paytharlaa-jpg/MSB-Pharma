@@ -1,0 +1,191 @@
+/* MSB PHARMACHEM — premium polish layer for the public website (loaded after home-experience.css) */
+
+/* ---------- Lenis smooth scrolling ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ---------- Scroll-driven parallax (individual transform props: no clash with hover transforms) ---------- */
+[data-parallax] {
+  translate: 0 var(--py, 0);
+  scale: var(--ps, 1.06);
+  will-change: translate, scale;
+}
+
+/* ---------- Typography ---------- */
+.public-site h1,
+.public-site h2,
+.public-site h3 {
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.public-site p {
+  text-wrap: pretty;
+}
+/* The old monospace "technical" labels read as developer UI; render them as refined small caps instead */
+.public-site .font-mono {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: rgba(27, 77, 179, 0.16);
+  color: #0f2d6b;
+}
+
+/* Section eyebrow: thin rule + spaced caps */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #3a991d;
+}
+.eyebrow::before {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: linear-gradient(90deg, #3a991d, #1b4db3);
+}
+.eyebrow.eyebrow-light {
+  color: #a7e08f;
+}
+
+/* ---------- Calmer backgrounds: grids fade out toward the edges instead of tiling like graph paper ---------- */
+.public-site .scientific-grid-bg,
+.public-site .scientific-grid-dense,
+.public-site .light-scientific-grid {
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 80%);
+  opacity: 0.6;
+}
+
+/* ---------- Premium surfaces ---------- */
+.premium-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 255, 0.92));
+  border: 1px solid rgba(15, 45, 107, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 24px 60px -24px rgba(15, 45, 107, 0.22),
+    0 8px 20px -12px rgba(15, 45, 107, 0.12);
+}
+.premium-hover {
+  transition:
+    translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.4s;
+}
+.premium-hover:hover {
+  translate: 0 -6px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 36px 70px -28px rgba(15, 45, 107, 0.3),
+    0 10px 24px -12px rgba(15, 45, 107, 0.16);
+  border-color: rgba(27, 77, 179, 0.22);
+}
+
+/* Light sweep across primary buttons on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  translate: -120% 0;
+  transition: translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn-shine:hover::after {
+  translate: 120% 0;
+}
+
+/* Navbar link underline that grows from the centre */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1b4db3, #3a991d);
+  transition:
+    left 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    right 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nav-underline:hover::after,
+.nav-underline[aria-current="page"]::after {
+  left: 0;
+  right: 0;
+}
+
+/* Slow ambient float for hero accents */
+@keyframes premium-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+.premium-float {
+  animation: premium-float 7s ease-in-out infinite;
+}
+
+@keyframes marquee-x {
+  from { translate: 0 0; }
+  to { translate: -50% 0; }
+}
+.marquee-track {
+  animation: marquee-x 38s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .public-site *,
+  .public-site *::before,
+  .public-site *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  [data-parallax] {
+    translate: none;
+    scale: none;
+  }
+}
+
+/* Centred eyebrows get a rule on both sides */
+.eyebrow.justify-center::after {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: linear-gradient(90deg, #1b4db3, #3a991d);
+}
+
+/* Timeline backdrop: same soft fade as the other grids */
+.public-site .neon-timeline-grid {
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 10%, transparent 75%);
+  opacity: 0.45;
+}

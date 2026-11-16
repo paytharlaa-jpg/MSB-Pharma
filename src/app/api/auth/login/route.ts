@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       where: { email: email.toLowerCase().trim() },
     });
 
-    if (!user || !user.isActive) {
+    if (!user || !user.isActive || user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Invalid credentials or account inactive" }, { status: 401 });
     }
 
@@ -27,13 +27,6 @@ export async function POST(request: Request) {
       const altLowercase = password.charAt(0).toLowerCase() + password.slice(1);
       isValid = (await verifyPassword(altCapitalized, user.passwordHash)) ||
                 (await verifyPassword(altLowercase, user.passwordHash));
-    }
-
-    // Secondary fallback for super admin accounts to avoid credential lockout
-    if (!isValid && user.role === "SUPER_ADMIN") {
-      if (password === "Abhiram@1289" || password === "Password@123" || password === "password@123") {
-        isValid = true;
-      }
     }
 
     if (!isValid) {

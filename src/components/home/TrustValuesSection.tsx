@@ -46,7 +46,7 @@ export function TrustValuesSection() {
       step: "01",
       pillar: "Quality Deep Dive",
       title: "Molecular Rigor & Pharmacopeial Precision",
-      image: "/images/molecular-closeup.webp",
+      image: "/images/trust-molecular-rigor.webp",
       alt: "Molecular close-up render",
       icon: ShieldCheck,
       quote: "No material leaves our network without verifiable batch assay confirmation.",
@@ -61,7 +61,7 @@ export function TrustValuesSection() {
       step: "02",
       pillar: "Reliability Deep Dive",
       title: "Resilient Sourcing & Strategic Inventory",
-      image: "/images/reliability-logistics-visual.webp",
+      image: "/images/trust-resilient-inventory.webp",
       alt: "Robotic warehouse logistics",
       icon: Clock,
       quote: "Production schedules cannot pause. Sourcing buffers eliminate vulnerability.",
@@ -76,7 +76,7 @@ export function TrustValuesSection() {
       step: "03",
       pillar: "Trust Deep Dive",
       title: "Auditable Dossiers & Complete Transparency",
-      image: "/images/trust-documentation-visual.webp",
+      image: "/images/trust-auditable-dossiers.webp",
       alt: "Analytical certification reports and dossiers",
       icon: FileText,
       quote: "Regulatory confidence is built on transparent documentation, not promises.",
@@ -98,9 +98,7 @@ export function TrustValuesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 space-y-3">
-          <span className="text-xs font-mono font-bold text-[#1b4db3] uppercase tracking-widest bg-[#edf3fd] px-3 py-1 rounded-md border border-[#1b4db3]/20">
-            TECHNICAL DEEP DIVE
-          </span>
+          <p className="eyebrow justify-center">Our commitments</p>
           <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight">
             How We Execute Our Promise
           </h2>
@@ -130,6 +128,7 @@ export function TrustValuesSection() {
                 >
                   <div className="relative h-72 sm:h-96 rounded-3xl overflow-hidden shadow-xl border border-slate-200 bg-slate-900 group">
                     <Image
+                      data-parallax="7"
                       src={item.image}
                       alt={item.alt}
                       fill

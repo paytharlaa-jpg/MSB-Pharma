@@ -84,10 +84,7 @@ export function GlobalReachSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="max-w-3xl space-y-3 mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#edf3fd] border border-[#1b4db3]/30 text-[#1b4db3] text-xs font-mono font-bold tracking-widest uppercase">
-            <Globe2 className="w-3.5 h-3.5 text-[#1b4db3]" />
-            <span>GLOBAL SUPPLY FOOTPRINT</span>
-          </div>
+          <p className="eyebrow">Supply footprint</p>
 
           <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-wipe">
             Connected to Hyderabad. <br />
@@ -107,7 +104,8 @@ export function GlobalReachSection() {
           <div ref={visualRef} className="lg:col-span-7 relative">
             <div className="relative h-[360px] sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-900">
               <Image
-                src="/images/global-supply-network.webp"
+                data-parallax="7"
+                src="/images/global-reach-freight.webp"
                 alt="Global supply chain network connected to Hyderabad"
                 fill
                 className="object-cover"

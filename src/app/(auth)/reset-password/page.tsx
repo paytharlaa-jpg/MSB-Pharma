@@ -99,8 +99,8 @@ function ResetPasswordContent() {
       {/* Background Cinematic Visual */}
       <div className="absolute inset-0 z-0 opacity-25">
         <Image
-          src="/images/hero-scientific-background.webp"
-          alt="Molecular Lattice"
+          src="/images/auth-reset-password.webp"
+          alt="Secure B2B Pharmaceutical Facility"
           fill
           className="object-cover"
           priority

@@ -42,6 +42,7 @@ interface Enquiry {
   notes: string | null;
   createdAt: string;
   assignedTo: { id: string; name: string; email: string } | null;
+  assignedToName: string | null;
   enquiryNotes: EnquiryNote[];
 }
 
@@ -49,9 +50,17 @@ export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  // Deep links from the dashboard's global search: /dashboard/...?search=<doc no>
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("search");
+    if (q) setSearch(q);
+  }, []);
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [newNote, setNewNote] = useState("");
+  const [assignName, setAssignName] = useState("");
+  const [assignSaving, setAssignSaving] = useState(false);
+  const [assignSaved, setAssignSaved] = useState(false);
   const [noteSubmitting, setNoteSubmitting] = useState(false);
   const [statusUpdating, setStatusUpdating] = useState(false);
 
@@ -107,6 +116,35 @@ export default function EnquiriesPage() {
     }
   };
 
+  // Keep the "Assigned to" box in step with the lead being managed
+  useEffect(() => {
+    setAssignName(selectedEnquiry?.assignedToName || "");
+  }, [selectedEnquiry?.id, selectedEnquiry?.assignedToName]);
+  useEffect(() => setAssignSaved(false), [selectedEnquiry?.id]);
+
+  const handleAssign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEnquiry) return;
+    setAssignSaving(true);
+    try {
+      const res = await fetch("/api/enquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: selectedEnquiry.id, assignedToName: assignName }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setSelectedEnquiry(json.enquiry);
+        setAssignSaved(true);
+        fetchEnquiries();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAssignSaving(false);
+    }
+  };
+
   const handleAddNote = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedEnquiry || !newNote.trim()) return;
@@ -140,7 +178,7 @@ export default function EnquiriesPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Enquiries & Leads</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Commercial requests from the public website, lead qualification, and staff follow-ups.
+            Commercial requests from the public website, lead qualification and follow-ups.
           </p>
         </div>
 
@@ -163,7 +201,7 @@ export default function EnquiriesPage() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by ref number, contact, company, email, product..."
+            placeholder="Search by ref number, contact, company, email, product, assignee..."
             className="pl-9"
           />
         </div>
@@ -175,7 +213,6 @@ export default function EnquiriesPage() {
             options={[
               { label: "All Statuses", value: "ALL" },
               { label: "New Leads", value: "NEW" },
-              { label: "Assigned", value: "ASSIGNED" },
               { label: "In Progress", value: "IN_PROGRESS" },
               { label: "Awaiting Customer", value: "AWAITING_CUSTOMER" },
               { label: "Quotation Sent", value: "QUOTATION_SENT" },
@@ -232,6 +269,11 @@ export default function EnquiriesPage() {
                     </td>
                     <td className="py-3.5 px-4">
                       <StatusBadge status={enq.status} />
+                      {enq.assignedToName && (
+                        <div className="mt-1 text-[11px] text-slate-500 whitespace-nowrap">
+                          Assigned: <span className="font-semibold text-slate-700">{enq.assignedToName}</span>
+                        </div>
+                      )}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <Button
@@ -298,6 +340,30 @@ export default function EnquiriesPage() {
               </div>
             </div>
 
+            {/* Assigned to (free text) */}
+            <form onSubmit={handleAssign} className="flex flex-wrap items-end gap-3 p-4 rounded-xl bg-emerald-50/50 border border-emerald-100">
+              <div className="flex-1 min-w-[200px]">
+                <label htmlFor="assign-name" className="text-xs font-semibold text-slate-700 block mb-1">
+                  Assigned to
+                </label>
+                <input
+                  id="assign-name"
+                  value={assignName}
+                  onChange={(e) => {
+                    setAssignName(e.target.value);
+                    setAssignSaved(false);
+                  }}
+                  maxLength={80}
+                  placeholder="Type the name of the person handling this lead"
+                  className="w-full text-sm rounded-lg border border-slate-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#00488F]/30 focus:border-[#00488F]"
+                />
+              </div>
+              <Button type="submit" size="sm" variant="primary" isLoading={assignSaving} disabled={(selectedEnquiry.assignedToName || "") === assignName.trim()}>
+                {assignName.trim() ? "Save assignment" : "Clear assignment"}
+              </Button>
+              {assignSaved && <span className="text-xs font-semibold text-emerald-700">Saved</span>}
+            </form>
+
             {/* Status Workflow & Quick Actions */}
             <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-blue-50/50 border border-blue-100">
               <div className="flex items-center gap-2">
@@ -309,7 +375,6 @@ export default function EnquiriesPage() {
                   className="text-xs font-semibold rounded-lg border border-slate-300 bg-white px-3 py-1.5 focus:ring-2 focus:ring-[#00488F]"
                 >
                   <option value="NEW">New</option>
-                  <option value="ASSIGNED">Assigned</option>
                   <option value="IN_PROGRESS">In Progress</option>
                   <option value="AWAITING_CUSTOMER">Awaiting Customer</option>
                   <option value="QUOTATION_SENT">Quotation Sent</option>
@@ -341,7 +406,7 @@ export default function EnquiriesPage() {
             <div className="space-y-3">
               <h4 className="text-xs font-semibold text-slate-700 uppercase flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5" />
-                <span>Internal Staff Notes & Activity Log</span>
+                <span>Internal Notes & Activity Log</span>
               </h4>
 
               {/* Add Note Form */}
@@ -364,7 +429,7 @@ export default function EnquiriesPage() {
                   selectedEnquiry.enquiryNotes.map((note) => (
                     <div key={note.id} className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs">
                       <div className="flex items-center justify-between text-slate-500 text-[10px] mb-1">
-                        <span className="font-semibold text-slate-700">{note.author?.name || "Staff"}</span>
+                        <span className="font-semibold text-slate-700">{note.author?.name || "Admin"}</span>
                         <span>{new Date(note.createdAt).toLocaleString("en-IN")}</span>
                       </div>
                       <p className="text-slate-800">{note.content}</p>

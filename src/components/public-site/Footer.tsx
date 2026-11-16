@@ -91,6 +91,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/compliance" className="hover:text-[#1b4db3] transition-colors">
+                  Compliance &amp; Registrations
+                </Link>
+              </li>
+              <li>
                 <Link href="/gallery" className="hover:text-[#1b4db3] transition-colors">
                   Supply Chain & Facility Gallery
                 </Link>
@@ -107,7 +112,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/login" className="text-[#1b4db3] hover:text-[#153e94] font-semibold inline-flex items-center gap-1">
-                  <span>Staff Portal Login</span>
+                  <span>Admin Login</span>
                   <ArrowUpRight className="w-3 h-3" />
                 </Link>
               </li>

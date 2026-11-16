@@ -82,7 +82,7 @@ export function TimelineMotionSection() {
       icon: FlaskConical,
       side: "left",
       origin: "origin-right",
-      image: "/images/pharmaceutical-raw-materials.webp",
+      image: "/images/timeline-vendor-qualification.webp",
       alt: "Pharmaceutical raw chemical synthesis",
       tag: "STAGE 01 · PROCUREMENT RIGOR",
       lead: "Complete synthesis route transparency and WHO-GMP site audit verification.",
@@ -100,7 +100,7 @@ export function TimelineMotionSection() {
       icon: Microscope,
       side: "right",
       origin: "origin-left",
-      image: "/images/impurity-standards.webp",
+      image: "/images/timeline-analytical-testing.webp",
       alt: "Analytical laboratory HPLC testing",
       tag: "STAGE 02 · QUALITY ASSURANCE",
       lead: "HPLC assays, NMR spectral profiling, and chromatographic peak resolution.",
@@ -118,7 +118,7 @@ export function TimelineMotionSection() {
       icon: FileCheck,
       side: "left",
       origin: "origin-right",
-      image: "/images/trust-documentation-visual.webp",
+      image: "/images/timeline-regulatory-documentation.webp",
       alt: "Certificate of Analysis folder and documentation",
       tag: "STAGE 03 · REGULATORY COMPLIANCE",
       lead: "100% authenticated batch records, manufacturer COA, and DMF support.",
@@ -136,7 +136,7 @@ export function TimelineMotionSection() {
       icon: Truck,
       side: "right",
       origin: "origin-left",
-      image: "/images/supply-chain-editorial.webp",
+      image: "/images/timeline-climate-dispatch.webp",
       alt: "Climate-controlled pharmaceutical warehouse",
       tag: "STAGE 04 · LOGISTICS EXECUTION",
       lead: "Tamper-evident sealing, cold-chain integrity, and rapid delivery coordination.",
@@ -169,10 +169,7 @@ export function TimelineMotionSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#edf3fd] border border-[#1b4db3]/30 text-[#1b4db3] text-xs font-mono font-bold tracking-widest uppercase shadow-xs">
-            <Clock className="w-3.5 h-3.5 text-[#1b4db3]" />
-            <span>INTERACTIVE TIMELINE · VERIFIED LIFECYCLE</span>
-          </div>
+          <p className="eyebrow justify-center">How we work</p>
 
           <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-glow-expand">
             How We Deliver Molecular Excellence
@@ -203,6 +200,7 @@ export function TimelineMotionSection() {
                     {/* Timeline Image Header with Hover Scale */}
                     <div className="relative h-48 sm:h-56 w-full bg-slate-900 overflow-hidden">
                       <Image
+                        data-parallax="7"
                         src={step.image}
                         alt={step.alt}
                         fill

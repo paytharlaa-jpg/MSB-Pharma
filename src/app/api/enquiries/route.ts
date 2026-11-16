@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { generateDocumentNumber } from "@/lib/document-number";
 import { createAuditLog } from "@/lib/audit";
 import { sendNotificationEmail, buildNewEnquiryEmailHtml } from "@/lib/email-service";
@@ -8,7 +8,7 @@ import { getWhatsAppClickToChatUrl } from "@/lib/whatsapp-service";
 
 export async function GET(request: Request) {
   try {
-    const user = await getSessionUser(request);
+    const user = await requireAdmin(request);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -46,6 +46,7 @@ export async function GET(request: Request) {
         { email: { contains: search } },
         { phone: { contains: search } },
         { productOfInterest: { contains: search } },
+        { assignedToName: { contains: search } },
       ];
     }
 
@@ -91,6 +92,13 @@ export async function POST(request: Request) {
     if (!contactName || !email || !phone || !message) {
       return NextResponse.json(
         { error: "Contact name, email, phone number, and message are required." },
+        { status: 400 }
+      );
+    }
+
+    if (typeof productOfInterest !== "string" || productOfInterest.trim().length < 2) {
+      return NextResponse.json(
+        { error: "Please enter the product of interest (API name, CAS number or intermediate)." },
         { status: 400 }
       );
     }
@@ -184,13 +192,13 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const user = await getSessionUser(request);
+    const user = await requireAdmin(request);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { id, status, assignedToUserId, notes } = body;
+    const { id, status, assignedToUserId, assignedToName, notes } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Enquiry ID required" }, { status: 400 });
@@ -201,6 +209,10 @@ export async function PATCH(request: Request) {
     if (status) data.status = status;
     if (assignedToUserId !== undefined) data.assignedToUserId = assignedToUserId || null;
     if (notes !== undefined) data.notes = notes;
+    if (assignedToName !== undefined) {
+      const name = typeof assignedToName === "string" ? assignedToName.trim().slice(0, 80) : "";
+      data.assignedToName = name || null;
+    }
 
     const updated = await prisma.enquiry.update({
       where: { id },
@@ -216,7 +228,7 @@ export async function PATCH(request: Request) {
       action: "STATUS_UPDATE",
       performedByUserId: user.id,
       userEmail: user.email,
-      details: { newStatus: status, assignedToUserId },
+      details: { newStatus: status, assignedToUserId, assignedToName },
     });
 
     return NextResponse.json({ success: true, enquiry: updated });

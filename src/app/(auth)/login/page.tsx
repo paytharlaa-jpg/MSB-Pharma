@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Lock, Mail, ArrowRight, ShieldCheck, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
@@ -39,19 +39,13 @@ export default function LoginPage() {
     }
   };
 
-  const fillCredentials = (staffEmail: string, staffPass: string) => {
-    setEmail(staffEmail);
-    setPassword(staffPass);
-    setError(null);
-  };
-
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 bg-[#071827]">
       {/* Background Cinematic Visual */}
       <div className="absolute inset-0 z-0 opacity-25">
         <Image
-          src="/images/hero-scientific-background.webp"
-          alt="Molecular Lattice"
+          src="/images/auth-login-cleanroom.webp"
+          alt="Secure B2B Pharmaceutical Facility"
           fill
           className="object-cover"
           priority
@@ -147,65 +141,6 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Quick Staff Account Selector */}
-          <div className="pt-4 border-t border-slate-100">
-            <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-2">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                <span>Quick Fill Staff Credentials:</span>
-              </span>
-              <span className="text-[10px] text-emerald-600 font-mono bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                1-Click Ready
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-1.5 text-xs">
-              <button
-                type="button"
-                onClick={() => fillCredentials("paytharlaa@gmail.com", "Abhiram@1289")}
-                className="col-span-2 px-2.5 py-2 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-[11px] font-semibold text-left flex items-center justify-between transition-colors"
-              >
-                <span>👑 Super Admin (Abhiram)</span>
-                <span className="text-[10px] text-blue-700 font-mono">paytharlaa@gmail.com</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials("admin@msbpharmachem.com", "Password@123")}
-                className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left transition-colors flex flex-col"
-              >
-                <span className="font-semibold">👑 Admin (Mohan K)</span>
-                <span className="text-[10px] text-slate-500 font-mono truncate">admin@msbpharmachem.com</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials("sales@msbpharmachem.com", "Password@123")}
-                className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left transition-colors flex flex-col"
-              >
-                <span className="font-semibold">💼 Sales Lead</span>
-                <span className="text-[10px] text-slate-500 font-mono truncate">sales@msbpharmachem.com</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials("accounts@msbpharmachem.com", "Password@123")}
-                className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left transition-colors flex flex-col"
-              >
-                <span className="font-semibold">📊 Accounts Dept</span>
-                <span className="text-[10px] text-slate-500 font-mono truncate">accounts@msbpharmachem.com</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials("inventory@msbpharmachem.com", "Password@123")}
-                className="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-medium text-left transition-colors flex flex-col"
-              >
-                <span className="font-semibold">📦 Inventory Officer</span>
-                <span className="text-[10px] text-slate-500 font-mono truncate">inventory@msbpharmachem.com</span>
-              </button>
-            </div>
-
-            <p className="mt-2 text-[10px] text-slate-400 text-center">
-              Standard staff password: <code className="bg-slate-100 text-slate-700 px-1 py-0.5 rounded font-mono">Password@123</code>
-            </p>
-          </div>
         </div>
 
         {/* Footer */}

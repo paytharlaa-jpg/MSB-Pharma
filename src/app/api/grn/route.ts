@@ -1,19 +1,23 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { generateDocumentNumber } from "@/lib/document-number";
 import { createAuditLog } from "@/lib/audit";
+import { parseGrnInput, grnSearchWhere, GrnInput } from "@/lib/grn-input";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const user = await requireAdmin(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
+    const { searchParams } = new URL(request.url);
+    const q = (searchParams.get("search") || "").trim();
+    const status = searchParams.get("qcStatus") || "";
+
     const grns = await prisma.goodsReceiptNote.findMany({
+      where: { ...grnSearchWhere(q), ...(status ? { qcStatus: status } : {}) },
       orderBy: { receiptDate: "desc" },
-      include: {
-        supplier: true,
-        purchaseOrder: { select: { poNumber: true } },
-        items: { include: { product: true } },
-        receivedBy: { select: { name: true } },
-      },
+      include: { items: true },
     });
     return NextResponse.json({ success: true, grns });
   } catch (error: unknown) {
@@ -23,59 +27,24 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const user = await requireAdmin(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
-    const user = await getSessionUser(request);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { supplierId, purchaseOrderId, notes, items } = body;
-
-    if (!supplierId || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: "Supplier and received product items are required" },
-        { status: 400 }
-      );
-    }
+    const body = (await request.json()) as GrnInput;
+    const { errors, data, items } = parseGrnInput(body);
+    if (errors.length) return NextResponse.json({ error: errors.join(". ") }, { status: 400 });
 
     const grnNumber = await generateDocumentNumber("GRN");
-
-    const validatedItems = items.map((item: {
-      productId: string;
-      batchNumber: string;
-      expiryDate?: string;
-      receivedQuantity: number;
-      acceptedQuantity: number;
-      rejectedQuantity?: number;
-      unit?: string;
-      storageLocation?: string;
-    }) => ({
-      productId: item.productId,
-      batchNumber: item.batchNumber.trim(),
-      expiryDate: item.expiryDate ? new Date(item.expiryDate) : null,
-      receivedQuantity: Number(item.receivedQuantity),
-      acceptedQuantity: Number(item.acceptedQuantity),
-      rejectedQuantity: Number(item.rejectedQuantity || 0),
-      unit: item.unit || "KG",
-      storageLocation: item.storageLocation?.trim() || "Main Warehouse - Kukatpally",
-    }));
-
-    // NOTE: In strict accordance with project rules, GRN does NOT mutate stock balances.
-    // Stock updates must be done manually via the authorized stock adjustment workflow.
     const grn = await prisma.goodsReceiptNote.create({
       data: {
+        ...data,
         grnNumber,
-        supplierId,
-        purchaseOrderId: purchaseOrderId || null,
-        notes: notes?.trim() || null,
-        receivedByUserId: user.id,
         status: "VERIFIED",
-        items: {
-          create: validatedItems,
-        },
+        receivedByUserId: user.id,
+        items: { create: items },
       },
-      include: { supplier: true, items: true },
+      include: { items: true },
     });
 
     await createAuditLog({
@@ -84,14 +53,10 @@ export async function POST(request: Request) {
       action: "CREATE",
       performedByUserId: user.id,
       userEmail: user.email,
-      details: { grnNumber, supplierId, itemsCount: validatedItems.length },
+      details: { grnNumber, supplierName: data.supplierName, itemsCount: items.length },
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "GRN recorded successfully. Remember: stock quantities must be updated separately via manual stock adjustment.",
-      grn,
-    });
+    return NextResponse.json({ success: true, grn });
   } catch (error: unknown) {
     console.error("GRN POST error:", error);
     return NextResponse.json({ error: "Failed to create GRN" }, { status: 500 });

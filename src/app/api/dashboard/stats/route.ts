@@ -1,167 +1,107 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(request: Request) {
+  const user = await requireAdmin(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
-    const user = await getSessionUser(request);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const fyStart = new Date(now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1, 3, 1);
+
+    const [
+      totalEnquiries,
+      newEnquiries,
+      openEnquiries,
+      grnTotal,
+      grnThisMonth,
+      grnQuarantine,
+      invoiceAgg,
+      invoiceFyAgg,
+      unpaidCount,
+      overdueCount,
+      paymentsThisMonth,
+      recentEnquiries,
+      recentGrns,
+      recentInvoices,
+      monthlyInvoices,
+    ] = await Promise.all([
+      prisma.enquiry.count(),
+      prisma.enquiry.count({ where: { status: "NEW" } }),
+      prisma.enquiry.count({ where: { status: { notIn: ["WON", "LOST", "CLOSED"] } } }),
+      prisma.goodsReceiptNote.count(),
+      prisma.goodsReceiptNote.count({ where: { receiptDate: { gte: monthStart } } }),
+      prisma.goodsReceiptNote.count({ where: { qcStatus: { in: ["QUARANTINE", "ON_HOLD"] } } }),
+      prisma.invoice.aggregate({
+        where: { status: { not: "CANCELLED" } },
+        _sum: { grandTotal: true, paidAmount: true, balanceAmount: true },
+        _count: true,
+      }),
+      prisma.invoice.aggregate({
+        where: { status: { not: "CANCELLED" }, invoiceDate: { gte: fyStart } },
+        _sum: { grandTotal: true, subtotal: true, taxAmount: true },
+      }),
+      prisma.invoice.count({ where: { balanceAmount: { gt: 0 }, status: { not: "CANCELLED" } } }),
+      prisma.invoice.count({ where: { balanceAmount: { gt: 0 }, dueDate: { lt: now }, status: { not: "CANCELLED" } } }),
+      prisma.paymentRecord.aggregate({ where: { paymentDate: { gte: monthStart } }, _sum: { amount: true } }),
+      prisma.enquiry.findMany({
+        take: 6,
+        orderBy: { createdAt: "desc" },
+        select: { id: true, enquiryNumber: true, contactName: true, companyName: true, productOfInterest: true, status: true, createdAt: true },
+      }),
+      prisma.goodsReceiptNote.findMany({
+        take: 5,
+        orderBy: { receiptDate: "desc" },
+        select: { id: true, grnNumber: true, supplierName: true, receiptDate: true, qcStatus: true, _count: { select: { items: true } } },
+      }),
+      prisma.invoice.findMany({
+        take: 5,
+        orderBy: { invoiceDate: "desc" },
+        select: { id: true, invoiceNumber: true, customerName: true, invoiceDate: true, grandTotal: true, balanceAmount: true, paymentStatus: true },
+      }),
+      prisma.invoice.findMany({
+        where: { status: { not: "CANCELLED" }, invoiceDate: { gte: new Date(now.getFullYear(), now.getMonth() - 5, 1) } },
+        select: { invoiceDate: true, grandTotal: true },
+      }),
+    ]);
+
+    // Last 6 months of billing
+    const months = Array.from({ length: 6 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+      return { key: `${d.getFullYear()}-${d.getMonth()}`, label: d.toLocaleDateString("en-IN", { month: "short" }), total: 0 };
+    });
+    for (const inv of monthlyInvoices) {
+      const m = months.find((x) => x.key === `${inv.invoiceDate.getFullYear()}-${inv.invoiceDate.getMonth()}`);
+      if (m) m.total += inv.grandTotal;
     }
-
-    const { searchParams } = new URL(request.url);
-    const startDateParam = searchParams.get("startDate");
-    const endDateParam = searchParams.get("endDate");
-
-    const dateFilter =
-      startDateParam && endDateParam
-        ? {
-            createdAt: {
-              gte: new Date(startDateParam),
-              lte: new Date(endDateParam),
-            },
-          }
-        : {};
-
-    // 1. Enquiries metrics
-    const totalEnquiries = await prisma.enquiry.count({ where: dateFilter });
-    const newEnquiries = await prisma.enquiry.count({
-      where: { ...dateFilter, status: "NEW" },
-    });
-    const openEnquiries = await prisma.enquiry.count({
-      where: {
-        ...dateFilter,
-        status: { in: ["NEW", "ASSIGNED", "IN_PROGRESS", "AWAITING_CUSTOMER"] },
-      },
-    });
-
-    // 2. Inventory & Batches metrics
-    const totalProducts = await prisma.product.count({ where: { isActive: true } });
-    const totalBatches = await prisma.productBatch.count();
-
-    // Batches expiring within 90 days
-    const ninetyDaysFromNow = new Date();
-    ninetyDaysFromNow.setDate(ninetyDaysFromNow.getDate() + 90);
-
-    const expiringBatches = await prisma.productBatch.findMany({
-      where: {
-        expiryDate: {
-          lte: ninetyDaysFromNow,
-          gte: new Date(),
-        },
-        currentQuantity: { gt: 0 },
-      },
-      include: { product: true },
-      take: 5,
-    });
-
-    const expiringCount = await prisma.productBatch.count({
-      where: {
-        expiryDate: {
-          lte: ninetyDaysFromNow,
-          gte: new Date(),
-        },
-        currentQuantity: { gt: 0 },
-      },
-    });
-
-    // Low stock products (total batch stock < product minimumStock)
-    const allProductsWithBatches = await prisma.product.findMany({
-      where: { isActive: true },
-      include: { batches: true },
-    });
-
-    const lowStockProducts = allProductsWithBatches.filter((p) => {
-      const totalStock = p.batches.reduce((sum, b) => sum + b.currentQuantity, 0);
-      return totalStock <= p.minimumStock && p.minimumStock > 0;
-    });
-
-    // 3. Purchasing & GRN
-    const purchaseOrdersCount = await prisma.purchaseOrder.count({ where: dateFilter });
-    const grnCount = await prisma.goodsReceiptNote.count({ where: dateFilter });
-
-    // 4. Quotations
-    const quotations = await prisma.quotation.findMany({
-      where: dateFilter,
-      select: { grandTotal: true, status: true },
-    });
-    const quotationsCount = quotations.length;
-    const quotationsValue = quotations.reduce((sum, q) => sum + q.grandTotal, 0);
-
-    // 5. Invoices & Payments
-    const invoices = await prisma.invoice.findMany({
-      where: dateFilter,
-      select: {
-        grandTotal: true,
-        paidAmount: true,
-        balanceAmount: true,
-        paymentStatus: true,
-      },
-    });
-    const invoicesCount = invoices.length;
-    const totalInvoicedAmount = invoices.reduce((sum, inv) => sum + inv.grandTotal, 0);
-    const totalCollectedAmount = invoices.reduce((sum, inv) => sum + inv.paidAmount, 0);
-    const totalOutstandingAmount = invoices.reduce((sum, inv) => sum + inv.balanceAmount, 0);
-    const unpaidInvoicesCount = invoices.filter((i) => i.paymentStatus !== "PAID").length;
-
-    // 6. Recent Enquiries
-    const recentEnquiries = await prisma.enquiry.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        enquiryNumber: true,
-        contactName: true,
-        companyName: true,
-        productOfInterest: true,
-        status: true,
-        createdAt: true,
-      },
-    });
-
-    // 7. Recent Audit Logs
-    const recentAuditLogs = await prisma.auditLog.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 6,
-    });
 
     return NextResponse.json({
       success: true,
       data: {
-        enquiries: {
-          total: totalEnquiries,
-          new: newEnquiries,
-          open: openEnquiries,
-        },
-        inventory: {
-          totalProducts,
-          totalBatches,
-          expiringSoonCount: expiringCount,
-          lowStockCount: lowStockProducts.length,
-          expiringBatches,
-          lowStockProducts: lowStockProducts.slice(0, 5),
-        },
-        purchasing: {
-          purchaseOrdersCount,
-          grnCount,
-        },
-        quotations: {
-          count: quotationsCount,
-          totalValue: quotationsValue,
-        },
+        enquiries: { total: totalEnquiries, new: newEnquiries, open: openEnquiries },
+        grn: { total: grnTotal, thisMonth: grnThisMonth, pendingQc: grnQuarantine },
         invoices: {
-          count: invoicesCount,
-          totalInvoiced: totalInvoicedAmount,
-          totalCollected: totalCollectedAmount,
-          totalOutstanding: totalOutstandingAmount,
-          unpaidCount: unpaidInvoicesCount,
+          count: invoiceAgg._count,
+          billed: invoiceAgg._sum.grandTotal || 0,
+          received: invoiceAgg._sum.paidAmount || 0,
+          outstanding: invoiceAgg._sum.balanceAmount || 0,
+          unpaidCount,
+          overdueCount,
+          fyBilled: invoiceFyAgg._sum.grandTotal || 0,
+          fyTaxable: invoiceFyAgg._sum.subtotal || 0,
+          fyGst: invoiceFyAgg._sum.taxAmount || 0,
+          receivedThisMonth: paymentsThisMonth._sum.amount || 0,
         },
+        monthly: months.map(({ label, total }) => ({ label, total })),
         recentEnquiries,
-        recentAuditLogs,
+        recentGrns,
+        recentInvoices,
       },
     });
   } catch (error: unknown) {
     console.error("Dashboard stats error:", error);
-    return NextResponse.json({ error: "Failed to load dashboard statistics" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load dashboard" }, { status: 500 });
   }
 }

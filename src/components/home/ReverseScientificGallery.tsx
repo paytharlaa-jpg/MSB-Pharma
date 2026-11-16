@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronLeft, Layers, Microscope, ShieldAlert, Cpu } from "lucide-react";
+import { Layers, Microscope, ShieldAlert, Cpu } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -69,7 +69,7 @@ export function ReverseScientificGallery() {
       tag: "PHASE 01 · MOLECULAR LEVEL",
       title: "Molecular Architecture",
       subtitle: "Precision at the Angstrom Scale",
-      image: "/images/molecular-closeup.webp",
+      image: "/images/reverse-molecular-architecture.webp",
       alt: "Molecular close-up render with glowing teal bonds",
       description:
         "Every Active Pharmaceutical Ingredient is verified at the molecular and crystallographic level, guaranteeing target receptor affinity and metabolic predictability.",
@@ -79,7 +79,7 @@ export function ReverseScientificGallery() {
       tag: "PHASE 02 · POLYMORPHIC FORM",
       title: "Crystalline Integrity",
       subtitle: "Thermodynamic & Chemical Stability",
-      image: "/images/api-materials.webp",
+      image: "/images/reverse-api-stability.webp",
       alt: "Pharmaceutical crystalline powder purity",
       description:
         "Stable polymorphic form control prevents phase transitions during tableting, preserving formulation shelf-life and drug release kinetics.",
@@ -89,7 +89,7 @@ export function ReverseScientificGallery() {
       tag: "PHASE 03 · SEPARATION METRICS",
       title: "Analytical HPLC Assays",
       subtitle: "Chromatographic Peak Resolution",
-      image: "/images/impurity-standards.webp",
+      image: "/images/reverse-chromatographic-resolution.webp",
       alt: "HPLC chromatography testing autosampler",
       description:
         "Sub-ppm chromatographic purity profiling confirms absence of genotoxic impurities, residual heavy metals, and degradation byproducts.",
@@ -99,7 +99,7 @@ export function ReverseScientificGallery() {
       tag: "PHASE 04 · REGULATORY DOSSIER",
       title: "Traceable Batch Records",
       subtitle: "Audited Quality Provenance",
-      image: "/images/trust-documentation-visual.webp",
+      image: "/images/reverse-audited-dossiers.webp",
       alt: "Certificate of Analysis folder and documentation",
       description:
         "Complete analytical dossiers including manufacturer Certificates of Analysis (COA), safety data sheets (MSDS), and open-part DMF compliance.",
@@ -109,7 +109,7 @@ export function ReverseScientificGallery() {
       tag: "PHASE 05 · COLD-CHAIN INTEGRITY",
       title: "Logistics Stewardship",
       subtitle: "Monitored Global Dispatch",
-      image: "/images/supply-chain-editorial.webp",
+      image: "/images/reverse-coldchain-dispatch.webp",
       alt: "Pharmaceutical warehouse and pallet handling",
       description:
         "Tamper-evident primary packaging, temperature logging, and calibrated warehousing safeguard high-potency molecules until delivery.",
@@ -129,29 +129,20 @@ export function ReverseScientificGallery() {
       <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#1b4db3]/8 blur-[180px] pointer-events-none" />
 
       <div className="h-[100svh] min-h-[640px] flex flex-col justify-center">
-        {/* Section Top Header */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#3a991d] animate-ping" />
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#3a991d]">
-              REVERSE SCIENTIFIC GALLERY · RIGHT TO LEFT SEQUENCE
-            </span>
+        {/* Section header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">Inside our quality process</p>
+            <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-[44px] font-bold leading-[1.05] text-[#0f2d6b]">
+              Verified at every molecule
+            </h2>
           </div>
-
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600">
-            <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
-              <ChevronLeft className="w-4 h-4 text-[#3a991d] animate-pulse" />
-              <span>REVERSE FLOW DISCOVERY</span>
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span className="hidden sm:inline font-medium">Keep scrolling</span>
+            <div className="w-28 sm:w-40 h-1 bg-slate-200/80 rounded-full overflow-hidden">
+              <div ref={progressBarRef} className="h-full rounded-full bg-gradient-to-r from-[#3a991d] to-[#1b4db3]" style={{ width: "8%" }} />
             </div>
-
-            <div className="w-24 sm:w-36 h-2 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
-              <div
-                ref={progressBarRef}
-                className="h-full bg-gradient-to-r from-[#3a991d] via-[#2563eb] to-[#1b4db3]"
-                style={{ width: "8%" }}
-              />
-            </div>
-            <span ref={progressTextRef} className="text-[#3a991d] font-bold min-w-[34px] text-right">
+            <span ref={progressTextRef} className="text-[#3a991d] font-bold min-w-[34px] text-right tabular-nums">
               0%
             </span>
           </div>
@@ -203,8 +194,8 @@ export function ReverseScientificGallery() {
 
               {/* Bottom Decorative Indicator */}
               <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>MSB PHARMACHEM AUDIT TRAIL</span>
-                <span className="text-[#3a991d] font-bold">100% VERIFIED</span>
+                <span>MSB PHARMACHEM quality record</span>
+                <span className="text-[#3a991d] font-bold">Verified</span>
               </div>
             </div>
           ))}

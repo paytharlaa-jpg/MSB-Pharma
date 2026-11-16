@@ -10,7 +10,7 @@ export function FloatingActionButtons() {
   const phoneHref = "tel:+918008335333";
   const emailHref = "mailto:mohank9@gmail.com?subject=Commercial%20Product%20Inquiry%20-%20MSB%20PHARMACHEM";
   const whatsappHref = getWhatsAppClickToChatUrl({
-    customMessage: "Hello MSB PHARMACHEM, I am contacting you from the website regarding pharmaceutical products & API requirements.",
+    customText: "Hello MSB PHARMACHEM, I am contacting you from the website regarding pharmaceutical products & API requirements.",
   });
 
   return (

@@ -115,7 +115,7 @@ export function BrandPromiseSection() {
       accentColor: "from-[#1b4db3]/15 via-[#1b4db3]/5 to-transparent",
       accentBorder: "border-[#1b4db3]/40 hover:border-[#1b4db3]",
       accentBadge: "text-[#1b4db3] bg-[#edf3fd] border-[#1b4db3]/20",
-      image: "/images/quality-science-visual.webp",
+      image: "/images/brand-promise-quality.webp",
       alt: "Quality Control Laboratory HPLC Assay",
       description:
         "Every batch is rigorously validated against official pharmacopeial monographs (IP, BP, USP, EP). We mandate authentic manufacturer Certificates of Analysis (COA) and cross-verify chromatograms before dispatch.",
@@ -143,7 +143,7 @@ export function BrandPromiseSection() {
       accentColor: "from-[#3a991d]/15 via-[#3a991d]/5 to-transparent",
       accentBorder: "border-[#3a991d]/40 hover:border-[#3a991d]",
       accentBadge: "text-[#3a991d] bg-[#edf8eb] border-[#3a991d]/20",
-      image: "/images/reliability-logistics-visual.webp",
+      image: "/images/brand-promise-reliability.webp",
       alt: "Climate-Controlled Pharmaceutical Distribution",
       description:
         "Headquartered in Hyderabad's premier life sciences corridor, our team maintains strategic buffer inventories and cold-chain staging to safeguard formulation partners from raw material market shocks.",
@@ -171,7 +171,7 @@ export function BrandPromiseSection() {
       accentColor: "from-[#1b4db3]/15 via-[#3a991d]/10 to-transparent",
       accentBorder: "border-[#1b4db3]/40 hover:border-[#3a991d]",
       accentBadge: "text-[#1b4db3] bg-[#edf3fd] border-[#1b4db3]/20",
-      image: "/images/trust-documentation-visual.webp",
+      image: "/images/brand-promise-trust.webp",
       alt: "Pharmaceutical Regulatory Dossier and Audit Records",
       description:
         "Transparent documentation is non-negotiable in pharmaceutical manufacturing. We assemble the complete batch release dossier: manufacturer COAs, batch analytical sheets, MSDS, and open-part DMF documentation.",
@@ -204,10 +204,7 @@ export function BrandPromiseSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#edf3fd] border border-[#1b4db3]/25 text-[#1b4db3] text-xs font-semibold tracking-wider uppercase font-mono shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#1b4db3]" />
-            <span>CORE PHILOSOPHY · TRI-CORE STANDARD</span>
-          </div>
+          <p className="eyebrow justify-center">Our philosophy</p>
 
           <h2 className="text-4xl sm:text-6xl font-black text-[#143e94] tracking-tight font-heading leading-tight anim-text-glow-expand">
             Quality. Reliability. Trust.
@@ -272,6 +269,7 @@ export function BrandPromiseSection() {
                 {/* Visual Image Header */}
                 <div className="relative h-60 w-full bg-slate-900 overflow-hidden">
                   <Image
+                    data-parallax="7"
                     src={pillar.image}
                     alt={pillar.alt}
                     fill

@@ -224,9 +224,7 @@ export function FeaturedProductsSection({
         <div className="product-header-reveal flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-slate-100 pb-6">
           <div className="max-w-2xl space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-teal-800 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-md border border-teal-200">
-                COMMERCIAL CATALOGUE
-              </span>
+              <p className="eyebrow">Featured catalogue</p>
               <span className="text-xs font-mono text-slate-500 font-semibold">
                 ● Ready for Commercial Dispatch
               </span>

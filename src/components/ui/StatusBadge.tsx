@@ -22,6 +22,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     case "DELIVERED":
     case "ACCEPTED":
     case "ACTIVE":
+    case "APPROVED":
       colorClasses = "bg-emerald-50 text-emerald-700 border-emerald-200";
       break;
 
@@ -35,6 +36,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     case "SENT":
     case "EXPIRING_SOON":
     case "LOW_STOCK":
+    case "QUARANTINE":
+    case "ON_HOLD":
       colorClasses = "bg-amber-50 text-amber-700 border-amber-200";
       break;
 
@@ -67,7 +70,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     <span
       className={twMerge(
         clsx(
-          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize",
+          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize whitespace-nowrap",
           colorClasses,
           className
         )

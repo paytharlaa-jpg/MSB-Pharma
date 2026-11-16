@@ -103,6 +103,8 @@ export function PublicEnquiryForm({
     product: string;
   } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [productError, setProductError] = useState<string | null>(null);
+  const productInputRef = React.useRef<HTMLInputElement>(null);
 
   // Sync defaultProduct when prop changes
   useEffect(() => {
@@ -114,21 +116,9 @@ export function PublicEnquiryForm({
     }
   }, [defaultProduct]);
 
-  const toggleGrade = (gradeId: string, gradeLabel: string) => {
-    if (selectedGrade === gradeId) {
-      setSelectedGrade(null);
-    } else {
-      setSelectedGrade(gradeId);
-      // If message is empty or doesn't mention grade, gently append it
-      if (!form.message.includes(gradeId)) {
-        setForm((prev) => ({
-          ...prev,
-          message: prev.message
-            ? `${prev.message.trim()} (Required Grade: ${gradeId})`
-            : `Please provide quote and COA for ${gradeLabel} standard.`,
-        }));
-      }
-    }
+  // Exactly one target standard can be selected; clicking the active one clears it
+  const selectGrade = (gradeId: string) => {
+    setSelectedGrade((current) => (current === gradeId ? null : gradeId));
   };
 
   const copyEnquiryNumber = async () => {
@@ -161,8 +151,14 @@ export function PublicEnquiryForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setErrorMsg(null);
+    if (form.productOfInterest.trim().length < 2) {
+      setProductError("Please enter the API name, CAS number or intermediate you need.");
+      productInputRef.current?.focus();
+      return;
+    }
+    setProductError(null);
+    setLoading(true);
 
     try {
       const payload = {
@@ -465,18 +461,34 @@ export function PublicEnquiryForm({
 
         <div>
           <label className="text-sm font-bold text-[#143e94] block mb-1.5">
-            Product of Interest (API / CAS / Intermediates)
+            Product of Interest (API / CAS / Intermediates) <span className="text-[#1b4db3]">*</span>
           </label>
           <div className="relative">
             <FlaskConical className="w-4 h-4 text-[#1b4db3] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
+              ref={productInputRef}
+              id="enquiry-product"
               type="text"
+              required
+              minLength={2}
+              aria-invalid={!!productError}
+              aria-describedby={productError ? "enquiry-product-error" : undefined}
               value={form.productOfInterest}
-              onChange={(e) => setForm({ ...form, productOfInterest: e.target.value })}
-              placeholder="e.g. Atorvastatin Calcium or Montelukast Sodium"
-              className="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors"
+              onChange={(e) => {
+                setForm({ ...form, productOfInterest: e.target.value });
+                if (productError && e.target.value.trim().length >= 2) setProductError(null);
+              }}
+              placeholder="e.g. Atorvastatin Calcium or CAS 344423-98-9"
+              className={`w-full rounded-xl border bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-colors ${
+                productError ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/10" : "border-slate-300 focus:border-[#1b4db3] focus:ring-[#1b4db3]/10"
+              }`}
             />
           </div>
+          {productError && (
+            <p id="enquiry-product-error" role="alert" className="mt-1.5 text-xs font-medium text-rose-600">
+              {productError}
+            </p>
+          )}
         </div>
       </div>
 
@@ -537,18 +549,20 @@ export function PublicEnquiryForm({
         <div className="flex items-center justify-between mb-2">
           <label className="text-sm font-bold text-[#143e94] flex items-center gap-1.5">
             <Award className="w-4 h-4 text-[#3a991d]" />
-            <span>Target Standard / Grade:</span>
+            <span>Target Standard / Grade</span>
           </label>
-          <span className="text-xs text-slate-500 font-medium">Select required pharmacopoeia</span>
+          <span className="text-xs text-slate-500 font-medium">Select one</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Target standard">
           {PHARMACOPOEIA_GRADES.map((grade) => {
             const active = selectedGrade === grade.id;
             return (
               <button
                 key={grade.id}
                 type="button"
-                onClick={() => toggleGrade(grade.id, grade.label)}
+                onClick={() => selectGrade(grade.id)}
+                role="radio"
+                aria-checked={active}
                 className={twMerge(
                   "text-xs sm:text-sm px-3.5 py-1.5 rounded-xl border transition-all duration-150 select-none flex items-center gap-1.5 shadow-2xs",
                   active

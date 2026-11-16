@@ -86,4 +86,13 @@ export async function getSessionUser(request?: Request): Promise<SessionUser | n
   }
 }
 
+/**
+ * The back office is admin-only: returns the session user only when they are an active SUPER_ADMIN.
+ */
+export async function requireAdmin(request?: Request): Promise<SessionUser | null> {
+  const user = await getSessionUser(request);
+  if (!user || user.role !== "SUPER_ADMIN") return null;
+  return user;
+}
+
 export { COOKIE_NAME };
