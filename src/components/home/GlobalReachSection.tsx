@@ -105,8 +105,8 @@ export function GlobalReachSection() {
             <div className="relative h-[360px] sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-900">
               <Image
                 data-parallax="7"
-                src="/images/global-reach-freight.webp"
-                alt="Global supply chain network connected to Hyderabad"
+                src="/images/global-reach-headquarters.webp"
+                alt="MSB PHARMACHEM Central Sourcing and Commercial Headquarters in Kukatpally, Hyderabad"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 60vw"

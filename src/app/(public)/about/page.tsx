@@ -180,7 +180,7 @@ export default function AboutPage() {
           </div>
           <div className="relative" data-reveal="right">
             <div className="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-[28px] overflow-hidden shadow-[0_40px_80px_-40px_rgba(15,45,107,0.6)]">
-              <Image src="/images/about-quality-lab.webp" alt="Quality control laboratory" fill className="object-cover" data-parallax="8" />
+              <Image src="/images/about-quality-lab.webp" alt="Pharmaceutical quality control and testing laboratory in Hyderabad" fill className="object-cover" data-parallax="8" />
             </div>
             <div className="absolute -bottom-8 -left-4 sm:-left-10 w-48 sm:w-60 aspect-square rounded-3xl overflow-hidden ring-8 ring-white shadow-2xl">
               <Image src="/images/about-warehouse-logistics.webp" alt="Warehouse and logistics" fill className="object-cover" data-parallax="6" />

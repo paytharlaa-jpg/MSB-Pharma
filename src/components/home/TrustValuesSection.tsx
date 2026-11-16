@@ -77,7 +77,7 @@ export function TrustValuesSection() {
       pillar: "Trust Deep Dive",
       title: "Auditable Dossiers & Complete Transparency",
       image: "/images/trust-auditable-dossiers.webp",
-      alt: "Analytical certification reports and dossiers",
+      alt: "Auditable CTD Module 3 regulatory dossier and Certificate of Analysis",
       icon: FileText,
       quote: "Regulatory confidence is built on transparent documentation, not promises.",
       body: "We provide complete regulatory document suites: manufacturer Certificates of Analysis (COA), Material Safety Data Sheets (MSDS), Drug Master File (DMF) open-part documentation, and TSE/BSE certifications required for domestic and export compliance audits.",
