@@ -352,6 +352,18 @@ model Invoice {
   poReference     String?
   vehicleNumber   String?
   ewayBillNumber  String?
+  paymentTerms    String?
+
+  // Shipped to (consignee)
+  shipToSameAsBilling Boolean @default(true)
+  shipToName      String?
+  shipToAddress   String?
+  shipToGstin     String?
+  shipToState     String?
+  shipToContact   String?
+
+  freightAmount   Float           @default(0) // freight / packing charged on the invoice (taxable)
+  roundOff        Float           @default(0)
 
   subtotal        Float           @default(0) // total taxable value
   taxRate         Float           @default(18)
@@ -384,6 +396,10 @@ model InvoiceItem {
   product      Product? @relation(fields: [productId], references: [id])
   description  String?
   hsnCode      String?
+  batchNumber  String?
+  mfgDate      DateTime?
+  expDate      DateTime?
+  packDetails  String?
   quantity     Float
   unit         String   @default("KGS") // UQC
   unitPrice    Float
@@ -502,6 +518,8 @@ model SiteSettings {
   invoiceTerms             String   @default("1. Payment due within 30 days of invoice date.\n2. Goods once sold will not be taken back unless quality dispute is raised within 7 days with COA analysis.\n3. Subject to Hyderabad jurisdiction.")
   quotationTerms           String   @default("1. Prices are valid for 15 days from date of issue.\n2. GST will be applicable as per prevailing statutory rates.\n3. Delivery subject to stock availability and prior sale.")
   enquiryNotificationEmail String   @default("paytharlaa@gmail.com") // Initial enquiry notification recipient (configurable)
+  // Tax invoice letterhead, bank details and default terms (JSON, edited from Invoices > Invoice Settings)
+  invoiceProfile           String   @default("{}")
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
 }

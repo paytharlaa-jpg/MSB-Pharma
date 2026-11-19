@@ -92,7 +92,7 @@ export function loadLogo(): string | null {
 }
 
 /** Shared letterhead used by GRN and invoice PDFs. */
-export function drawLetterhead(doc: jsPDF) {
+export function drawLetterhead(doc: jsPDF, contact: { email?: string; gstin?: string } = {}) {
   const logo = loadLogo();
   if (logo) doc.addImage(logo, "PNG", 34, 31.7, 68, 68);
 
@@ -112,7 +112,7 @@ export function drawLetterhead(doc: jsPDF) {
   doc.setTextColor(0, 0, 0);
   doc.text(COMPANY.address, 113.4, 80.2);
   doc.text(
-    `Phone: ${COMPANY.phone}  |  Email: ${COMPANY.email || "____________________"}  |  GSTIN: ${COMPANY.gstin || "____________________"}`,
+    `Phone: ${COMPANY.phone}  |  Email: ${contact.email || COMPANY.email || "____________________"}  |  GSTIN: ${contact.gstin || COMPANY.gstin || "____________________"}`,
     113.4,
     90.7
   );
@@ -255,11 +255,11 @@ function labelValue(doc: jsPDF, x: number, y: number, label: string, value: stri
   return cx;
 }
 
-export function generateGrnPdf(g: GrnPdfData): jsPDF {
+export function generateGrnPdf(g: GrnPdfData, contact: { email?: string; gstin?: string } = {}): jsPDF {
   const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
   let page = 1;
 
-  drawLetterhead(doc);
+  drawLetterhead(doc, contact);
   drawTitleBar(doc, "GOODS RECEIPT NOTE (GRN) & INCOMING INSPECTION REPORT");
 
   // --- Header strip: GRN No / Date / Time

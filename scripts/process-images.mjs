@@ -54,11 +54,12 @@ for (const file of files) {
   const src = path.join(IN, file);
   const meta = await sharp(src).metadata();
   const dest = path.join(OUT, `${slot}.webp`);
-  const info = await sharp(src)
+  let pipeline = sharp(src)
     .rotate()
-    .resize(WIDTH, HEIGHT, { fit: "cover", position: sharp.strategy.attention })
-    .webp({ quality: 80, effort: 6, smartSubsample: true })
-    .toFile(dest);
+    .resize(WIDTH, HEIGHT, { fit: "cover", position: sharp.strategy.attention, kernel: "lanczos3" });
+  // Upscaled sources get a light sharpen to recover edge crispness
+  if ((meta.width ?? 0) < WIDTH) pipeline = pipeline.sharpen({ sigma: 0.9, m1: 0.6, m2: 2 });
+  const info = await pipeline.webp({ quality: 82, effort: 6, smartSubsample: true }).toFile(dest);
   const warn = (meta.width ?? 0) < 1920 ? `  (warning: source only ${meta.width}px wide, may look soft; upscale it first)` : "";
   console.log(`OK    ${slot}.webp  ${meta.width}×${meta.height} → ${info.width}×${info.height}, ${Math.round(info.size / 1024)} KB${warn}`);
   done.add(slot);

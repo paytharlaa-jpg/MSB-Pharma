@@ -3,20 +3,30 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRight, ArrowUpRight, Atom, Pill, Beaker, ScanSearch, Truck, FileCheck2, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Atom, Pill, Beaker, ScanSearch, Truck, FileCheck2, Check, Layers, Package } from "lucide-react";
 import { CREDENTIALS } from "./CredentialIcons";
 
-const PORTFOLIO = [
-  { icon: Pill, label: "Human & Veterinary APIs", sub: "Generic formulation coverage", count: 20 },
-  { icon: Atom, label: "Intermediates & KSMs", sub: "Building blocks for API synthesis", count: 30 },
-  { icon: Beaker, label: "Chemicals & Solvents", sub: "Pharma, lab & industrial grades", count: 90 },
-  { icon: ScanSearch, label: "Impurity Standards", sub: "Method development & QC", count: 400 },
-];
+// Icon + one-line description per category slug (counts come live from the product catalogue)
+const CATEGORY_META: Record<string, { icon: React.ElementType; sub: string; short?: string }> = {
+  apis: { icon: Pill, sub: "Human & veterinary APIs", short: "Pharmaceutical APIs" },
+  "intermediates-raw-materials": { icon: Atom, sub: "Building blocks for API synthesis", short: "Raw Materials & Intermediates" },
+  excipients: { icon: Layers, sub: "Formulation-grade excipients" },
+  "chemicals-solvents": { icon: Beaker, sub: "Pharma, lab & industrial grades" },
+  "impurity-standards": { icon: ScanSearch, sub: "Method development & QC" },
+};
+
+export interface HeroCategory {
+  id: string;
+  name: string;
+  slug: string;
+  productCount?: number;
+}
 
 const GRADES = ["IP", "BP", "USP", "EP"];
 
-export function HeroSequence() {
+export function HeroSequence({ categories = [] }: { categories?: HeroCategory[] }) {
   const containerRef = useRef<HTMLElement>(null);
+  const total = categories.reduce((n, c) => n + (c.productCount ?? 0), 0);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -44,7 +54,7 @@ export function HeroSequence() {
           duration: 1.6,
           delay: start + 0.9,
           ease: "power2.out",
-          onUpdate: () => (n.textContent = `${Math.round(obj.v)}+`),
+          onUpdate: () => (n.textContent = `${Math.round(obj.v)}`),
         });
       });
 
@@ -147,31 +157,43 @@ export function HeroSequence() {
               <div className="flex items-center justify-between">
                 <h2 className="font-heading text-lg font-bold !text-white">Product Portfolio</h2>
                 <span className="rounded-full border border-[#9be07e]/30 bg-[#3a991d]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#b6ef9b]">
-                  540+ molecules
+                  {total} products
                 </span>
               </div>
 
               <ul className="mt-4 space-y-1.5">
-                {PORTFOLIO.map(({ icon: Icon, label, sub, count }) => (
-                  <li key={label}>
-                    <Link
-                      href="/products"
-                      className="hero-card-row group flex items-center gap-3 rounded-2xl px-3 py-2.5 hover:bg-white/[0.07] transition-colors"
-                    >
-                      <span className="w-10 h-10 shrink-0 rounded-xl border border-white/15 bg-white/[0.08] text-[#9fc3ff] flex items-center justify-center">
-                        <Icon className="w-[18px] h-[18px]" />
-                      </span>
-                      <span className="flex-1 min-w-0">
-                        <span className="block text-sm font-semibold text-white">{label}</span>
-                        <span className="block text-xs text-white/55 truncate">{sub}</span>
-                      </span>
-                      <span className="hero-count font-heading text-base font-bold tabular-nums text-[#b6ef9b]" data-to={count}>
-                        {count}+
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-white/30 transition-all group-hover:text-white group-hover:translate-x-0.5" />
-                    </Link>
-                  </li>
-                ))}
+                {categories.map((c) => {
+                  const meta = CATEGORY_META[c.slug] ?? { icon: Package, sub: "" };
+                  const Icon = meta.icon;
+                  const count = c.productCount ?? 0;
+                  return (
+                    <li key={c.id}>
+                      <Link
+                        href={`/products?category=${c.slug}`}
+                        className="hero-card-row group flex items-center gap-3 rounded-2xl px-3 py-2 hover:bg-white/[0.07] transition-colors"
+                      >
+                        <span className="w-9 h-9 shrink-0 rounded-xl border border-white/15 bg-white/[0.08] text-[#9fc3ff] flex items-center justify-center">
+                          <Icon className="w-[17px] h-[17px]" />
+                        </span>
+                        <span className="flex-1 min-w-0">
+                          <span className="block text-sm font-semibold text-white truncate">{meta.short ?? c.name}</span>
+                          {meta.sub && <span className="block text-xs text-white/55 truncate">{meta.sub}</span>}
+                        </span>
+                        {count > 0 ? (
+                          <span className="text-right">
+                            <span className="hero-count block font-heading text-base font-bold tabular-nums text-[#b6ef9b] leading-none" data-to={count}>
+                              {count}
+                            </span>
+                            <span className="block text-[10px] text-white/45 mt-0.5">{count === 1 ? "product" : "products"}</span>
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-medium text-white/50">On request</span>
+                        )}
+                        <ArrowRight className="w-4 h-4 text-white/30 transition-all group-hover:text-white group-hover:translate-x-0.5" />
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
 
               <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">

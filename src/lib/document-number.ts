@@ -28,12 +28,12 @@ export async function generateDocumentNumber(docType: DocType): Promise<string> 
   const financialYear = getFinancialYear();
   const fyShort = financialYear.replace("20", ""); // e.g. "26-27"
   // GRN follows the client GRN report ("MSB/GRN/2026-27/NNN"); invoices follow the Sales Register
-  // ("MSB/26-27/NNN") which keeps them within GST's 16-character invoice number limit.
+  // ("MSB/D/26-27/NNN", 15 characters) which keeps them within GST's 16-character invoice number limit.
   const defaultPrefix =
     docType === "GRN"
       ? `MSB/GRN/${financialYear}/`
       : docType === "INV"
-        ? `MSB/${fyShort}/`
+        ? `MSB/D/${fyShort}/`
         : `MSB/${docType}/${fyShort}/`;
 
   const updatedSequence = await prisma.$transaction(async (tx) => {

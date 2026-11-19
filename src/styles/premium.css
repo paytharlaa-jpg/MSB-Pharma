@@ -76,7 +76,8 @@ html.lenis body {
 
 /* ---------- Premium surfaces ---------- */
 .premium-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 255, 0.92));
+  /* fully opaque: these cards often overlap the dark page headers */
+  background: linear-gradient(180deg, #ffffff, #f8faff);
   border: 1px solid rgba(15, 45, 107, 0.08);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,

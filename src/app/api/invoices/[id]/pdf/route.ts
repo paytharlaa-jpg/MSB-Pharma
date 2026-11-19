@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { generateInvoicePdf } from "@/lib/invoice-pdf";
+import { loadInvoiceProfile } from "@/lib/invoice-profile-server";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const user = await requireAdmin(request);
@@ -11,11 +12,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const { id } = await params;
     const inv = await prisma.invoice.findUnique({
       where: { id },
-      include: { items: true, payments: { orderBy: { paymentDate: "asc" } } },
+      include: { items: { orderBy: { id: "asc" } } },
     });
     if (!inv) return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
 
-    const doc = generateInvoicePdf(inv);
+    const doc = generateInvoicePdf(inv, await loadInvoiceProfile());
     const inline = new URL(request.url).searchParams.get("view") === "1";
     const filename = `${inv.invoiceNumber.replace(/\//g, "-")}.pdf`;
     return new NextResponse(new Uint8Array(doc.output("arraybuffer")), {

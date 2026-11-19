@@ -1,0 +1,216 @@
+MSB PHARMACHEM WEBSITE & BUSINESS PORTAL
+FULL CHANGE REPORT (Nov 2026)
+===============================================================
+
+Local site:  http://localhost:3000
+Admin login: http://localhost:3000/login (single admin account)
+
+---------------------------------------------------------------
+PART A: BACKEND (ADMIN PORTAL)
+---------------------------------------------------------------
+
+A1. Admin portal reduced to 5 features
+    - Menu now: Dashboard, Enquiries & Leads, Goods Receipt (GRN),
+      Invoices & Payments, Reports & Exports.
+    - Removed: Product Master, Inventory & Batches, Customers, Suppliers,
+      Purchase Orders, Quotations, Delivery Challans, Audit Logs,
+      System Settings, and their APIs.
+    - Products stay fixed in the database, so the public Products page is
+      unaffected.
+
+A2. Admin only: no employees
+    - Removed the staff logins: sales@, accounts@, inventory@,
+      paytharlaa@ and mohank9@. Only admin@msbpharmachem.com remains.
+    - Their past records were moved to the admin account.
+    - Removed the role / permission system.
+
+A3. Security fixes
+    - Removed hard-coded "backdoor" passwords that let anyone into any
+      super-admin account.
+    - Removed the login page's quick-fill buttons, which showed passwords
+      publicly.
+    - Every admin API and PDF download now requires the admin login.
+      Previously some PDFs and lists were open to anyone.
+
+A4. Dashboard
+    - Cards: new enquiries, GRNs this month and pending QC, billed this
+      financial year (with GST), outstanding and overdue.
+    - 6-month billing chart, receivables summary, and the latest enquiries,
+      GRNs and invoices.
+    - Global search box that searches enquiries, GRNs and invoices at once.
+
+A5. Enquiries & Leads
+    - Search, status filter, Manage Lead panel and notes (as before).
+    - NEW: "Assigned to" field in Manage Lead. Type any name and save. The
+      name shows in the list and is searchable.
+    - NEW: Excel export in register format with an Assigned To column
+      (see A9).
+
+A6. Goods Receipt (GRN): matches the supplied GRN & Incoming Inspection
+    PDF
+    - The form asks every question in the PDF:
+        Supplier and document details: PO, invoice, vehicle,
+          transporter / LR, e-way bill, received at.
+        Material lines: description, batch, Mfg / Exp (retest), qty as
+          per invoice, qty received, UOM, no. of containers, accepted /
+          rejected qty and remarks.
+        10-point inspection checklist: Yes / No / N/A.
+        QC: sample ref, sampled by, date, status, storage location,
+          temperature, action on rejection.
+        Three-way match, remarks / discrepancies.
+        Received / Inspected / Verified / Approved by (name and date).
+    - The PDF is generated on the same grid as the client template, with
+      ticks and values filled in.
+    - Search, QC-status filter, edit and delete.
+    - Numbering: MSB/GRN/2026-27/NNN.
+
+A7. Invoices & Payments: GST tax invoices
+    - Invoice fields follow the Sales Register format:
+        Customer, GSTIN, place of supply, category (B2B / B2CL / B2CS /
+          Export), invoice type, reverse charge.
+        Per line: HSN, UQC, qty, rate, GST rate.
+    - GST calculates automatically: CGST + SGST within Telangana, IGST
+      for other states.
+    - Payments: record, remove, and overpayment is blocked. Status shows
+      Unpaid / Partially paid / Paid.
+    - Returning customers auto-fill their details. Search and status
+      filter. Totals cards (billed / received / outstanding).
+    - NEW tax invoice PDF in the client's "TAX INVOICE" template format:
+        Letterhead: Phone / Email / Web, GSTIN / PAN / IEC.
+        Original / Duplicate / Triplicate line.
+        Details grid: invoice no., date, PO, place of supply, payment
+          terms, due date, transport / vehicle, e-way bill / LR.
+        Billed To (buyer) and Shipped To (consignee), with
+          "Same as Billed To".
+        Goods table: S.No, description, HSN, Batch No. / Mfg-Exp, qty,
+          pack details, UOM, rate per UOM, amount.
+        Bank details and amount in words.
+        Totals: Total Taxable Value, Less Discount, Freight / Packing,
+          CGST, SGST, IGST (always shown), Round Off, GRAND TOTAL.
+        Terms & Conditions and signatures (Receiver / Authorised
+          Signatory).
+    - NEW form fields: payment terms, consignee (shipped to), batch no.,
+      Mfg / Exp dates, pack details, invoice-level discount and
+      freight / packing, round-off.
+    - NEW editable Terms & Conditions on every invoice, pre-filled from the
+      template terms (blanks set to 7 days / 18%).
+    - NEW "Invoice Settings" button: company email, website, GSTIN, PAN,
+      IEC, bank details and default terms. Blank values print as "____"
+      lines.
+    - NEW numbering: MSB/D/26-27/NNN (15 characters, within GST's limit).
+      It continues from the last invoice, so the next is MSB/D/26-27/013.
+      Restarts at 001 each new financial year. Older invoices keep their
+      numbers.
+
+A8. GST Sales Register (Excel)
+    - Downloads the client's own "Sales Register Format (MSB).xlsx",
+      filled with one row per product per invoice.
+    - Same colours, dropdowns, formulas, frozen panes, hidden helper
+      columns and Row Check. The broken external "Setup" link was fixed.
+    - Verified identical to the template's example rows.
+
+A9. Reports & Exports
+    - Reports:
+        GST Sales Register.
+        Leads Register (with Assigned To, business type, target standard,
+          follow-ups).
+        GRN Register, Payments Received, Outstanding Receivables.
+    - Every report has a date range, search and on-screen preview.
+    - Excel downloads now all use the Sales Register style: blue title
+      bar, summary row, blue header, grid lines, frozen headers, filters,
+      print-ready.
+    - CSV is still available.
+
+---------------------------------------------------------------
+PART B: FRONTEND (PUBLIC WEBSITE)
+---------------------------------------------------------------
+
+B1. Premium look and animation (site-wide)
+    - Smooth "glide" scrolling (desktop), photo parallax, sections and
+      cards fading up as they appear, counting numbers.
+    - Glass navbar that hides when scrolling down and returns on scroll
+      up.
+    - Cleaner typography: developer-style labels replaced with proper
+      section headings, and calmer backgrounds.
+    - Respects visitors' "reduce motion" setting.
+
+B2. Homepage hero
+    - Heading: "Trusted Pharma Supply Partner".
+    - Globe removed. Replaced by a glass-effect Product Portfolio card on a
+      dark brand-gradient background, with no mouse-tilt effect and sized
+      to fit the screen.
+    - Badges: GST Registered, IEC Holder, MSME Registered, Wholesale Drug
+      Licence.
+    - Scroll icon removed. The top contact bar in the header was removed.
+    - Product Portfolio shows the real number of products per category
+      from the catalogue (updates automatically).
+
+B3. About Us
+    - Trusted B2B positioning: stats and registration badges. The stats
+      card alignment was fixed: no grey band, columns line up.
+    - New "MSB PHARMACHEM: Pharma API & Pharmaceutical Raw Material
+      Suppliers" section with the supplied text, product portfolio, who we
+      serve and four focus points.
+    - New "What We Do" section (6 services).
+    - Closing banner: "Quality Products. Reliable Supply. Global Reach."
+
+B4. Products page
+    - Product list grouped category by category: table with CAS, grade,
+      documentation and Request quote.
+    - Count per category, which also works as a filter. Search.
+    - Empty categories show "Sourced on request".
+
+B5. Enquiry form
+    - Product of Interest (API / CAS) is required, with an error message
+      and a server-side check.
+    - Target Standard: exactly one choice.
+    - Product Category and Product of Interest swapped places.
+
+B6. New Compliance page
+    - Registrations, five-step quality process, documentation supplied,
+      IP / BP / USP / EP standards, storage & traceability, documentation
+      request.
+    - Linked in the navbar, footer and sitemap.
+
+B7. Gallery
+    - Redesigned: category filters, hover captions, full-screen viewer.
+    - New branded images.
+
+B8. Footer
+    - "Trading Hub" changed to "Supply Hub".
+
+B9. Images
+    - Image shot list with AI prompts (docs/image-shot-list.md) and an
+      install script (scripts/process-images.mjs).
+    - Note: most site images are still about 1365–1600 px wide. Higher
+      resolution versions would look sharper on large screens.
+
+---------------------------------------------------------------
+PART C: DATABASE
+---------------------------------------------------------------
+- GRN: supplier / document fields, checklist, QC, three-way match,
+  signatories. Line fields: Mfg / Exp, qty per invoice, containers,
+  remarks.
+- Invoice: GST recipient fields, place of supply, category, type, reverse
+  charge, CGST / SGST / IGST / cess totals, payment terms, consignee,
+  freight, round-off.
+- Invoice lines: HSN, batch, Mfg / Exp, pack details, discount, taxable
+  value, GST rate and amounts.
+- Enquiry: Assigned To (name).
+- Site settings: Invoice Settings (letterhead, bank details, default
+  terms).
+- Applied to both dev.db and prisma/dev.db. Existing data was migrated
+  and kept.
+
+---------------------------------------------------------------
+STILL NEEDED FROM THE CLIENT
+---------------------------------------------------------------
+- New mobile number and email (after the domain is purchased).
+- GSTIN, PAN, IEC and bank details: enter them in Invoices > Invoice
+  Settings.
+- Content document for the remaining homepage text updates.
+- Reference website for the Compliance page layout.
+- Products for Excipients, Chemicals & Solvents and Impurity Standards
+  (currently "On request").
+- Licence / registration numbers, if they should be shown on the site.
+- Change the admin password before going live.

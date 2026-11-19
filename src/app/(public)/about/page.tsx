@@ -27,14 +27,40 @@ import { PageHero, SectionHeading } from "@/components/public-site/PageHero";
 import { CREDENTIALS } from "@/components/home/CredentialIcons";
 
 export const metadata = {
-  title: "About Us | MSB PHARMACHEM: Trusted B2B Pharma Supply Partner",
+  title: "About Us | MSB PHARMACHEM: Pharma API & Pharmaceutical Raw Material Suppliers",
   description:
-    "MSB PHARMACHEM is a Hyderabad-based B2B supplier of pharmaceutical APIs, intermediates, excipients, chemicals, solvents and impurity standards, with 18+ years of supply-chain expertise.",
+    "MSB PHARMACHEM is a Hyderabad-based pharmaceutical sourcing, supply, import and export company for APIs, bulk drugs, raw materials, solvents, excipients, impurity standards, intermediates and industrial chemicals.",
 };
+
+const PORTFOLIO_ITEMS = [
+  "Human APIs",
+  "Veterinary APIs",
+  "Pharmaceutical Intermediates",
+  "Bulk Drugs",
+  "Specialty Chemicals",
+  "Pharmaceutical Excipients",
+  "Reference Impurity Standards",
+];
+
+const CUSTOMERS = [
+  "Pharmaceutical manufacturers",
+  "Formulation companies",
+  "Veterinary pharma companies",
+  "Distributors",
+  "Research laboratories",
+  "Industrial customers",
+];
+
+const FOCUS = [
+  { title: "Quality products", body: "Sourced from vetted manufacturers, with COA and MSDS for every batch." },
+  { title: "Competitive pricing", body: "Direct sourcing relationships that keep quotations sharp and clear." },
+  { title: "Dependable global sourcing", body: "Domestic and international supply, imports and exports." },
+  { title: "Timely delivery", body: "Planned inventory and reliable logistics from Hyderabad." },
+];
 
 const STATS = [
   { value: 18, suffix: "+", label: "Years of supply-chain expertise" },
-  { value: 540, suffix: "+", label: "Molecules in our sourcing portfolio" },
+  { value: 5, suffix: "", label: "Product categories supplied" },
   { value: 24, suffix: " hrs", label: "Typical dispatch from Hyderabad" },
   { value: 100, suffix: "%", label: "Batches shipped with COA" },
 ];
@@ -121,7 +147,7 @@ export default function AboutPage() {
           <div className="premium-card rounded-3xl p-6 sm:p-10">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10" data-stagger>
               {STATS.map((s) => (
-                <div key={s.label}>
+                <div key={s.label} className="px-4">
                   <p className="font-heading text-4xl sm:text-5xl font-bold text-[#0f2d6b] tabular-nums">
                     <span data-count={s.value} data-suffix={s.suffix}>
                       {s.value}
@@ -142,6 +168,77 @@ export default function AboutPage() {
                     <span className="block text-sm font-semibold text-[#0f2d6b] leading-tight">{label}</span>
                     <span className="block text-[11px] text-slate-500 truncate">{sub}</span>
                   </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Company introduction: positioning, portfolio, customers, focus */}
+      <section className="pt-24 sm:pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+            <div className="lg:col-span-7">
+              <SectionHeading
+                eyebrow="Pharma API & raw material suppliers"
+                title={
+                  <>
+                    MSB PHARMACHEM: <span className="text-[#1b4db3]">Pharma API</span> &amp;{" "}
+                    <span className="text-[#3a991d]">Pharmaceutical Raw Material</span> Suppliers
+                  </>
+                }
+              />
+              <div className="mt-7 space-y-5 text-lg leading-relaxed text-slate-600" data-reveal>
+                <p>
+                  MSB PHARMACHEM is a Hyderabad-based pharmaceutical sourcing, supply, import and export company specializing in
+                  Pharmaceutical APIs, Bulk Drugs, Pharmaceutical Raw Materials, Solvents, Excipients, Impurity Standards, Pharma
+                  Intermediates and Industrial Chemicals.
+                </p>
+                <p>
+                  We are committed to delivering reliable pharmaceutical sourcing and supply solutions to pharmaceutical
+                  manufacturers, formulation companies, veterinary pharma companies, distributors, research laboratories and
+                  industrial customers across India and international markets.
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 space-y-5">
+              <div className="premium-card rounded-3xl p-7" data-reveal="right">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#3a991d]">Our product portfolio</p>
+                <ul className="mt-5 flex flex-wrap gap-2" data-stagger>
+                  {PORTFOLIO_ITEMS.map((item) => (
+                    <li key={item} className="rounded-full border border-[#1b4db3]/15 bg-[#edf3fd] px-3.5 py-1.5 text-[13px] font-semibold text-[#0f2d6b]">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-3xl bg-[#0f2d6b] p-7 text-white" data-reveal="right" data-reveal-delay="0.1">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9be07e]">Who we serve</p>
+                <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5">
+                  {CUSTOMERS.map((c) => (
+                    <li key={c} className="flex items-start gap-2 text-sm text-white/85">
+                      <Check className="w-4 h-4 text-[#9be07e] shrink-0 mt-0.5" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-5 pt-4 border-t border-white/10 text-xs text-white/60">Across India and international markets</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16" data-reveal>
+            <p className="max-w-3xl text-lg leading-relaxed text-slate-600">
+              As a reliable pharmaceutical sourcing and supply partner in India, we focus on:
+            </p>
+            <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4" data-stagger>
+              {FOCUS.map((f, i) => (
+                <div key={f.title} className="rounded-3xl border border-slate-200/80 p-6 hover:border-[#1b4db3]/30 hover:shadow-[0_30px_60px_-30px_rgba(15,45,107,0.35)] transition-all duration-500">
+                  <span className="font-heading text-sm font-bold text-[#3a991d]">0{i + 1}</span>
+                  <h3 className="mt-3 font-heading text-lg font-bold text-[#0f2d6b]">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
                 </div>
               ))}
             </div>
@@ -341,9 +438,12 @@ export default function AboutPage() {
             <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-[#3a991d]/30 blur-[90px]" aria-hidden="true" />
             <div className="relative grid lg:grid-cols-2 gap-10 items-center">
               <div>
-                <h2 className="font-heading text-3xl sm:text-4xl font-bold leading-tight !text-white">Get in touch with MSB PHARMACHEM</h2>
+                <p className="eyebrow eyebrow-light">MSB PHARMACHEM</p>
+                <h2 className="mt-4 font-heading text-3xl sm:text-4xl font-bold leading-tight !text-white">
+                  Quality Products. Reliable Supply. <span className="text-[#9be07e]">Global Reach.</span>
+                </h2>
                 <p className="mt-4 text-white/75 leading-relaxed">
-                  Looking for a specific API, raw material or chemical? Contact us for specifications, samples and quotations.
+                  For domestic requirements, international sourcing, imports, exports and bulk enquiries, connect with our team.
                 </p>
               </div>
               <div className="space-y-3 text-sm">
@@ -351,7 +451,7 @@ export default function AboutPage() {
                 <p className="flex items-center gap-3 text-white/85"><Phone className="w-4 h-4 text-[#9be07e]" /> +91 8008335333</p>
                 <p className="flex items-center gap-3 text-white/85"><Mail className="w-4 h-4 text-[#9be07e]" /> mohank9@gmail.com</p>
                 <Link href="/contact" className="btn-shine mt-4 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 font-semibold text-[#0f2d6b]">
-                  Contact our sales desk <ArrowRight className="w-4 h-4" />
+                  Connect with our team <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>

@@ -14,6 +14,7 @@ import {
   X,
   AlertCircle,
   FileSpreadsheet,
+  Settings2,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -28,9 +29,10 @@ import {
   INVOICE_TYPES,
   UQC_OPTIONS,
   GST_RATES,
-  computeGstLine,
+  computeInvoiceTotals,
   supplyTypeFor,
 } from "@/lib/company";
+import { InvoiceProfile, EMPTY_PROFILE, DEFAULT_INVOICE_TERMS } from "@/lib/invoice-profile";
 
 interface Payment {
   id: string;
@@ -44,6 +46,10 @@ interface Payment {
 interface InvoiceItem {
   description: string | null;
   hsnCode: string | null;
+  batchNumber: string | null;
+  mfgDate: string | null;
+  expDate: string | null;
+  packDetails: string | null;
   unit: string;
   quantity: number;
   unitPrice: number;
@@ -70,6 +76,15 @@ interface Invoice {
   poReference: string | null;
   vehicleNumber: string | null;
   ewayBillNumber: string | null;
+  paymentTerms: string | null;
+  shipToSameAsBilling: boolean;
+  shipToName: string | null;
+  shipToAddress: string | null;
+  shipToGstin: string | null;
+  shipToState: string | null;
+  shipToContact: string | null;
+  discountAmount: number;
+  freightAmount: number;
   notes: string | null;
   terms: string | null;
   subtotal: number;
@@ -90,10 +105,13 @@ type Customer = Pick<
 interface LineForm {
   description: string;
   hsnCode: string;
+  batchNumber: string;
+  mfgDate: string;
+  expDate: string;
+  packDetails: string;
   unit: string;
   quantity: string;
   unitPrice: string;
-  discount: string;
   gstRate: string;
 }
 
@@ -112,6 +130,15 @@ interface InvoiceForm {
   poReference: string;
   vehicleNumber: string;
   ewayBillNumber: string;
+  paymentTerms: string;
+  shipToSameAsBilling: boolean;
+  shipToName: string;
+  shipToAddress: string;
+  shipToGstin: string;
+  shipToState: string;
+  shipToContact: string;
+  discountAmount: string;
+  freightAmount: string;
   notes: string;
   terms: string;
   items: LineForm[];
@@ -125,8 +152,19 @@ const plusDays = (iso: string, days: number) => {
   d.setDate(d.getDate() + days);
   return d.toISOString().slice(0, 10);
 };
-const blankLine = (): LineForm => ({ description: "", hsnCode: "", unit: "KGS", quantity: "", unitPrice: "", discount: "0", gstRate: "18" });
-const blankForm = (): InvoiceForm => ({
+const blankLine = (): LineForm => ({
+  description: "",
+  hsnCode: "",
+  batchNumber: "",
+  mfgDate: "",
+  expDate: "",
+  packDetails: "",
+  unit: "KGS",
+  quantity: "",
+  unitPrice: "",
+  gstRate: "18",
+});
+const blankForm = (defaultTerms = DEFAULT_INVOICE_TERMS): InvoiceForm => ({
   invoiceDate: today(),
   dueDate: plusDays(today(), 30),
   customerName: "",
@@ -141,8 +179,17 @@ const blankForm = (): InvoiceForm => ({
   poReference: "",
   vehicleNumber: "",
   ewayBillNumber: "",
+  paymentTerms: "30 days from invoice date",
+  shipToSameAsBilling: true,
+  shipToName: "",
+  shipToAddress: "",
+  shipToGstin: "",
+  shipToState: "",
+  shipToContact: "",
+  discountAmount: "0",
+  freightAmount: "0",
   notes: "",
-  terms: "Goods once sold will not be taken back. Interest @18% p.a. on overdue payments. Subject to Hyderabad jurisdiction.",
+  terms: defaultTerms,
   items: [blankLine()],
 });
 
@@ -162,15 +209,27 @@ function toForm(inv: Invoice): InvoiceForm {
     poReference: inv.poReference || "",
     vehicleNumber: inv.vehicleNumber || "",
     ewayBillNumber: inv.ewayBillNumber || "",
+    paymentTerms: inv.paymentTerms || "",
+    shipToSameAsBilling: inv.shipToSameAsBilling,
+    shipToName: inv.shipToName || "",
+    shipToAddress: inv.shipToAddress || "",
+    shipToGstin: inv.shipToGstin || "",
+    shipToState: inv.shipToState || "",
+    shipToContact: inv.shipToContact || "",
+    discountAmount: String(inv.discountAmount || 0),
+    freightAmount: String(inv.freightAmount || 0),
     notes: inv.notes || "",
-    terms: inv.terms || "",
+    terms: inv.terms || DEFAULT_INVOICE_TERMS,
     items: inv.items.map((i) => ({
       description: i.description || "",
       hsnCode: i.hsnCode || "",
+      batchNumber: i.batchNumber || "",
+      mfgDate: i.mfgDate ? i.mfgDate.slice(0, 10) : "",
+      expDate: i.expDate ? i.expDate.slice(0, 10) : "",
+      packDetails: i.packDetails || "",
       unit: i.unit,
       quantity: String(i.quantity),
       unitPrice: String(i.unitPrice),
-      discount: String(i.discount || 0),
       gstRate: String(i.gstRate),
     })),
   };
@@ -198,6 +257,40 @@ export default function InvoicesPage() {
   const [form, setForm] = useState<InvoiceForm>(blankForm());
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const [profile, setProfile] = useState<InvoiceProfile>(EMPTY_PROFILE);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState<InvoiceProfile>(EMPTY_PROFILE);
+  const [settingsSaving, setSettingsSaving] = useState(false);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/invoices/settings")
+      .then((r) => r.json())
+      .then((j) => j.success && setProfile(j.profile))
+      .catch(() => {});
+  }, []);
+
+  const saveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSettingsSaving(true);
+    setSettingsError(null);
+    try {
+      const res = await fetch("/api/invoices/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settingsDraft),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to save settings");
+      setProfile(json.profile);
+      setSettingsOpen(false);
+    } catch (err) {
+      setSettingsError(err instanceof Error ? err.message : "Failed to save settings");
+    } finally {
+      setSettingsSaving(false);
+    }
+  };
 
   const [payInvoice, setPayInvoice] = useState<Invoice | null>(null);
   const [payAmount, setPayAmount] = useState("");
@@ -247,17 +340,17 @@ export default function InvoicesPage() {
     [invoices]
   );
 
-  // Live GST computation (same formulas as the Sales Register)
-  const computed = useMemo(() => {
-    const lines = form.items.map((l) =>
-      computeGstLine(
-        { quantity: Number(l.quantity) || 0, unitPrice: Number(l.unitPrice) || 0, discount: Number(l.discount) || 0, gstRate: Number(l.gstRate) || 0 },
+  // Live totals: exactly the same calculation the server uses when saving
+  const computed = useMemo(
+    () =>
+      computeInvoiceTotals(
+        form.items.map((l) => ({ quantity: Number(l.quantity) || 0, unitPrice: Number(l.unitPrice) || 0, gstRate: Number(l.gstRate) || 0 })),
+        Number(form.discountAmount) || 0,
+        Number(form.freightAmount) || 0,
         form.placeOfSupply
-      )
-    );
-    const sum = (k: keyof (typeof lines)[number]) => lines.reduce((s, l) => s + l[k], 0);
-    return { lines, taxable: sum("taxableValue"), igst: sum("igst"), cgst: sum("cgst"), sgst: sum("sgst"), total: sum("lineTotal") };
-  }, [form.items, form.placeOfSupply]);
+      ),
+    [form.items, form.discountAmount, form.freightAmount, form.placeOfSupply]
+  );
   const supplyType = supplyTypeFor(form.placeOfSupply);
 
   const set = <K extends keyof InvoiceForm>(k: K, v: InvoiceForm[K]) => setForm((f) => ({ ...f, [k]: v }));
@@ -292,7 +385,7 @@ export default function InvoicesPage() {
 
   const openCreate = () => {
     setEditingId(null);
-    setForm(blankForm());
+    setForm(blankForm(profile.defaultTerms));
     setFormError(null);
     setFormOpen(true);
   };
@@ -396,6 +489,18 @@ export default function InvoicesPage() {
             <FileSpreadsheet className="w-3.5 h-3.5" />
             Sales Register (.xlsx)
           </a>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSettingsDraft(profile);
+              setSettingsError(null);
+              setSettingsOpen(true);
+            }}
+          >
+            <Settings2 className="w-3.5 h-3.5" />
+            <span>Invoice Settings</span>
+          </Button>
           <Button variant="primary" size="sm" onClick={openCreate}>
             <Plus className="w-3.5 h-3.5" />
             <span>New Tax Invoice</span>
@@ -574,12 +679,33 @@ export default function InvoicesPage() {
                 ]}
               />
             </div>
-            <Input label="PO / Order Reference" value={form.poReference} onChange={(e) => set("poReference", e.target.value)} />
-            <div className="grid grid-cols-2 gap-2">
-              <Input label="Vehicle No." value={form.vehicleNumber} onChange={(e) => set("vehicleNumber", e.target.value)} />
-              <Input label="E-Way Bill No." value={form.ewayBillNumber} onChange={(e) => set("ewayBillNumber", e.target.value)} />
-            </div>
+            <Input label="Buyer's PO No. / Date" placeholder="e.g. PO-7781 / 28-10-2026" value={form.poReference} onChange={(e) => set("poReference", e.target.value)} />
+            <Input label="Payment Terms" placeholder="e.g. 30 days from invoice date" value={form.paymentTerms} onChange={(e) => set("paymentTerms", e.target.value)} />
+            <Input label="Transport / Vehicle No." value={form.vehicleNumber} onChange={(e) => set("vehicleNumber", e.target.value)} />
+            <Input label="E-Way Bill No. / LR No." value={form.ewayBillNumber} onChange={(e) => set("ewayBillNumber", e.target.value)} />
           </div>
+
+          <SectionTitle>Shipped To (Consignee)</SectionTitle>
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.shipToSameAsBilling}
+              onChange={(e) => set("shipToSameAsBilling", e.target.checked)}
+              className="w-4 h-4 accent-[#1B4DB3]"
+            />
+            Same as Billed To
+          </label>
+          {!form.shipToSameAsBilling && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input label="Consignee Name *" value={form.shipToName} onChange={(e) => set("shipToName", e.target.value)} required />
+              <Input label="Consignee GSTIN" maxLength={15} value={form.shipToGstin} onChange={(e) => set("shipToGstin", e.target.value.toUpperCase())} />
+              <div className="sm:col-span-2">
+                <Input label="Delivery Address" value={form.shipToAddress} onChange={(e) => set("shipToAddress", e.target.value)} />
+              </div>
+              <Input label="State" placeholder="e.g. Telangana / 36" value={form.shipToState} onChange={(e) => set("shipToState", e.target.value)} />
+              <Input label="Contact Person / Phone" value={form.shipToContact} onChange={(e) => set("shipToContact", e.target.value)} />
+            </div>
+          )}
 
           <SectionTitle>2. Product Details</SectionTitle>
           <datalist id="inv-products">
@@ -600,19 +726,23 @@ export default function InvoicesPage() {
                       </button>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-7 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
                     <div className="col-span-2 sm:col-span-3">
-                      <Input label="Product Description *" list="inv-products" value={l.description} onChange={(e) => setLine(idx, "description", e.target.value)} required />
+                      <Input label="Description of Goods (Product / Grade) *" list="inv-products" value={l.description} onChange={(e) => setLine(idx, "description", e.target.value)} required />
                     </div>
                     <Input label="HSN Code *" value={l.hsnCode} onChange={(e) => setLine(idx, "hsnCode", e.target.value)} required />
-                    <Select label="UQC" value={l.unit} onChange={(e) => setLine(idx, "unit", e.target.value)} options={UQC_OPTIONS.map((u) => ({ label: u, value: u }))} />
+                    <Input label="Batch No." value={l.batchNumber} onChange={(e) => setLine(idx, "batchNumber", e.target.value)} />
+                    <Input label="Pack Details" placeholder="e.g. 20 x 25 kg" value={l.packDetails} onChange={(e) => setLine(idx, "packDetails", e.target.value)} />
+                    <Input label="Mfg Date" type="date" value={l.mfgDate} onChange={(e) => setLine(idx, "mfgDate", e.target.value)} />
+                    <Input label="Exp Date" type="date" value={l.expDate} onChange={(e) => setLine(idx, "expDate", e.target.value)} />
                     <Input label="Quantity *" type="number" step="any" min="0" value={l.quantity} onChange={(e) => setLine(idx, "quantity", e.target.value)} required />
-                    <Input label="Rate (₹ per UQC) *" type="number" step="any" min="0" value={l.unitPrice} onChange={(e) => setLine(idx, "unitPrice", e.target.value)} required />
-                    <Input label="Discount (₹)" type="number" step="any" min="0" value={l.discount} onChange={(e) => setLine(idx, "discount", e.target.value)} />
+                    <Select label="UOM" value={l.unit} onChange={(e) => setLine(idx, "unit", e.target.value)} options={UQC_OPTIONS.map((u) => ({ label: u, value: u }))} />
+                    <Input label="Rate (₹ per UOM) *" type="number" step="any" min="0" value={l.unitPrice} onChange={(e) => setLine(idx, "unitPrice", e.target.value)} required />
                     <Select label="GST Rate (%)" value={l.gstRate} onChange={(e) => setLine(idx, "gstRate", e.target.value)} options={GST_RATES.map((r) => ({ label: `${r}%`, value: String(r) }))} />
                   </div>
                   {c && (
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-600 pt-1">
+                      <span>Amount: <b>{inr(c.amount)}</b></span>
                       <span>Taxable: <b>{inr(c.taxableValue)}</b></span>
                       {supplyType === "Inter-State" ? (
                         <span>IGST: <b>{inr(c.igst)}</b></span>
@@ -636,24 +766,51 @@ export default function InvoicesPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-3">
-              <Textarea label="Remarks" value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} />
-              <Textarea label="Terms & Conditions" value={form.terms} onChange={(e) => set("terms", e.target.value)} rows={2} />
+              <div className="grid grid-cols-2 gap-2">
+                <Input label="Less: Discount (₹)" type="number" step="any" min="0" value={form.discountAmount} onChange={(e) => set("discountAmount", e.target.value)} />
+                <Input label="Freight / Packing (₹)" type="number" step="any" min="0" value={form.freightAmount} onChange={(e) => set("freightAmount", e.target.value)} />
+              </div>
+              <p className="text-[11px] text-slate-500">Discount and freight are spread across the lines by value, and GST is calculated on the result.</p>
+              <Textarea label="Internal Remarks (not printed)" value={form.notes} onChange={(e) => set("notes", e.target.value)} rows={2} />
             </div>
             <div className="rounded-lg border border-slate-200 overflow-hidden text-xs self-start">
-              {[
-                ["Total Taxable Value", computed.taxable],
-                ...(supplyType === "Inter-State" ? [["IGST", computed.igst]] : [["CGST", computed.cgst], ["SGST", computed.sgst]]),
-              ].map(([k, v]) => (
-                <div key={k as string} className="flex justify-between px-3 py-2 border-b border-slate-100">
+              {(
+                [
+                  ["Total Taxable Value", computed.gross],
+                  ["Less: Discount", -computed.discount],
+                  ["Freight / Packing", computed.freight],
+                  ["CGST", computed.cgst],
+                  ["SGST", computed.sgst],
+                  ["IGST", computed.igst],
+                  ["Round Off", computed.roundOff],
+                ] as [string, number][]
+              ).map(([k, v]) => (
+                <div key={k} className="flex justify-between px-3 py-2 border-b border-slate-100">
                   <span className="font-semibold text-slate-600">{k}</span>
-                  <span>{inr(v as number)}</span>
+                  <span>{inr(v)}</span>
                 </div>
               ))}
-              <div className="flex justify-between px-3 py-2.5 bg-[#EAF1FB] text-sm font-bold text-slate-900">
-                <span>Invoice Total</span>
-                <span>{inr(computed.total)}</span>
+              <div className="flex justify-between px-3 py-2.5 bg-[#DFEEDD] text-sm font-bold text-slate-900">
+                <span>Grand Total</span>
+                <span>{inr(computed.grandTotal)}</span>
               </div>
             </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-semibold text-slate-700">Terms &amp; Conditions (printed on the invoice)</label>
+              <button type="button" onClick={() => set("terms", profile.defaultTerms)} className="text-[11px] font-semibold text-[#1B4DB3] hover:underline">
+                Reset to default terms
+              </button>
+            </div>
+            <textarea
+              value={form.terms}
+              onChange={(e) => set("terms", e.target.value)}
+              rows={6}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs leading-relaxed font-mono focus:outline-none focus:ring-2 focus:ring-[#1B4DB3]/20 focus:border-[#1B4DB3]"
+            />
+            <p className="mt-1 text-[11px] text-slate-500">One point per line. A line starting with &quot;Declaration:&quot; prints with a bold label.</p>
           </div>
 
           <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
@@ -662,6 +819,58 @@ export default function InvoicesPage() {
             </Button>
             <Button type="submit" variant="primary" isLoading={saving}>
               {editingId ? "Save Changes" : "Save Invoice & Download PDF"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Invoice settings: letterhead, bank details, default terms */}
+      <Modal
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        title="Invoice Settings"
+        description="Printed on every tax invoice. Leave a field empty and it prints as a blank line."
+        maxWidth="xl"
+      >
+        <form onSubmit={saveSettings} className="space-y-5">
+          {settingsError && <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs">{settingsError}</div>}
+          <SectionTitle>Company details (letterhead)</SectionTitle>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input label="Email" type="email" value={settingsDraft.email} onChange={(e) => setSettingsDraft({ ...settingsDraft, email: e.target.value })} />
+            <Input label="Website" placeholder="www.example.com" value={settingsDraft.website} onChange={(e) => setSettingsDraft({ ...settingsDraft, website: e.target.value })} />
+            <Input label="GSTIN" maxLength={15} value={settingsDraft.gstin} onChange={(e) => setSettingsDraft({ ...settingsDraft, gstin: e.target.value.toUpperCase() })} />
+            <Input label="PAN" maxLength={10} value={settingsDraft.pan} onChange={(e) => setSettingsDraft({ ...settingsDraft, pan: e.target.value.toUpperCase() })} />
+            <Input label="IEC" maxLength={10} value={settingsDraft.iec} onChange={(e) => setSettingsDraft({ ...settingsDraft, iec: e.target.value.toUpperCase() })} />
+          </div>
+          <SectionTitle>Bank details for payment</SectionTitle>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input label="Account Name" value={settingsDraft.bankAccountName} onChange={(e) => setSettingsDraft({ ...settingsDraft, bankAccountName: e.target.value })} />
+            <Input label="Bank & Branch" value={settingsDraft.bankName} onChange={(e) => setSettingsDraft({ ...settingsDraft, bankName: e.target.value })} />
+            <Input label="Account No." value={settingsDraft.bankAccountNo} onChange={(e) => setSettingsDraft({ ...settingsDraft, bankAccountNo: e.target.value })} />
+            <Input label="IFSC Code" maxLength={11} value={settingsDraft.bankIfsc} onChange={(e) => setSettingsDraft({ ...settingsDraft, bankIfsc: e.target.value.toUpperCase() })} />
+            <Input label="A/c Type" placeholder="Current / Savings" value={settingsDraft.bankAccountType} onChange={(e) => setSettingsDraft({ ...settingsDraft, bankAccountType: e.target.value })} />
+          </div>
+          <SectionTitle>Default Terms &amp; Conditions</SectionTitle>
+          <div>
+            <textarea
+              value={settingsDraft.defaultTerms}
+              onChange={(e) => setSettingsDraft({ ...settingsDraft, defaultTerms: e.target.value })}
+              rows={7}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs leading-relaxed font-mono focus:outline-none focus:ring-2 focus:ring-[#1B4DB3]/20 focus:border-[#1B4DB3]"
+            />
+            <div className="mt-1 flex items-center justify-between">
+              <p className="text-[11px] text-slate-500">Pre-filled on every new invoice and can still be edited per invoice.</p>
+              <button type="button" onClick={() => setSettingsDraft({ ...settingsDraft, defaultTerms: DEFAULT_INVOICE_TERMS })} className="text-[11px] font-semibold text-[#1B4DB3] hover:underline">
+                Restore template terms
+              </button>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <Button type="button" variant="outline" onClick={() => setSettingsOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" isLoading={settingsSaving}>
+              Save Settings
             </Button>
           </div>
         </form>

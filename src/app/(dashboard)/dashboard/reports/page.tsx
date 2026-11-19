@@ -11,7 +11,7 @@ const REPORTS: { key: ReportType; label: string; desc: string; icon: React.Eleme
   { key: "payments", label: "Payments Received", desc: "All payments recorded against invoices", icon: CreditCard },
   { key: "outstanding", label: "Outstanding Receivables", desc: "Unpaid and part-paid invoices with days overdue", icon: AlertTriangle },
   { key: "grn", label: "GRN Register", desc: "Goods received, batches, quantities and QC status", icon: FileCheck2 },
-  { key: "enquiries", label: "Enquiries & Leads", desc: "Website and manual enquiries", icon: MessageSquare },
+  { key: "enquiries", label: "Leads Register", desc: "Enquiries with status, assigned person and follow-ups", icon: MessageSquare },
 ];
 
 const firstOfFy = () => {

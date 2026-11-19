@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { generateGrnPdf } from "@/lib/grn-pdf";
 import { safeJson } from "@/lib/grn-input";
+import { loadInvoiceProfile } from "@/lib/invoice-profile-server";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const user = await requireAdmin(request);
@@ -19,7 +20,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       threeWayMatch: safeJson<string[]>(grn.threeWayMatch, []),
       signatories: safeJson<Record<string, { name?: string; date?: string }>>(grn.signatories, {}),
       remarks: grn.remarks ?? grn.notes,
-    });
+    }, await loadInvoiceProfile());
 
     const inline = new URL(request.url).searchParams.get("view") === "1";
     const filename = `${grn.grnNumber.replace(/\//g, "-")}.pdf`;

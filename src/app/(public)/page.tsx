@@ -22,6 +22,7 @@ export default async function HomePage() {
     name: string;
     slug: string;
     description: string | null;
+    productCount: number;
   }> = [];
 
   try {
@@ -36,9 +37,11 @@ export default async function HomePage() {
   }
 
   try {
-    categories = await prisma.productCategory.findMany({
+    const rows = await prisma.productCategory.findMany({
       orderBy: { sortOrder: "asc" },
+      include: { _count: { select: { products: { where: { isApprovedForPublic: true, isActive: true } } } } },
     });
+    categories = rows.map(({ _count, ...c }) => ({ ...c, productCount: _count.products }));
   } catch (err) {
     console.error("HomePage categories query error:", err);
   }

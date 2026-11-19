@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { computeGstLine, supplyTypeFor, r2, GST_STATES } from "./company";
+import { computeInvoiceTotals, supplyTypeFor, GST_STATES, r2 } from "./company";
 
 export interface InvoiceInput {
   invoiceDate?: string;
@@ -16,15 +16,27 @@ export interface InvoiceInput {
   poReference?: string;
   vehicleNumber?: string;
   ewayBillNumber?: string;
+  paymentTerms?: string;
+  shipToSameAsBilling?: boolean;
+  shipToName?: string;
+  shipToAddress?: string;
+  shipToGstin?: string;
+  shipToState?: string;
+  shipToContact?: string;
+  discountAmount?: number | string;
+  freightAmount?: number | string;
   notes?: string;
   terms?: string;
   items?: Array<{
     description?: string;
     hsnCode?: string;
+    batchNumber?: string;
+    mfgDate?: string;
+    expDate?: string;
+    packDetails?: string;
     unit?: string;
     quantity?: number | string;
     unitPrice?: number | string;
-    discount?: number | string;
     gstRate?: number | string;
     cess?: number | string;
   }>;
@@ -56,43 +68,47 @@ export function parseInvoiceInput(body: InvoiceInput) {
   const rawItems = (body.items || []).filter((i) => str(i.description));
   if (rawItems.length === 0) errors.push("Add at least one product line");
 
-  const items = rawItems.map((i) => {
-    const line = {
-      quantity: num(i.quantity),
-      unitPrice: num(i.unitPrice),
-      discount: num(i.discount),
-      gstRate: num(i.gstRate),
-      cess: num(i.cess),
-    };
-    const t = computeGstLine(line, placeOfSupply);
+  const lineInputs = rawItems.map((i) => ({
+    quantity: num(i.quantity),
+    unitPrice: num(i.unitPrice),
+    gstRate: num(i.gstRate),
+    cess: num(i.cess),
+  }));
+  rawItems.forEach((i, idx) => {
     if (!str(i.hsnCode)) errors.push(`HSN code missing for "${str(i.description)}"`);
-    if (line.quantity <= 0 || line.unitPrice < 0) errors.push(`Check quantity / rate for "${str(i.description)}"`);
+    if (lineInputs[idx].quantity <= 0 || lineInputs[idx].unitPrice < 0) errors.push(`Check quantity / rate for "${str(i.description)}"`);
+  });
+
+  const discountAmount = Math.max(0, num(body.discountAmount));
+  const freightAmount = Math.max(0, num(body.freightAmount));
+  const totals = computeInvoiceTotals(lineInputs, discountAmount, freightAmount, placeOfSupply);
+  if (rawItems.length && discountAmount > totals.gross) errors.push("Discount cannot be more than the total value of goods");
+
+  const items = rawItems.map((i, idx) => {
+    const c = totals.lines[idx];
     return {
       description: str(i.description)!,
       hsnCode: str(i.hsnCode),
+      batchNumber: str(i.batchNumber),
+      mfgDate: date(i.mfgDate),
+      expDate: date(i.expDate),
+      packDetails: str(i.packDetails),
       unit: str(i.unit) || "KGS",
-      quantity: line.quantity,
-      unitPrice: line.unitPrice,
-      discount: line.discount,
-      gstRate: line.gstRate,
-      taxableValue: t.taxableValue,
-      igst: t.igst,
-      cgst: t.cgst,
-      sgst: t.sgst,
-      cess: t.cess,
-      lineTotal: t.lineTotal,
+      quantity: lineInputs[idx].quantity,
+      unitPrice: lineInputs[idx].unitPrice,
+      discount: c.discount,
+      gstRate: lineInputs[idx].gstRate,
+      taxableValue: c.taxableValue,
+      igst: c.igst,
+      cgst: c.cgst,
+      sgst: c.sgst,
+      cess: c.cess,
+      lineTotal: c.lineTotal,
     };
   });
 
-  const sum = (k: "taxableValue" | "igst" | "cgst" | "sgst" | "cess" | "discount" | "lineTotal") =>
-    r2(items.reduce((s, i) => s + i[k], 0));
-  const subtotal = sum("taxableValue");
-  const igstAmount = sum("igst");
-  const cgstAmount = sum("cgst");
-  const sgstAmount = sum("sgst");
-  const cessAmount = sum("cess");
-  const grandTotal = sum("lineTotal");
   const rates = [...new Set(items.map((i) => i.gstRate))];
+  const sameAsBilling = body.shipToSameAsBilling !== false;
 
   const data = {
     invoiceDate: date(body.invoiceDate) ?? new Date(),
@@ -110,17 +126,26 @@ export function parseInvoiceInput(body: InvoiceInput) {
     poReference: str(body.poReference),
     vehicleNumber: str(body.vehicleNumber),
     ewayBillNumber: str(body.ewayBillNumber),
+    paymentTerms: str(body.paymentTerms),
+    shipToSameAsBilling: sameAsBilling,
+    shipToName: sameAsBilling ? null : str(body.shipToName),
+    shipToAddress: sameAsBilling ? null : str(body.shipToAddress),
+    shipToGstin: sameAsBilling ? null : str(body.shipToGstin)?.toUpperCase() || null,
+    shipToState: sameAsBilling ? null : str(body.shipToState),
+    shipToContact: sameAsBilling ? null : str(body.shipToContact),
     notes: str(body.notes),
-    terms: str(body.terms),
-    subtotal,
+    terms: typeof body.terms === "string" && body.terms.trim() ? body.terms.trim().slice(0, 3000) : null,
+    subtotal: totals.taxable,
     taxRate: rates.length === 1 ? rates[0] : 0,
-    igstAmount,
-    cgstAmount,
-    sgstAmount,
-    cessAmount,
-    taxAmount: r2(igstAmount + cgstAmount + sgstAmount + cessAmount),
-    discountAmount: sum("discount"),
-    grandTotal,
+    igstAmount: totals.igst,
+    cgstAmount: totals.cgst,
+    sgstAmount: totals.sgst,
+    cessAmount: totals.cess,
+    taxAmount: totals.tax,
+    discountAmount: totals.discount,
+    freightAmount: totals.freight,
+    roundOff: totals.roundOff,
+    grandTotal: totals.grandTotal,
   } satisfies Partial<Prisma.InvoiceUncheckedCreateInput>;
 
   return { errors: [...new Set(errors)], data, items };

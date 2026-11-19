@@ -66,3 +66,61 @@ export function computeGstLine(line: GstLineInput, placeOfSupply: string) {
 }
 
 export { r2 };
+
+export interface InvoiceLineInput {
+  quantity: number;
+  unitPrice: number;
+  gstRate: number;
+  cess?: number;
+}
+
+/**
+ * Tax-invoice arithmetic shared by the form preview and the server.
+ * Amount = qty × rate. Invoice-level discount and freight/packing are spread over the lines in
+ * proportion to their amount, so each line's taxable value (and the Sales Register) stays exact.
+ * GST is then charged per line; the grand total is rounded to the nearest rupee.
+ */
+export function computeInvoiceTotals(lines: InvoiceLineInput[], discount: number, freight: number, placeOfSupply: string) {
+  const amounts = lines.map((l) => r2((l.quantity || 0) * (l.unitPrice || 0)));
+  const gross = r2(amounts.reduce((a, b) => a + b, 0));
+  const d = Math.max(0, r2(discount || 0));
+  const f = Math.max(0, r2(freight || 0));
+
+  let dLeft = d;
+  let fLeft = f;
+  const computed = lines.map((l, i) => {
+    const last = i === lines.length - 1;
+    const share = gross > 0 ? amounts[i] / gross : last ? 1 : 0;
+    const dShare = last ? dLeft : r2(d * share);
+    const fShare = last ? fLeft : r2(f * share);
+    dLeft = r2(dLeft - dShare);
+    fLeft = r2(fLeft - fShare);
+    // "discount" is the net adjustment to this line's amount (discount share minus freight share)
+    const adj = r2(dShare - fShare);
+    const t = computeGstLine({ quantity: l.quantity, unitPrice: l.unitPrice, discount: adj, gstRate: l.gstRate, cess: l.cess }, placeOfSupply);
+    return { amount: amounts[i], discount: adj, ...t };
+  });
+
+  const sum = (k: "taxableValue" | "igst" | "cgst" | "sgst" | "cess") => r2(computed.reduce((s, c) => s + c[k], 0));
+  const taxable = sum("taxableValue");
+  const igst = sum("igst");
+  const cgst = sum("cgst");
+  const sgst = sum("sgst");
+  const cess = sum("cess");
+  const beforeRound = r2(taxable + igst + cgst + sgst + cess);
+  const grandTotal = Math.round(beforeRound);
+  return {
+    lines: computed,
+    gross,
+    discount: d,
+    freight: f,
+    taxable,
+    igst,
+    cgst,
+    sgst,
+    cess,
+    tax: r2(igst + cgst + sgst + cess),
+    roundOff: r2(grandTotal - beforeRound),
+    grandTotal,
+  };
+}

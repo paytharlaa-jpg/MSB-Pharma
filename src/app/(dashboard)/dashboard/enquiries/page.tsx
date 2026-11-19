@@ -168,7 +168,7 @@ export default function EnquiriesPage() {
   };
 
   const handleExport = (format: "csv" | "xlsx") => {
-    window.open(`/api/reports?type=enquiries&format=${format}`, "_blank");
+    window.location.href = `/api/reports?type=enquiries&format=${format}`;
   };
 
   return (

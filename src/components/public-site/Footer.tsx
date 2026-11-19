@@ -153,7 +153,7 @@ export function Footer() {
         <div className="mt-12 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} MSB PHARMACHEM. All rights reserved.</p>
           <p className="text-center sm:text-right">
-            Pharmaceutical APIs & Intermediates Trading Hub • Hyderabad, India
+            Pharmaceutical APIs & Intermediates Supply Hub • Hyderabad, India
           </p>
         </div>
       </div>

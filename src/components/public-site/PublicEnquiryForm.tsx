@@ -440,7 +440,7 @@ export function PublicEnquiryForm({
         </div>
       </div>
 
-      {/* Row 3: Phone & Product Name */}
+      {/* Row 3: Phone & Product Category */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-sm font-bold text-[#143e94] block mb-1.5">
@@ -460,6 +460,29 @@ export function PublicEnquiryForm({
         </div>
 
         <div>
+          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
+            Product Category <span className="text-[#1b4db3]">*</span>
+          </label>
+          <select
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
+          >
+            <option value="">Select Category...</option>
+            {effectiveCategories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+      </div>
+
+      {/* Row 4: Product of Interest (Required) & Quantity */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="sm:col-span-2">
           <label className="text-sm font-bold text-[#143e94] block mb-1.5">
             Product of Interest (API / CAS / Intermediates) <span className="text-[#1b4db3]">*</span>
           </label>
@@ -490,29 +513,6 @@ export function PublicEnquiryForm({
             </p>
           )}
         </div>
-      </div>
-
-      {/* Row 4: Product Category (Required) & Quantity */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="sm:col-span-2">
-          <label className="text-sm font-bold text-[#143e94] block mb-1.5">
-            Product Category <span className="text-[#1b4db3]">*</span>
-          </label>
-          <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            required
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#1b4db3] focus:ring-4 focus:ring-[#1b4db3]/10 transition-colors font-medium"
-          >
-            <option value="">Select Category...</option>
-            {effectiveCategories.map((cat) => (
-              <option key={cat.id} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div>
           <label className="text-sm font-bold text-[#143e94] block mb-1.5">
             Requested Quantity

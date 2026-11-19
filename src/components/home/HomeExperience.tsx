@@ -27,6 +27,7 @@ interface CategoryItem {
   name: string;
   slug: string;
   description: string | null;
+  productCount?: number;
 }
 
 interface ProductItem {
@@ -80,7 +81,7 @@ export function HomeExperience({ products, categories }: HomeExperienceProps) {
       <CinematicPreloader onComplete={() => setPreloaderComplete(true)} />
 
       {/* 4. Section 1 — Cinematic Hero Transformation & Rich 3D Graphics */}
-      <HeroSequence />
+      <HeroSequence categories={categories} />
 
       {/* 5. Section 2 — Product Range Showcase (3D Rotating Pharma Molecule & Glowing Moving Gradient Box) */}
       <ProductRangeSection />
